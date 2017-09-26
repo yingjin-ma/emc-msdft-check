@@ -5,6 +5,12 @@ The multi-reference density functional theory with self consistent field (MR-DFT
                                                                    2017.9.27
 Command for git:
 
+git status
+git checkout -- [file name]
+git branch
+git checkout [remote branch]
+git pull
+
 CASE 1:
 Git global setup
 
