@@ -22,14 +22,14 @@
       DO I=1,NDET
         DO J=I+1,NDET
           IF    (iMETHOD==0) THEN
-            F1=2.0D0*HH(I,J)/(HH(I,I)+HH(J,J))*DSIGN
+            F1=2.0D0*HH(I,J)/(HH(I,I)+HH(J,J))
           ELSEIF(iMETHOD==1) THEN
-            F1=2.0D0*XHF(I,J)/(XHF(I,I)+XHF(J,J))*DSIGN
+            F1=2.0D0*XHF(I,J)/(XHF(I,I)+XHF(J,J))
           ELSEIF(iMETHOD==3) THEN
-            F1=2.0D0*XHFJ(I,J)/(XHFJ(I,I)+XHFJ(J,J))*DSIGN
+            F1=2.0D0*XHFJ(I,J)/(XHFJ(I,I)+XHFJ(J,J))
           ELSEIF(iMETHOD==2) THEN
             F1=2.0D0*(XHFJ(I,J)+XHFK(I,J))/(XHFJ(I,I)+XHFJ(J,J) &
-               +XHFK(I,I)+XHFK(J,J))*DSIGN
+               +XHFK(I,I)+XHFK(J,J))
           ELSEIF(iMETHOD==10) THEN
             F1=0.0D0
           ELSEIF(iMETHOD==101) THEN
@@ -49,6 +49,7 @@
             WRITE(8406,'(A30,I3)')'Error for computed DFTEXCR',iMETHOD
           ENDIF
           IF(iMETHOD<100) THEN
+            F1=F1*DSIGN
             WRITE(8406,*)'F1=',F1
             EXC(I,J)=F1*(EXC(I,I)+EXC(J,J))/2.0D0
             FACTOR(I,J)=F1

@@ -39,7 +39,7 @@
       ON_KAPPA=iPARA(34)
       ON_ZETA=iPARA(35)
       NOCC=0
-      IF(ON_ZETA==1) NOCC=iPARA(6)
+      IF(ON_KAPPA==1) NOCC=iPARA(6)
       IF(iTOLER<=0) THEN
         iTOLER=15
       ENDIF

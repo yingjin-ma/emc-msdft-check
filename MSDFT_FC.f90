@@ -49,10 +49,10 @@
       ENDDO
 
       IF(IMETHOD==1) THEN
-        TMP=DFTFCA(:,:,1)+DFTFCB(:,:,1)
-        TMP=TMP*DSUM/Energy_XC
+        TMP=0.0D0
+        TMP=TMP+DFTFCA(:,:,1)+DFTFCB(:,:,1)
+        TMP=TMP*0.5D0
       ENDIF
-
       OPEN(23,FILE='INT_MO')
       DO I=1,NORB
         READ(23,*)(MO(J,I),J=1,NORB)
@@ -64,12 +64,11 @@
       TMP=MATMUL(MTR1,MO)
 
 ! Print (Fc)ij
-      TMP=TMP*2.0D0
       OPEN(34,FILE='FCIJ.tmp')
       WRITE(34,*)TMP
       CLOSE(34)          
 ! Print EXC
       OPEN(35,FILE='Corr_ENG.tmp')
-      WRITE(35,*)DSUM
+      WRITE(35,*)DSUM,Energy_XC
       CLOSE(35)
       END
