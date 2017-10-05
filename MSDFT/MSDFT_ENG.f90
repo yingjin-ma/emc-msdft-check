@@ -21,6 +21,9 @@
           WRITE(*,*)'MSDFT ENG:',I,D1(I)
           WRITE(8406,'(A12,I5,F25.12)')'MSDFT ENG:',I,D1(I)
         ENDDO
+        OPEN(23,FILE='Energy.tmp')
+        WRITE(23,*)D1(1)
+        CLOSE(23)
         DO I=1,DIM
           WRITE(*,*)'CI COEFF'
           WRITE(*,*)COEFF(:,I)

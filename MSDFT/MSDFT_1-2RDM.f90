@@ -363,6 +363,8 @@
                       Energy_XC(1),1,iROOT,iSTATE,WEIGHTS)
         
       ENDIF
+      
+      CALL PRINT_FINAL_ENG()
 
       DO I1=1,iROOT
       RDM1=0.0D0
@@ -577,7 +579,16 @@
 999   CONTINUE
       END
 
-
+      SUBROUTINE PRINT_FINAL_ENG()
+      REAL*8 ENERGY,ECOLD,ECNEW
+      OPEN(56,FILE='Energy.tmp')
+      READ(56,*)ENERGY
+      CLOSE(56)
+      OPEN(56,FILE='Corr_ENG.tmp')
+      READ(56,*)ECOLD,ECNEW
+      CLOSE(56)
+      WRITE(8406,*)'Final Energy is: ',ENERGY-ECOLD+ECNEW
+      END
 
 
 

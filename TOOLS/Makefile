@@ -15,7 +15,7 @@ Link=-o
 #FLIB = -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm  -lblas
 
 #59.72.122.148 with GNU, gfortran only
-FLIB = -L /usr/lib64 -m64 -lblas -llapack
+#FLIB = -L /usr/lib64 -m64 -lblas -llapack
 
 #mac OS with intel mkl
 #FLIB = -L${MKLROOT}/lib -Wl,-rpath,${MKLROOT}/lib -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl

@@ -16,7 +16,8 @@
         double precision,allocatable::GM1(:,:,:,:)
 
         CALL FCIDUMP_READ()
-        T=OneEI
+        T=OneEI+DFT_Fc
+        DFT_Fc=0.0D0
         U=TwoEI
         T_origin=T
         U_origin=U
@@ -31,10 +32,6 @@
         call DMRG_CASSCF()
         T_ini=T_origin
         U_ini=U_origin
- 
-        !write(6,*)"================================="
-        !call print_mat(norb,norb,DFT_Fc,6)
-        !stop
 
         if(DMRG_SCF)then
             i=1
