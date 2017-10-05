@@ -1,8 +1,10 @@
       Program main
+      implicit none
       Integer,Parameter :: Natom=6
       Integer,Parameter :: NORB=86
       Integer,Parameter :: NROOTS=2
-      Integer iROOT,iSTATE
+      Integer iROOT,iSTATE,NOCC
+      Integer ON_KAPPA,ON_ZETA
       Real*8 WEIGHTS(2)
       Real*8 GEOM(Natom,3)
       Integer ATOMCHG(Natom),iERRO
@@ -13,21 +15,25 @@
       Real*8 COEFF(NROOTS,NROOTS)
       character     :: baselable*30
 
+      ON_KAPPA=1
+      ON_ZETA=1
       baselable='aug-cc-pVDZ'
       COEFF=0.0D0
-      COEFF(1,1)=DSQRT(0.9D0)
-      COEFF(2,1)=DSQRT(0.1D0)
+      COEFF(1,1)=DSQRT(1.0D0)
+      COEFF(2,1)=DSQRT(0.0D0)
       COEFF(1,2)=DSQRT(0.1D0)
       COEFF(2,2)=-DSQRT(0.9D0)
-      iROOT=2
-      iSTATE=2
+      iROOT=1
+      iSTATE=1
       WEIGHTS(1)=1.0D0
       WEIGHTS(2)=0.0D0
+      NOCC=0
       CALL RD_GEOM(NATOM,GEOM,ATOMCHG,iERRO)
       CALL INTXC_ALLOCATE(NATOM)
       CALL BASIS_INT(NATOM,NORB,GEOM,ATOMCHG,T,U,baselable)
       CALL DFT_Fc(NATOM,NORB,NROOTS,Pa,Pb,Energy_XC, &
-                  GEOM,ATOMCHG,1,COEFF,iROOT,iSTATE,WEIGHTS)
+                  GEOM,ATOMCHG,1,COEFF,iROOT,iSTATE,WEIGHTS,NOCC, &
+                  ON_KAPPA,ON_ZETA)
       CALL INTXC_DEALLOCATE()
       END
 

@@ -20,6 +20,8 @@
 !C iPARA(31): STATES, target states
 !C iPARA(32): IWEIGHT, specify the wights (1) or not (0)
 !C iPARA(33): iROOT, the number of roots for TQL or Davidson
+!C iPARA(34): INT,ON_KAPPA
+!C iPARA(35): INT,ON_ZETA
 !C iPARA(41-60): INT, weights of each states (less than 20 states)
 !C iPARA(61): IMAX, max stept of MCSCF
 !C iPARA(91): RESTART, restart (1) or not (0)
@@ -142,6 +144,10 @@
         NUM=33
       ELSEIF(CC=='IWEIGHT') THEN
         NUM=32
+      ELSEIF(CC=='KAPPA') THEN
+        NUM=34
+      ELSEIF(CC=='ZETA') THEN
+        NUM=35
       ELSE 
         NUM=-1
       ENDIF   

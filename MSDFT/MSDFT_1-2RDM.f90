@@ -1,6 +1,7 @@
 !C*MODULE BLWCAS  *DECK OneAndTwoRDM 
       SUBROUTINE OneAndTwoRDM(iMETHOD,NATOM,NOrb,NAct,NConf,RDM1,RDM2, &
-                 T,U,NuENG,IDFT,iSTATE,WEIGHTS,iTOLER,iROOT,GEOM,ATOMCHG)
+                 T,U,NuENG,IDFT,iSTATE,WEIGHTS,iTOLER,iROOT,GEOM, &
+                 ATOMCHG,NOCC,ON_KAPPA,ON_ZETA)
       IMPLICIT NONE
       integer Norb,NAct,Nconf,IDFT,iSTATE,iMETHOD,iTOLER,iROOT
       integer NATOM
@@ -24,6 +25,7 @@
       integer IHFJ(NConf,NConf),IHFK(NConf,NConf)
       real*8 DFTFCA(NORB,NORB,NConf),DFTFCB(NORB,NORB,NConf)
       real*8 Energy_XC(Nconf),IFAC(Nconf,Nconf)
+      integer NOCC,ON_KAPPA,ON_ZETA
 
       tolerance=(10.0D0)**(-iTOLER)
       WRITE(8406,*)'tolerance:',tolerance
@@ -342,7 +344,8 @@
       IF(IDFT==1) THEN
         WRITE(8406,*)'iMETHOD=',iMETHOD
         CALL DFT_Fc(NATOM,NORB,NCONF,DFTFCA,DFTFCB,Energy_XC, &
-                    GEOM,ATOMCHG,0,Coeff,iROOT,iSTATE,WEIGHTS)
+                    GEOM,ATOMCHG,0,Coeff,iROOT,iSTATE,WEIGHTS, &
+                    NOCC,ON_KAPPA,ON_ZETA)
         CALL CALDEXCR(HH,HD,XHFJ,XHFK,NConf,EXC,iMETHOD,NORB,NA, &
                       NB,Energy_XC,IFAC)
         HH=HH+EXC
@@ -354,7 +357,8 @@
 
       IF(IDFT==1) THEN
         CALL DFT_Fc(NATOM,NORB,NCONF,DFTFCA,DFTFCB,Energy_XC, &
-                    GEOM,ATOMCHG,1,Coeff,iROOT,iSTATE,WEIGHTS)
+                    GEOM,ATOMCHG,1,Coeff,iROOT,iSTATE,WEIGHTS, &
+                    NOCC,ON_KAPPA,ON_ZETA)
         CALL MSDFT_Fc(NORB,NCONF,Coeff,DFTFCA,DFTFCB,IFAC,EXC, &
                       Energy_XC(1),1,iROOT,iSTATE,WEIGHTS)
         

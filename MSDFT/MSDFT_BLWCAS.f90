@@ -5,6 +5,7 @@
       INTEGER IMAX,IINT,IDFT,iTOLER,iROOT
       INTEGER NORB,NELE,NACT,NDET,iMETHOD,NATOM
       INTEGER ATOMCHG(iPARA(7))
+      INTEGER NOCC,ON_KAPPA,ON_ZETA
       REAL*8 GEOM(iPARA(7),3)
       REAL*8 ENG,DSUM,TD,Converged
       REAL*8,ALLOCATABLE :: READCI(:,:),RDM1(:,:),RDM2(:,:,:,:)
@@ -35,6 +36,10 @@
       iMETHOD=iPARA(95)
       iERRO=0
       iTOLER=iPARA(96)
+      ON_KAPPA=iPARA(34)
+      ON_ZETA=iPARA(35)
+      NOCC=0
+      IF(ON_ZETA==1) NOCC=iPARA(6)
       IF(iTOLER<=0) THEN
         iTOLER=15
       ENDIF
@@ -134,7 +139,7 @@
         WRITE(8406,*)'IN:  MSDFT_1-2RDM.f90'
         CALL OneAndTwoRDM(iMETHOD,NATOM,NORB,NACT,NDET,RDM1(:,:), &
         RDM2(:,:,:,:),T,U,ENG,IDFT,NSTATE,WEIGHTS(:),iTOLER,iROOT, &
-        GEOM,ATOMCHG)
+        GEOM,ATOMCHG,NOCC,ON_KAPPA,ON_ZETA)
         WRITE(8406,*)'OUT: MSDFT_1-2RDM.f90'
         WRITE(8406,*)''
         WRITE(8406,*)' ------ Normal Termination with STEP 2.2.1 ------'

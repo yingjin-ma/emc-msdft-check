@@ -1,8 +1,9 @@
 subroutine DFT_Fc(ncenters,nconts,nstates,Pa,Pb,Energy_XC,coord,atomchg, &
-                  imethod,Coeff,iROOT,iSTATE,WEIGHTS)
+                  imethod,Coeff,iROOT,iSTATE,WEIGHTS,NOCC,ON_KAPPA,ON_ZETA)
 implicit none
-integer       :: ncenters,nconts,elea,eleb,ele,nstates
+integer       :: ncenters,nconts,elea,eleb,ele,nstates,NOCC
 integer       :: iROOT,iSTATE,imethod
+integer       :: ON_KAPPA,ON_ZETA
 integer       :: conf_index(iSTATE)
 real*8        :: WEIGHTS(iSTATE)
 integer       :: imult,icharge,atomchg(ncenters) ! natoms, multiplicity, charge
@@ -11,6 +12,7 @@ real(8)       :: coord(ncenters,3) ! coordinate, atomcharge
 real(8)       :: INT_MO(nconts,nconts),Energy_XC(nstates)
 ! output data zone
 real(8)       :: Pa(nconts,nconts,nstates),Pb(nconts,nconts,nstates)
+real(8)       :: Pa2(nconts,nconts),Pb2(nconts,nconts)
 real(8)       :: E_ex,E_corr,Coeff(nstates,nstates)
 real(8)       :: MOA(nconts,nconts),MOB(nconts,nconts)   
 integer       :: i,j,k,l,DETS(nstates,2,nconts)
@@ -44,6 +46,9 @@ DO I=1,nconts
 ENDDO
 CLOSE(23)
 !*****************************************
+I1=NOCC
+I2=NOCC
+CALL RHOAB(nconts,nconts,I1,I2,INT_MO,INT_MO,Pa2,Pb2)
 do i=1,nstates
   MOA=INT_MO
   do j=1,elea
@@ -89,21 +94,21 @@ if(imethod==1) then
 
   Energy_XC=0.0D0
   call EngineUp(ncenters,imult,icharge,functional_in,&
-                    Pa,Pb,nconts,coord,atomchg,&
-                    Energy_XC,1)
+                    Pa,Pb,Pa2,Pb2,nconts,coord,atomchg,&
+                    Energy_XC,1,ON_KAPPA,ON_ZETA)
   print*,'NEW EXC IS:', Energy_XC(1)
 else if(imethod==0) then
   call EngineUp(ncenters,imult,icharge,functional_in,&
-                    Pa,Pb,nconts,coord,atomchg,&
-                    Energy_XC,nstates)
+                    Pa,Pb,Pa2,Pb2,nconts,coord,atomchg,&
+                    Energy_XC,nstates,ON_KAPPA,ON_ZETA)
 endif
 end 
 
 
 !================================
 subroutine EngineUp(ncenters,imult,icharge,functional_in,&
-                    Pain,Pbin,ncontsin,coord,atomchg,&
-                    Energy_XC,n_states)
+                    Pain,Pbin,Pain2,Pbin2,ncontsin,coord,atomchg,&
+                    Energy_XC,n_states,ON_KAPPA,ON_ZETA)
 ! Main program of Engine
 !  
 !===============================
@@ -120,6 +125,7 @@ real(8),parameter   :: covrad(26) = [0.38,0.32,1.34,0.9,0.82,0.77,0.75,&
 !include "parameter.h"
 ! input data zone
 integer       :: ncenters,imult,icharge,n_states
+integer       :: ON_KAPPA,ON_ZETA
 integer       :: atomchg(ncenters)  ! natoms, multiplicity, charge
 character     :: functional_in*30  ! functional
 real(8)       :: coord(ncenters,3) ! coordinate, atomcharge
@@ -129,6 +135,7 @@ integer    :: itmax
 integer    :: ncontsin
 real(8)    :: Pain(ncontsin,ncontsin,n_states)
 real(8)    :: Pbin(ncontsin,ncontsin,n_states)
+real(8)    :: Pain2(ncontsin,ncontsin),Pbin2(ncontsin,ncontsin)
 real(8),allocatable ::  Fxca(:,:),Fxcb(:,:)
 integer       :: Gtype    ! guesstype, 1: Pseudo Huckel 2:Hcore
                     ! force,                Mullikencharge
@@ -137,7 +144,7 @@ integer :: info
 
 real(8)   :: dist
 !###
-real(8)   :: rho
+real(8)   :: rho,trho
 !
 !
 !====
@@ -206,20 +213,24 @@ do i=1,n_states
   print*,i,n_states
   Pa=Pain(:,:,i)
   Pb=Pbin(:,:,i)
-  call  DFT_calc(nconts,E_ex,E_corr,Fxca,Fxcb,info)
+  call  DFT_calc(nconts,E_ex,E_corr,Fxca,Fxcb,info, &
+                 Pain(:,:,i),Pbin(:,:,i),Pain2,Pbin2, &
+                 ON_KAPPA,ON_ZETA)
   print *,E_ex,E_corr
   Energy_XC(i)=E_ex+E_corr
   Pain(:,:,i)=Fxca
   Pbin(:,:,i)=Fxcb
 enddo
 !! TEST Density !!
-rho = 0
+rho = 0.0D0
 do i = 1,ngrids
+   trho=0.0D0
    do j = 1,nconts
       do k =1,nconts
-         rho = rho + (Pa(j,k) +Pb(j,k)) * grids(i)%val0(j)*grids(i)%val0(k)*grids(i)%weight
+         trho = trho + (Pa(j,k) +Pb(j,k)) * grids(i)%val0(j)*grids(i)%val0(k)*grids(i)%weight
       enddo
    enddo
+   rho=rho+trho
 enddo
 
 print *,rho

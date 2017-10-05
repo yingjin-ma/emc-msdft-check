@@ -1,6 +1,7 @@
 !================================================
 ! Do DFT calculation
-subroutine  DFT_calc(n,Ex,Ec,Fxca,Fxcb,info)
+subroutine  DFT_calc(n,Ex,Ec,Fxca,Fxcb,info,tmp_rhoa,tmp_rhob,tmp_rhoa2,tmp_rhob2, &
+                     ON_KAPPA,ON_ZETA)
 !  Give DFT-energy and KS-Matrix
 !    
 !================================================
@@ -16,7 +17,9 @@ real(8),parameter   :: covrad(26) = [0.38,0.32,1.34,0.9,0.82,0.77,0.75,&
                                      1.36,1.25,1.27,1.39,1.25 ]
 !INCLUDE 'parameter.h'
     integer    :: i,j,k,l,n,m,info
-    integer    :: igrid
+    integer    :: igrid,ON_KAPPA,ON_ZETA
+    real(8)    :: tmp_rhoa(n,n),tmp_rhob(n,n),KAPPA
+    real(8)    :: tmp_rhoa2(n,n),tmp_rhob2(n,n)
     real(8)    :: rho_a,rho_b
     real(8)    :: sigma_aa,sigma_ab,sigma_bb,sigma_t
     real(8)    :: Et 
@@ -117,12 +120,24 @@ real(8),parameter   :: covrad(26) = [0.38,0.32,1.34,0.9,0.82,0.77,0.75,&
             ! Calculate gamma_ab
             sigma_ab=drv_a(1)*drv_b(1)+drv_a(2)*drv_b(2)+drv_a(3)*drv_b(3)
         endif
+! 2017 10.5 added new ZETA
+        IF(ON_ZETA==1) THEN
+          CALL XC_ZETA(rho_a,rho_b)
+        ENDIF
         call XCinterface(n,Multi,1,rho_a,rho_b,sigma_aa,sigma_bb,sigma_ab,sigma_t,igrid,&
                           drv_a,drv_b,1,Ext,Ect,Fxc_at,Fxc_bt)
-        Ex = Ext*grids(igrid)%weight+Ex
-        Ec = Ect*grids(igrid)%weight+Ec
-        Fxca = Fxca + Fxc_at*grids(igrid)%weight
-        Fxcb = Fxcb + Fxc_bt*grids(igrid)%weight
+! 2017 10.1 added KAPPA
+        KAPPA=1.0D0
+        IF(ON_KAPPA==1) THEN
+          CALL XC_KMCF(IGRID,n,tmp_rhoa,tmp_rhob,tmp_rhoa2,tmp_rhob2,KAPPA)
+if(kappa<0.0D0) then
+print*,'kappa=',kappa
+endif
+        ENDIF
+        Ex = KAPPA*Ext*grids(igrid)%weight+Ex
+        Ec = KAPPA*Ect*grids(igrid)%weight+Ec
+        Fxca = Fxca + Fxc_at*grids(igrid)%weight*KAPPA
+        Fxcb = Fxcb + Fxc_bt*grids(igrid)%weight*KAPPA
     enddo
 deallocate(Fxc_at,Fxc_bt)
 end subroutine
