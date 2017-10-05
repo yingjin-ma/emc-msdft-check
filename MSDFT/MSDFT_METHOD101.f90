@@ -1,27 +1,19 @@
       SUBROUTINE METHOD101(HH11,HH22,HH12,EXC1, &
                            EXC2,EXC12)
       IMPLICIT NONE
+!     dE(MSDFT)=dE(WFT)+dE(Ec1-Ec2)
       REAL*8 HH11,HH22,HH12,EXC1,EXC2,EXC12
-      REAL*8 A,B,C,DT
+      REAL*8 DH,DE
+      REAL*8 A,B
 
-      DT=DSQRT((HH11-HH22)**2+4.0D0*(HH12**2))
-      A=4.0D0
-      B=8.0D0*HH12
-      IF(HH11>HH22) THEN
-        C=4.0D0*(HH12**2)+(HH11-HH22+EXC1-EXC2)**2-(DT+EXC1-EXC2)**2
-      ELSEIF(HH11<HH22) THEN
-        C=4.0D0*(HH12**2)+(HH11-HH22+EXC1-EXC2)**2-(DT+EXC2-EXC1)**2
-      ELSE
-        C=0.0D0
-      ENDIF
-      DT=B**2-4.0D0*A*C
-      IF(DT<0.0D0) THEN
-         DT=0.0D0
-      ENDIF
+      DH=DABS(HH11-HH22)
+      DE=DABS(EXC1-EXC2)
+      A=DSQRT(DH**2+4.0D0*HH12)+DE-DH
+      B=0.5D0*DSQRT(A**2-DE**2)
       IF(HH12>0.0D0) THEN
-        EXC12=0.5D0*(-B+DSQRT(DT))
+        EXC12=B-HH12
       ELSEIF(HH12<0.0D0) THEN
-        EXC12=0.5D0*(-B-DSQRT(DT))
+        EXC12=-B-HH12
       ELSE
         EXC12=0.0D0
       ENDIF
