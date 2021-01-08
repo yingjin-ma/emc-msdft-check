@@ -51,8 +51,8 @@
       IF(IMETHOD==1) THEN
         TMP=0.0D0
         TMP=TMP+DFTFCA(:,:,1)+DFTFCB(:,:,1)
-        TMP=TMP*0.5D0
       ENDIF
+      TMP=TMP*0.5D0
       OPEN(23,FILE='INT_MO')
       DO I=1,NORB
         READ(23,*)(MO(J,I),J=1,NORB)
@@ -68,7 +68,7 @@
       WRITE(34,*)TMP
       CLOSE(34)          
 ! Print EXC
-      OPEN(35,FILE='Corr_ENG.tmp')
-      WRITE(35,*)DSUM,Energy_XC
-      CLOSE(35)
+!      OPEN(35,FILE='Corr_ENG.tmp')
+!      WRITE(35,*)DSUM,Energy_XC
+!      CLOSE(35)
       END

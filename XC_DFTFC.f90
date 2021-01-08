@@ -1,5 +1,5 @@
 subroutine DFT_Fc(ncenters,nconts,nstates,Pa,Pb,Energy_XC,coord,atomchg, &
-                  imethod,Coeff,iROOT,iSTATE,WEIGHTS,NOCC,ON_KAPPA,ON_ZETA)
+                  imethod,Coeff,iROOT,iSTATE,WEIGHTS,NOCC,ON_KAPPA,ON_ZETA,imult)
 implicit none
 integer       :: ncenters,nconts,elea,eleb,ele,nstates,NOCC
 integer       :: iROOT,iSTATE,imethod
@@ -19,8 +19,7 @@ integer       :: i,j,k,l,DETS(nstates,2,nconts)
 real*8        :: TPa(nconts,nconts,iROOT),TPb(nconts,nconts,iROOT)
 integer       :: I1,I2
  
-imult = 1
-icharge = 0
+icharge = 2
 ele=0
 do i=1,ncenters
   ele=ele+atomchg(i)
@@ -240,3 +239,5 @@ deallocate(Pa,Pb,Fxca,Fxcb)
 !deallocate(atoms)
 !call prtMat(Pa+Pb,nconts,"Density") 
 end subroutine EngineUp
+
+

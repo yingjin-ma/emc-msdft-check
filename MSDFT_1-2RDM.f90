@@ -1,10 +1,10 @@
 !C*MODULE BLWCAS  *DECK OneAndTwoRDM 
       SUBROUTINE OneAndTwoRDM(iMETHOD,NATOM,NOrb,NAct,NConf,RDM1,RDM2, &
                  T,U,NuENG,IDFT,iSTATE,WEIGHTS,iTOLER,iROOT,GEOM, &
-                 ATOMCHG,NOCC,ON_KAPPA,ON_ZETA)
+                 ATOMCHG,NOCC,ON_KAPPA,ON_ZETA,SPIN)
       IMPLICIT NONE
       integer Norb,NAct,Nconf,IDFT,iSTATE,iMETHOD,iTOLER,iROOT
-      integer NATOM
+      integer NATOM,SPIN
       integer IConfA(NConf,NAct),IConfB(NConf,NAct)
       INTEGER ATOMCHG(NATOM)
       REAL*8  GEOM(NATOM,3)
@@ -24,9 +24,11 @@
       real*8 XHFJ(NConf,NConf),XHFK(NConf,NConf)
       integer IHFJ(NConf,NConf),IHFK(NConf,NConf)
       real*8 DFTFCA(NORB,NORB,NConf),DFTFCB(NORB,NORB,NConf)
-      real*8 Energy_XC(Nconf),IFAC(Nconf,Nconf)
+      real*8 Energy_XC(Nconf),IFAC(Nconf,Nconf),DTEMP
       integer NOCC,ON_KAPPA,ON_ZETA
 
+
+      CALL SET_COMM(NATOM,SPIN,ATOMCHG,GEOM,ON_KAPPA,ON_ZETA,NORB,0)
       tolerance=(10.0D0)**(-iTOLER)
       WRITE(8406,*)'tolerance:',tolerance
 !C READ DETs
@@ -345,11 +347,21 @@
         WRITE(8406,*)'iMETHOD=',iMETHOD
         CALL DFT_Fc(NATOM,NORB,NCONF,DFTFCA,DFTFCB,Energy_XC, &
                     GEOM,ATOMCHG,0,Coeff,iROOT,iSTATE,WEIGHTS, &
-                    NOCC,ON_KAPPA,ON_ZETA)
+                    NOCC,ON_KAPPA,ON_ZETA,SPIN)
         CALL CALDEXCR(HH,HD,XHFJ,XHFK,NConf,EXC,iMETHOD,NORB,NA, &
                       NB,Energy_XC,IFAC)
         HH=HH+EXC
       ENDIF
+
+! For Fe only
+
+!DTEMP=HH(1,1)
+!HH=0.0D0   
+!do i=1,5
+!  HH(i,i)=DTEMP
+!enddo
+
+! End
 
       CALL MSDFTENG(HH,Coeff,NConf)
       ALLOCATE(TMP1(NAct,NAct,iROOT))
@@ -358,13 +370,13 @@
       IF(IDFT==1) THEN
         CALL DFT_Fc(NATOM,NORB,NCONF,DFTFCA,DFTFCB,Energy_XC, &
                     GEOM,ATOMCHG,1,Coeff,iROOT,iSTATE,WEIGHTS, &
-                    NOCC,ON_KAPPA,ON_ZETA)
+                    NOCC,ON_KAPPA,ON_ZETA,SPIN)
         CALL MSDFT_Fc(NORB,NCONF,Coeff,DFTFCA,DFTFCB,IFAC,EXC, &
                       Energy_XC(1),1,iROOT,iSTATE,WEIGHTS)
         
       ENDIF
       
-      CALL PRINT_FINAL_ENG()
+!      CALL PRINT_FINAL_ENG()
 
       DO I1=1,iROOT
       RDM1=0.0D0
@@ -414,6 +426,7 @@
       write(8406,*) conf_index
       DEALLOCATE(TMP1)
       DEALLOCATE(TMP2)
+      CALL CLOSE_COMM()
       END
 
 
@@ -580,17 +593,18 @@
       END
 
       SUBROUTINE PRINT_FINAL_ENG()
+      IMPLICIT NONE
       REAL*8 ENERGY,ECOLD,ECNEW
-      OPEN(56,FILE='Energy.tmp')
-      READ(56,*)ENERGY
-      CLOSE(56)
-      OPEN(56,FILE='Corr_ENG.tmp')
-      READ(56,*)ECOLD,ECNEW
-      CLOSE(56)
+!      OPEN(56,FILE='Energy.tmp')
+!      READ(56,*)ENERGY
+!      CLOSE(56)
+!      OPEN(56,FILE='Corr_ENG.tmp')
+!      READ(56,*)ECOLD,ECNEW
+!      CLOSE(56)
       WRITE(8406,*)'Final Energy is: ',ENERGY-ECOLD+ECNEW
+!      OPEN(56,FILE='Final.eng')
+!      WRITE(56,*)ENERGY,ENERGY-ECOLD+ECNEW
+!      CLOSE(56)
       END
-
-
-
 
 

@@ -139,7 +139,7 @@
         WRITE(8406,*)'IN:  MSDFT_1-2RDM.f90'
         CALL OneAndTwoRDM(iMETHOD,NATOM,NORB,NACT,NDET,RDM1(:,:), &
         RDM2(:,:,:,:),T,U,ENG,IDFT,NSTATE,WEIGHTS(:),iTOLER,iROOT, &
-        GEOM,ATOMCHG,NOCC,ON_KAPPA,ON_ZETA)
+        GEOM,ATOMCHG,NOCC,ON_KAPPA,ON_ZETA,iPARA(15))
         WRITE(8406,*)'OUT: MSDFT_1-2RDM.f90'
         WRITE(8406,*)''
         WRITE(8406,*)' ------ Normal Termination with STEP 2.2.1 ------'
@@ -234,4 +234,5 @@
       DEALLOCATE(TRANSU,DFT_Fc)
 999   CONTINUE
       END  
+
 

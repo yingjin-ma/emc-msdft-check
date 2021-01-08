@@ -61,22 +61,22 @@
       ENDDO
       RHO =dmax1(0.0D0,RHO )
       TRHO=dmax1(0.0D0,TRHO)
-      IF(RHO>1.0D-20 .AND. TRHO>RHO) THEN
+      IF(RHO>1.0D-4 .AND. TRHO>RHO) THEN
       ! compute k,rs and x at r
-      KK=(TRHO/RHO)**(1.0D0/3.0D0)
-      RS=(3.0D0/(4.0D0*PI*RHO))**(1.0D0/3.0D0)
-      IF(RS>25.0D0) RS=25.0D0
-      XX=LOG(RS)
+        KK=(TRHO/RHO)**(1.0D0/3.0D0)
+        RS=(3.0D0/(4.0D0*PI*RHO))**(1.0D0/3.0D0)
+        IF(RS>25.0D0) RS=25.0D0
+        XX=LOG(RS)
       ! compute facter ka at r
-      KAPA=0.0D0
-      DO I=1,6
-        DO J=1,5
-          KAPA=KAPA+(BMN(I,J)*(XX**(I-1))*(KK**(J-1)))
+        KAPA=0.0D0
+        DO I=1,6
+          DO J=1,5
+            KAPA=KAPA+(BMN(I,J)*(XX**(I-1))*(KK**(J-1)))
+          ENDDO
         ENDDO
-      ENDDO
-      KAPA=1.0D0/KAPA
+        KAPA=1.0D0/KAPA
       ELSE
-      KAPA=1.0D0
+        KAPA=0.0D0
       ENDIF
       IF(RHO==TRHO) KAPA=1.0D0
       END

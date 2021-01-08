@@ -136,8 +136,8 @@ endif
         ENDIF
         Ex = KAPPA*Ext*grids(igrid)%weight+Ex
         Ec = KAPPA*Ect*grids(igrid)%weight+Ec
-        Fxca = Fxca + Fxc_at*grids(igrid)%weight*KAPPA
-        Fxcb = Fxcb + Fxc_bt*grids(igrid)%weight*KAPPA
+        Fxca = Fxca + Fxc_at*grids(igrid)%weight
+        Fxcb = Fxcb + Fxc_bt*grids(igrid)%weight
     enddo
 deallocate(Fxc_at,Fxc_bt)
 end subroutine

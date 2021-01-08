@@ -1,4 +1,4 @@
-Program_name=run_MSDFT
+Program_name=run_vMSDFT
 
 F90srcs = MSDFT_MAIN.f90 MSDFT_RDINCAR.f90 MSDFT_COMB.f90 MSDFT_MCCONF.f90 MSDFT_BLWCAS.f90 MSDFT_CHECKFILE.f90 MSDFT_MCFILE.f90\
 	  MSDFT_PUTINT.f90 MSDFT_METHOD100.f90 MSDFT_EXCR.f90 MSDFT_INT.f90 MSDFT_MCHAM.f90 MSDFT_UPDATE.f90 MSDFT_1-2RDM.f90\
@@ -22,18 +22,16 @@ F90objs = $(F90srcs:.f90=.o)
 F77objs = $(F77srcs:.F=.o)
 LIB = INT_LIBCINT.a
 
-
-
 Complier1=ifort
 Complier2=gfortran
 
 Link=-o
 
-#192.9.200.120 with intel mkl
-#FLIB = -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm  -lblas
+#With intel mkl and GNU compilier
+FLIB =  -L${MKLROOT}/lib/intel64 -Wl,--no-as-needed -lmkl_gf_ilp64 -lmkl_gnu_thread -lmkl_core -lgomp -lpthread -lm -ldl
 
 #59.72.122.148 with GNU, gfortran only
-FLIB = -L /usr/lib64 -m64 -lblas -llapack
+#FLIB = -L /usr/lib64 -m64 -lblas -llapack
 
 #mac OS with intel mkl
 #FLIB = -L${MKLROOT}/lib -Wl,-rpath,${MKLROOT}/lib -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl

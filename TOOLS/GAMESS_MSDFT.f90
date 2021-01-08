@@ -89,7 +89,8 @@
         IF(CTYPE=='Cl'  .or. CTYPE=='cl')  ATOMCHG(I)=17
         IF(CTYPE=='Ar'  .or. CTYPE=='ar')  ATOMCHG(I)=18
         IF(CTYPE=='K'  .or. CTYPE=='k')  ATOMCHG(I)=19
-        IF(CTYPE=='Ca' .or. CTYPE=='Ca') ATOMCHG(I)=20
+        IF(CTYPE=='Ca' .or. CTYPE=='ca') ATOMCHG(I)=20
+        IF(CTYPE=='Fe' .or. CTYPE=='fe') ATOMCHG(I)=26
       ENDDO
 101   CLOSE(24)
 
@@ -112,6 +113,10 @@
              IF(C1 == "f") THEN
                L=L+10
                CALL ORDER_F1(N,MO2,L-10,L)
+             ENDIF
+             IF(C1 == 'g') THEN
+               L=L+15
+               CALL ORDER_G1(N,MO2,L-15,L)
              ENDIF
            ENDDO
          ENDIF
@@ -173,6 +178,40 @@
       MO=TMO
       END
 
+      SUBROUTINE ORDER_G1(N,MO,N1,N2)
+      IMPLICIT NONE
+      INTEGER N,N1,N2
+      REAL*8 MO(N,N),TMO(N,N)
+      INTEGER ID1(15),ID2(15)
+      INTEGER I,J,K
+      DO I=1,15
+        ID1(I)=I
+      ENDDO
+      ID2(1)=1
+      ID2(2)=4
+      ID2(3)=5
+      ID2(4)=10
+      ID2(5)=13
+      ID2(6)=11
+      ID2(7)=6
+      ID2(8)=14
+      ID2(9)=15
+      ID2(10)=8
+      ID2(11)=2
+      ID2(12)=7
+      ID2(13)=12
+      ID2(14)=9
+      ID2(15)=3
+      TMO=MO
+      DO I=1,15
+        J=N1+ID1(I)
+        K=N1+ID2(I)
+        TMO(J,:)=MO(K,:)
+      ENDDO
+      MO=TMO
+      END
+
+
       SUBROUTINE MSDFTTOGAMESS(N,MO1,MO2,BASELABLE,NATOM)
       IMPLICIT NONE
       CHARACTER*30 BASELABLE
@@ -206,7 +245,8 @@
         IF(CTYPE=='Cl'  .or. CTYPE=='cl')  ATOMCHG(I)=17
         IF(CTYPE=='Ar'  .or. CTYPE=='ar')  ATOMCHG(I)=18
         IF(CTYPE=='K'  .or. CTYPE=='k')  ATOMCHG(I)=19
-        IF(CTYPE=='Ca' .or. CTYPE=='Ca') ATOMCHG(I)=20
+        IF(CTYPE=='Ca' .or. CTYPE=='ca') ATOMCHG(I)=20
+        IF(CTYPE=='Fe' .or. CTYPE=='fe') ATOMCHG(I)=26
       ENDDO
 101   CLOSE(24)
 
@@ -229,6 +269,10 @@
              IF(C1 == "f") THEN
                L=L+10
                CALL ORDER_F2(N,MO2,L-10,L)
+             ENDIF
+             IF(C1 == "g") THEN
+               L=L+15
+               CALL ORDER_G2(N,MO2,L-15,L)
              ENDIF
            ENDDO
          ENDIF
@@ -285,6 +329,39 @@
       DO I=1,10
         J=N1+IF1(I)
         K=N1+IF2(I)
+        TMO(J,:)=MO(K,:)
+      ENDDO
+      MO=TMO
+      END
+
+      SUBROUTINE ORDER_G2(N,MO,N1,N2)
+      IMPLICIT NONE
+      INTEGER N,N1,N2
+      REAL*8 MO(N,N),TMO(N,N)
+      INTEGER ID1(15),ID2(15)
+      INTEGER I,J,K
+      DO I=1,15
+        ID1(I)=I
+      ENDDO
+      ID2(1)=1
+      ID2(2)=11
+      ID2(3)=15
+      ID2(4)=2
+      ID2(5)=3
+      ID2(6)=7
+      ID2(7)=12
+      ID2(8)=10
+      ID2(9)=14
+      ID2(10)=4
+      ID2(11)=6
+      ID2(12)=13
+      ID2(13)=5
+      ID2(14)=8
+      ID2(15)=9
+      TMO=MO
+      DO I=1,15
+        J=N1+ID1(I)
+        K=N1+ID2(I)
         TMO(J,:)=MO(K,:)
       ENDDO
       MO=TMO

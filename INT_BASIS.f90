@@ -176,7 +176,7 @@ print*,base_temp
     allocate(atm2(6,nAtoms))
     allocate(atm3(6,nAtoms))
     allocate(bas(8,nBases))
-    allocate(env(20*nBases+12*nAtoms))
+    allocate(env(50*nBases+12*nAtoms))
     atm =0
     bas =0
     env =0

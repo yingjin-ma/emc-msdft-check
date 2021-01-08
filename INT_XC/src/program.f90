@@ -1,7 +1,8 @@
+
       Program main
       implicit none
-      Integer,Parameter :: Natom=6
-      Integer,Parameter :: NORB=86
+      Integer,Parameter :: Natom=1
+      Integer,Parameter :: NORB=110
       Integer,Parameter :: NROOTS=2
       Integer iROOT,iSTATE,NOCC
       Integer ON_KAPPA,ON_ZETA
@@ -17,7 +18,7 @@
 
       ON_KAPPA=1
       ON_ZETA=1
-      baselable='aug-cc-pVDZ'
+      baselable='cc-pVTZ'
       COEFF=0.0D0
       COEFF(1,1)=DSQRT(1.0D0)
       COEFF(2,1)=DSQRT(0.0D0)
@@ -31,6 +32,8 @@
       CALL RD_GEOM(NATOM,GEOM,ATOMCHG,iERRO)
       CALL INTXC_ALLOCATE(NATOM)
       CALL BASIS_INT(NATOM,NORB,GEOM,ATOMCHG,T,U,baselable)
+
+stop
       CALL DFT_Fc(NATOM,NORB,NROOTS,Pa,Pb,Energy_XC, &
                   GEOM,ATOMCHG,1,COEFF,iROOT,iSTATE,WEIGHTS,NOCC, &
                   ON_KAPPA,ON_ZETA)
@@ -61,6 +64,7 @@
         IF(CTYPE(I)=='O'  .or. CTYPE(I)=='o')  ATOMCHG(I)=8
         IF(CTYPE(I)=='F'  .or. CTYPE(I)=='f')  ATOMCHG(I)=9
         IF(CTYPE(I)=='Ne' .or. CTYPE(I)=='ne') ATOMCHG(I)=10
+        IF(CTYPE(I)=='Fe' .or. CTYPE(I)=='fe') ATOMCHG(I)=26
       ENDDO
       END SUBROUTINE RD_GEOM
 

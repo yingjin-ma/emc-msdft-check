@@ -31,6 +31,7 @@
         IF(CTYPE(I)=='Cl'  .or. CTYPE(I)=='cl')  ATOMCHG(I)=17
         IF(CTYPE(I)=='Ar'  .or. CTYPE(I)=='ar')  ATOMCHG(I)=18
         IF(CTYPE(I)=='K'  .or. CTYPE(I)=='k')  ATOMCHG(I)=19
-        IF(CTYPE(I)=='Ca' .or. CTYPE(I)=='Ca') ATOMCHG(I)=20
+        IF(CTYPE(I)=='Ca' .or. CTYPE(I)=='ca') ATOMCHG(I)=20
+        IF(CTYPE(I)=='Fe' .or. CTYPE(I)=='fe') ATOMCHG(I)=26
       ENDDO      
       END SUBROUTINE RD_GEOM
