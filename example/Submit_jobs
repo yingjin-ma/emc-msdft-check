@@ -1,0 +1,14 @@
+#!/bin/bash
+#SBATCH -J eMC_PE-EDGA
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -p debug
+#SBATCH -o out-vMSDFT-test
+#SBATCH -e err-vMSDFT-test
+
+module     use   /public/opensoft-app/eMC_PE-EDGA/eMC_modulefiles
+module    load   eMC_vMSDFT/1.0
+
+run_vMSDFT > vMSDFT.out
+
+

@@ -1,0 +1,57 @@
+$ORBINT                              
+sym c1                               
+orbitals FCIDUMP                     
+electron    8
+$END                                 
+                                     
+$ORBSPC                              
+frozen,    0
+closed,    0
+   occ,    5
+$END                                 
+                                     
+$DMRG_input                          
+binary  maquis                       
+input   dmrg-input                   
+reorder MASORB.orb                   
+output  dmrg.out                     
+mpirun  yes                          
+nproc   1                            
+$END                                 
+                                     
+$DMRG-Lagrange                       
+DMRG-SCF    .true.                   
+DMRG-LR     .false.                  
+rlxstate     1                       
+ckp_re-use  .true.                   
+$END                                 
+                                     
+$DMRG-CASSCF                         
+method  microit   0 (WM initial versi
+method  orbhess   0                  
+method  cp-hess   0 (Coupled NR/AH)  
+method  ItdeltR   0 (Step-restricted 
+method  WMKUBAR   0 (WMK, only in thi
+method  cp-inte   0 (WMK with perturb
+method  occhess   0                  
+method  newraph   0 (Newton-Raphson) 
+method  augment  20 (AH)             
+! Max number for macro-iterations    
+maxcycle         20                  
+! ====== (only used for WMK, 2 will u
+CP_integrals     0                   
+! ====== MPS will be updated to 1st-o
+!CP_Hessian      1                   
+! ====== MPS is forced to be update a
+MPSci_update     5                   
+! ====== Max iterations for micro-ite
+MAX_iter         10                  
+! ====== Used in macro-iter ======   
+THRS_energy     1.0d-8               
+THRS_rotation   1.0d-8               
+! ====== Used in micro-iter ======   
+THRS_coupled    1.0d-5               
+THRS_gradients  1.0d-3               
+!omit_act_rotation                   
+!old_code                            
+$END                                 
