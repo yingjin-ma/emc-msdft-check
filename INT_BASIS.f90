@@ -355,6 +355,8 @@ deallocate(NorVECsph,NorVEC)
 !deallocate(atoms)
 deallocate(atm,atm2,atm3,bas,env)
 
+write(6,*)" mayj : done basisint"
+call flush(6)
 
 end subroutine basisint
 !=======================

@@ -57,6 +57,7 @@
       ALLOCATE(U(NORB,NORB,NORB,NORB))
 !C Initialization: RDMDETs, DETs, INT_MO, FCIDUMP, ONETWOINT
       IF(IINT==0) THEN
+        write(6,*) "IINT : ", IINT       
         CALL CHECKFILE(0,iERRO)
         IF(iERRO==-1) GOTO 999
         WRITE(8406,*)''
@@ -66,6 +67,7 @@
         WRITE(8406,*)'OUT: MSDFT_INT.f90'
         WRITE(8406,*)''
       ELSE
+        write(6,*) "IINT : ", IINT       
         CALL FOUND_INIT(NORB,NATOM,GEOM,ATOMCHG)
         CALL CHECKFILE(1,iERRO)
         IF(iERRO==-1) GOTO 999
@@ -73,6 +75,7 @@
         WRITE(8406,*)'INITIAL GUESS FOUNDED'
         WRITE(8406,*)''
       END IF
+
       ALLOCATE(DFT_Fc(NORB,NORB))
       ALLOCATE(TRANSU(NORB,NORB))
       ALLOCATE(WEIGHTS(NSTATE))
@@ -121,6 +124,7 @@
       READ(25)ENG
       CLOSE(25)
       ENDIF
+
       WRITE(8406,*)''
       WRITE(8406,*)' > STEP 2.2: CAS(MSDFT)SCF Program'
       WRITE(8406,*)''

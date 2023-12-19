@@ -57,7 +57,7 @@
 !          write(6,*)" After Solver AH "; call flush(6)
         else
           call derivaties4(0,0)
-          call iteration(icycle)  
+          call iteration(icycle,.false.)  
         end if
 
 

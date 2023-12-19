@@ -1,4 +1,4 @@
-Program_name=run_vMSDFT
+Program_name=eMC_vMSDFT
 
 F90srcs = MSDFT_MAIN.f90 MSDFT_RDINCAR.f90 MSDFT_COMB.f90 MSDFT_MCCONF.f90 MSDFT_BLWCAS.f90 MSDFT_CHECKFILE.f90 MSDFT_MCFILE.f90\
 	  MSDFT_PUTINT.f90 MSDFT_METHOD100.f90 MSDFT_EXCR.f90 MSDFT_INT.f90 MSDFT_MCHAM.f90 MSDFT_UPDATE.f90 MSDFT_1-2RDM.f90\
@@ -20,7 +20,7 @@ F77srcs = XC_LEBEDEV.F XC_LIB.F
 
 F90objs = $(F90srcs:.f90=.o)
 F77objs = $(F77srcs:.F=.o)
-LIB = INT_LIBCINT.a
+LIB = libcint.a
 
 Complier1=ifort
 Complier2=gfortran
@@ -42,10 +42,10 @@ $(Program_name):$(F90objs) $(F77objs)
 .SUFFIXES : .F .f90 .o
 
 .f90.o:
-	$(Complier2) -O2 -g -c $<
+	$(Complier2) -O2 -g -c -fallow-argument-mismatch $<
 
 .F.o:
-	$(Complier2) -O2 -g -c $<
+	$(Complier2) -O2 -g -c -fallow-argument-mismatch $<
 
 .PHONY:clean
 clean : 
