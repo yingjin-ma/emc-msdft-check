@@ -15,6 +15,8 @@
       READ(23,*)BASELABLE
       CLOSE(23)
       CALL BASIS_INT(NATOM,NORB,GEOM,ATOMCHG,DMOINT1,DMOINT2,BASELABLE)
+      print *,"mayj : done BASIS_INT in CAS_INT"  
+
       CALL E_NU(NATOM,GEOM,ATOMCHG,ENG)
       OPEN(23,FILE='INT_MO')
       DO I=1,NORB
@@ -60,10 +62,17 @@
       INTEGER I,J
       INTEGER ITMP(NORB)
       CHARACTER*30 BASELABLE
+      write(6,*) "mayj : enter FOUND_INIT"
+      call flush(6)
+
       OPEN(23,FILE='INCAR')
       READ(23,*)
       READ(23,*)BASELABLE
       CLOSE(23)
+      write(6,*) "mayj : before BASIS_INT in FOUND_INIT"  
+      call flush(6) 
       CALL BASIS_INT(NATOM,NORB,GEOM,ATOMCHG,DMOINT1,DMOINT2,BASELABLE)
+      print *,"mayj :   done BASIS_INT in FOUND_INIT"  
+      call flush(6) 
       END
 

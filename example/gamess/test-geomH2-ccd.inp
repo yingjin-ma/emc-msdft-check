@@ -1,0 +1,10 @@
+ $CONTRL SCFTYP=RHF RUNTYP=ENERGY ISPHER=1 $END
+ $SYSTEM timlim=1000 $END
+ $BASIS  GBASIS=CCD $END
+ $DATA
+  check the data
+ C1
+ H   1    0.00000000    0.0    0.375
+ H   1    0.00000000    0.0   -0.375
+ $END
+

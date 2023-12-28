@@ -6,8 +6,8 @@ F90srcs = MAIN.f90 GAMESS_MSDFT.f90 MOLPROtoGAMESS.f90
 F90objs = $(F90srcs:.f90=.o)
 F77objs = $(F77srcs:.F=.o)
 
-Complier2=ifort
-Complier1=gfortran
+Complier1=ifort
+Complier2=gfortran
 
 Link=-o
 

@@ -38,6 +38,7 @@
       IF(ILINE1==0 .AND. ILINE2==0) GOTO 9999
       IF(ILINE1>0 .AND. ILINE2>0) GOTO 9999
       IF(ILINE1>0 .AND. ILINE2==0) THEN
+        write(*,*)"ILINE1 : ",ILINE1       
         CALL READGAMESSMO(NAO,GAMESSMO,ILINE1)
         CALL GAMESSTOMSDFT(NAO,GAMESSMO,MSDFTMO,BASELABLE,NATOM)
       ENDIF
@@ -379,13 +380,15 @@
         READ(41,*)CC
         IF(CC=='$VEC') THEN
           DO 120 J = 1,N
+          write(6,*)"MAYJ J :",J 
           iMAX = 0
 100       iMIN = iMAX+1
           iMAX = iMAX+5
           IF (iMAX .GT. N) iMAX = N
           READ (41,140) IC,IC,(MO(I,J),I = iMIN,iMAX)
           IF (iMAX .LT. N) GO TO 100
-120       CONTINUE
+          write(6,*)"MAYJ J done "
+120       CONTINUE          
         GOTO 130
         ENDIF
       ENDDO

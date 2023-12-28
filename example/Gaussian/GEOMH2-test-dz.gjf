@@ -1,0 +1,11 @@
+%nproc=4
+%mem = 10GB
+%chk = geomh2-dz.chk
+#p HF cc-pvdz 5d nosym   pop=full
+
+geom
+
+0 1 
+H       0.00000000    0.0000000     0.375000
+H       0.00000000    0.0000000    -0.375000
+

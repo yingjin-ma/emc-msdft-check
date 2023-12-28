@@ -15,6 +15,8 @@
       CFILE(22)='FCIDUMP'
       CFILE(23)='ONETWOINT'
 
+      write(6,*)"Entering CHECKFILE"
+      call flush(6) 
 
       DO I=1,8       
         iERRO=-1

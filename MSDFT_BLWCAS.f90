@@ -57,7 +57,7 @@
       ALLOCATE(U(NORB,NORB,NORB,NORB))
 !C Initialization: RDMDETs, DETs, INT_MO, FCIDUMP, ONETWOINT
       IF(IINT==0) THEN
-        write(6,*) "IINT : ", IINT       
+        write(6,*) "mayj  IINT : ", IINT       
         CALL CHECKFILE(0,iERRO)
         IF(iERRO==-1) GOTO 999
         WRITE(8406,*)''
@@ -67,7 +67,7 @@
         WRITE(8406,*)'OUT: MSDFT_INT.f90'
         WRITE(8406,*)''
       ELSE
-        write(6,*) "IINT : ", IINT       
+        write(6,*) "mayj  IINT : ", IINT       
         CALL FOUND_INIT(NORB,NATOM,GEOM,ATOMCHG)
         CALL CHECKFILE(1,iERRO)
         IF(iERRO==-1) GOTO 999

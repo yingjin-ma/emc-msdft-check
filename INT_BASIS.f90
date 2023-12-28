@@ -30,6 +30,8 @@ do i = 1,nconts
 enddo
 deallocate(TWOEI)
 
+print*,"mayj : done the BASIS_INT"
+
 end subroutine
 
 subroutine INTXC_ALLOCATE(N)
@@ -109,7 +111,7 @@ do i = 1,Natoms
   atoms(i)%charge = atomchg(i) 
   write (atoms(i)%base,"(I0.2,A1,A27)")  atomchg(i),'-',baselable
 enddo
-print *,atoms(1)%base
+!print *,atoms(1)%base
 
 
 
@@ -210,11 +212,11 @@ print*,base_temp
            ! 2.2.2 prepare contractcoeff
            bas(7,j+start) = offpoint
            do k = 1,atoms(i)%shell(j)%nGauss        
-    !             env(offpoint+k) = atoms(i)%shell(j)%contrCoeff(k)
-                env(offpoint+k) = atoms(i)%shell(j)%contrCoeff(k)*CINTgto_norm( &
-                                  atoms(i)%shell(j)%angMoment, atoms(i)%shell(j)%exponents(k))
-             !   atoms(i)%shell(j)%contrCoeff(k) = atoms(i)%shell(j)%contrCoeff(k)*CINTgto_norm( &
-             !                     atoms(i)%shell(j)%angMoment, atoms(i)%shell(j)%exponents(k))
+!!                 env(offpoint+k) = atoms(i)%shell(j)%contrCoeff(k)
+              env(offpoint+k) = atoms(i)%shell(j)%contrCoeff(k)*CINTgto_norm( &
+                                atoms(i)%shell(j)%angMoment, atoms(i)%shell(j)%exponents(k))
+!              atoms(i)%shell(j)%contrCoeff(k) = atoms(i)%shell(j)%contrCoeff(k)*CINTgto_norm( &
+!                                atoms(i)%shell(j)%angMoment, atoms(i)%shell(j)%exponents(k))
            enddo
            offpoint = offpoint + atoms(i)%shell(j)%nGauss
 
@@ -302,6 +304,13 @@ do i = 0,nBases-1
    enddo
 enddo
 
+do i = 1,nConts 
+  do j = 1,i 
+      write(6,*)"S and Hcore (",i,",",j,") = ", S(i,j),Hcore(i,j)
+  end do 
+end do 
+
+
 
 !4.  
 !##########   2-electron integral  ########
@@ -342,6 +351,9 @@ do ij = 0, nBases*(nBases+1)/2-1
     enddo
 enddo
 
+do i = 1,nRec
+  write(6,*)"U",TWOEI(i) 
+end do 
 
 deallocate(ishls)
 deallocate(jshls)

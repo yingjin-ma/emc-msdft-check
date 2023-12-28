@@ -60,6 +60,8 @@
       INTEGER I,J
       INTEGER ITMP(NORB)
       CHARACTER*30 BASELABLE
+      write(6,*) "mayj : enter FOUND_INIT"
+      call flush(6) 
       OPEN(23,FILE='INCAR')
       READ(23,*)
       READ(23,*)BASELABLE
