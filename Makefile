@@ -28,8 +28,7 @@ Complier2=gfortran
 Link=-o
 
 #With intel mkl and GNU compilier
-FLIB =  -L${MKLROOT}/lib/intel64 -Wl,--no-as-needed -lmkl_gf_ilp64 -lmkl_gnu_thread -lmkl_core -lgomp -lpthread -lm -ldl
-
+FLIB =  -L${MKLROOT}/lib/intel64 -Wl,--no-as-needed  -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -lgomp -lpthread -lm -ldl
 #59.72.122.148 with GNU, gfortran only
 #FLIB = -L /usr/lib64 -m64 -lblas -llapack
 
@@ -39,13 +38,15 @@ FLIB =  -L${MKLROOT}/lib/intel64 -Wl,--no-as-needed -lmkl_gf_ilp64 -lmkl_gnu_thr
 $(Program_name):$(F90objs) $(F77objs)
 	$(Complier2) $(Link) $(Program_name) $(F90objs) $(F77objs) $(LIB) $(FLIB)
 
+
 .SUFFIXES : .F .f90 .o
 
 .f90.o:
-	$(Complier2) -O2 -g -c -fallow-argument-mismatch $<
-
+	$(Complier2) -O2 -g -c -Wno-argument-mismatch $<  -m64 -I"${MKLROOT}/include"
+	
 .F.o:
-	$(Complier2) -O2 -g -c -fallow-argument-mismatch $<
+	$(Complier2) -O2 -g -c -Wno-argument-mismatch $<  -m64 -I"${MKLROOT}/include" 
+	
 
 .PHONY:clean
 clean : 
