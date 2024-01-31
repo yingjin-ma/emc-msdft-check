@@ -1,0 +1,6 @@
+ mv oneparticle.rdm oneRDM.1.1
+ mv twoparticle.rdm twoRDM.1.1
+ rm -rf ref_checkpoint_state.1
+ cp -rf checkpoint_state.1 ref_checkpoint_state.1
+ rm -rf initial_checkpoint_state.1
+ cp -rf checkpoint_state.1 initial_checkpoint_state.1

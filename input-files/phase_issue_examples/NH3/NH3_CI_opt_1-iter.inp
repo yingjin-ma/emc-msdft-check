@@ -1,0 +1,17 @@
+&GATEWAY
+ coord=NH3_nosym.xyz
+ basis=ANO-S-MB
+ group=NOSYM
+
+&SEWARD
+&SCF
+&RASSCF
+
+ inactive=  4
+    ras2 =  3
+ CIroot=  2,2; 1 2; 1 1
+  PRWF = 0.00
+
+&ALASKA
+&SLAPAF
+

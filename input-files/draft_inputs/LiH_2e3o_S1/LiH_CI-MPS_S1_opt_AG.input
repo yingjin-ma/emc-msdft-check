@@ -1,0 +1,45 @@
+&GATEWAY
+ coord=LiH.xyz
+ basis=cc-pvdz
+ group=NOSYM
+
+>>>  Do  while  <<<
+&SEWARD
+>>>>>> if(iter=1) <<<<<<
+&SCF
+ fileorb=LiH_RASSCF.ScfOrb
+>>>>>>   endif   <<<<<<
+&RASSCF
+ inactive = 1
+     RAS2 = 3
+  CIROot  = 2 2; 1 2; 1 1
+ RLXRoot  = 2
+    PRWF  = 0.0
+
+&RASSCF
+ inactive = 1
+     RAS2 = 3
+  CIROot  = 2 2; 1 2; 1 1
+ RLXRoot  = 2
+    PRWF  = 0.0
+
+  DMRG
+  RGinput
+    nsweeps = 20
+    max_bond_dimension = 100
+  endRG
+  LRRAS2 = 3
+  CIONLY
+
+&MOTRA &END
+Title
+LiH
+FROZEN
+0
+JOBIPH
+HDF5
+
+&ALASKA
+&SLAPAF
+>>>  EndDo  <<<
+

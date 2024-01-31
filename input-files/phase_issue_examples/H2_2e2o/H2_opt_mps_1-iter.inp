@@ -1,0 +1,43 @@
+&GATEWAY
+coord
+2
+angstrom
+H 0.350000000 0.000000000 0.000000000
+H -0.350000000 0.000000000 0.000000000
+basis
+H.DZ....
+group=nosym
+
+*>>>  Do  while  <<<
+
+&SEWARD
+
+&RASSCF
+Title
+H2, DZ Basis set
+nActEl
+2 0 0
+CIRoot=2,2,1
+Ras2=2
+fileo=test1_opt.RasOrb
+CIONLY
+
+DMRG
+LRRAS2=2
+RGInput
+max_bond_dimension=48
+nsweeps=3
+EndRG
+
+&MOTRA &END
+Title
+H2
+FROZEN
+0
+JOBIPH
+HDF5
+
+&ALASKA
+&SLAPAF
+
+*>>>  EndDo  <<<

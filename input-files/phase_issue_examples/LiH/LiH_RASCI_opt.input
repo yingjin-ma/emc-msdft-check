@@ -1,0 +1,28 @@
+&GATEWAY
+ coord=LiH.xyz
+ basis=cc-pvdz
+ group=NOSYM
+
+&SEWARD
+
+
+&RASSCF
+  fileorb = LiH_RASSCF.RasOrb
+ inactive = 1
+     RAS2 = 4
+  CIROot  = 2 2; 1 2; 1 1
+ RLXRoot  = 1
+    PRWF  = 0.0
+    CIONLY
+
+&MOTRA &END
+Title
+LiH
+FROZEN
+0
+JOBIPH
+HDF5
+
+&ALASKA
+&SLAPAF
+

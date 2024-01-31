@@ -1,0 +1,12 @@
+rm oneRDM.*
+rm -rf *checkpoint*
+rm twoRDM.*
+rm MPSCi*
+rm fort.*
+rm dmrg.out*
+rm dmrg_tdms_*
+rm Hami.*
+rm *overlap*
+rm results_state.*
+rm info*.tmp
+

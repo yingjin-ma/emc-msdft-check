@@ -1,0 +1,1215 @@
+  QCMaquis - Quantum Chemical Density Matrix Renormalization group
+  available from http://www.reiher.ethz.ch/software
+  based on the ALPS MPS codes from http://alps.comp-phys.org/
+  copyright (c) 2015 Laboratory of Physical Chemistry, ETH Zurich
+  copyright (c) 2012-2015 by Sebastian Keller
+  for details see the publication: 
+  S. Keller et al, arXiv:1510.02026
+
+This binary contains symmetries: su2u1 su2u1pg 
+DMRG version 2.0-f5f1b7c6ec6a1e6c3600050667df991190419ba0 (yingjin-devel) v1.0
+Temporary storage enabled in ./tmp/storage_temp_25f80ba5e676/
+Hope it is from coded
+The hamiltonian will contain 55 terms
+MPO Bond: 28
+MPO Bond: 12
+MPO Bond: 1
+Restoring state.
+Will start again at site -1 in sweep 2
+Hope it is from coded
+The hamiltonian will contain 55 terms
+MPO Bond: 28
+MPO Bond: 12
+MPO Bond: 1
+ lat, model, mpo constructed 
+MPS initialization has finished...
+ ==> using the modified twosite optimization in dmrg_sim.h 
+Expecting 0 states to orthogonalize to.
+Boundaries are partially initialized...
+Boundaries are fully initialized...
+Done init_left_right
+TSMPOTensor: 28x1,  28 operators, 24 tags
+TSMPOTensor: 1x12,  12 operators, 12 tags
+Total number of tags: 36
+ Entering the sweep subroutine 
+ ====== ====== ====== =========== ====== ====== ====== ====== 
+ ====== ====== ====== refchkpfile unload ====== ====== ====== 
+ ====== ====== ====== =========== ====== ====== ====== ====== 
+
+Sweep 2, optimizing sites 0 and 1
+ =========================================== 
+    restore GS RDM-derivative behaviour      
+ =========================================== 
+ Before TwoSiteTensor--tst 
+ Before MPSTensor--twin_mps 
+ 11 in TwoSiteTensor::make_mps 
+ 11aa in TwoSiteTensor::make_mps 
+ 11bb in TwoSiteTensor::make_mps 
+ After typedef in ts_reduction::reduce_right 
+ Before for loop in ts_reduction::reduce_right 
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ 0011 --else-- in ts_reduction::reduce_right 
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ 0011 --else-- in ts_reduction::reduce_right 
+ jl:0 jr:0 j:0 S2:1 S1:1 jm:1
+ 0011 --else-- in ts_reduction::reduce_right 
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ 0011 --else-- in ts_reduction::reduce_right 
+ 1100 in TwoSiteTensor::make_mps 
+ Before SiteProblem--sp 
+ Before compute orthogonal vectors 
+parms eigensolver : IETL_JCD
+ ============================================================== 
+ =====!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!===== 
+ ===== The solve_ietl_davidson2 instead of solve_ietl_jcd ===== 
+ ===== The solve_ietl_davidson2 instead of solve_ietl_jcd ===== 
+ =====!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!===== 
+ In the solve_ietl_davidson2 solver || istate :::::: 10000
+ initial vector t :
+ Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+Basis: |( <0,0,0>,<0,0,0>: 1x5 )|
+Block (<0,0,0>,<0,0,0>):
+[[ 0.996291111, -0.05927765606, 0, 0, -0.06237132004]]
+
+
+
+ == Davidson with pre-conditioner in davidson2.h | istate 10000
+ vector during Davidson2 iterations Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+Basis: |( <0,0,0>,<0,0,0>: 1x5 )|
+Block (<0,0,0>,<0,0,0>):
+[[ 0.996291111, -0.05927765606, 0, 0, -0.06237132004]]
+
+
+
+ params.is_set  || state-averaged 0 energy(theta) : -5.839645343
+ finish mdiag.precondition 
+ finish one davidson step 
+ vector during Davidson2 iterations Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <2,0,0>,<2,0,0>: 4x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 0.996291111]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ -0.05927765606],
+[ 0],
+[ 0],
+[ -0.06237132004]]
+
+
+
+ params.is_set  || state-averaged 0 energy(theta) : -5.839645343
+ davidson.h :: theta -5.839645343
+ davidson.h ::     u Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <2,0,0>,<2,0,0>: 4x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ -0.996291111]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ 0.05927765606],
+[ -6.556654988e-07],
+[ -0],
+[ 0.06237132003]]
+
+
+
+ Change the scaling in order to mix the MPS 
+Davidson2 used 2 iterations.
+ res.second res.second res.second res.second res.second  Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <2,0,0>,<2,0,0>: 4x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ -0.996291111]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ 0.05927765606],
+[ -6.556654988e-07],
+[ -0],
+[ 0.06237132003]]
+
+
+
+ ============================================= 
+ ===== The get_hami to get the full Hami ===== 
+ ============================================= 
+The re-constructed Hami for block-0,1 in sweep 2 with direction 1
+cijswpLR : Hami_0-1_sweep-2_L.txt
+<4,0,0><4,0,0>
+<2,0,0><2,0,0>
+Time elapsed in JCD: 0.00487616
+ ==== before tst << res.second ==== 
+ ==== before tst << res.second ==== 
+ res.second.data()
+ Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <2,0,0>,<2,0,0>: 4x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ -0.996291111]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ 0.05927765606],
+[ -6.556654988e-07],
+[ -0],
+[ 0.06237132003]]
+
+
+
+ ===== op << 0000 ===== 
+ ===== 0000 operator_shift ===== 
+ ===== 0011 operator_shift ===== 
+ ===== 0022 operator_shift ===== 
+ ===== 0033 operator_shift ===== 
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ jl:0 jr:0 j:0 S2:1 S1:1 jm:1
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ ===== 0044 operator_shift ===== 
+ ===== 0055 operator_shift ===== 
+ ===== 0066 operator_shift ===== 
+ ===== 0077 operator_shift ===== 
+ ===== 0088 operator_shift ===== 
+ ====     before res.clear     ==== 
+ ====  twin_mps.clear  ==== 
+Energy 1 -22.7842055746346
+Now the final sweep is start2 alpha_final 1e-08
+ === cutoff will start === 
+ ==== Mmax and cutoff ==== 1 1e-11
+Printout to check -- in split_mps_l2r
+ data_ in split_mps_l2r
+ Basis: |( <2,0,0>,<2,0,0>: 1x2 )( <1,1,0>,<1,1,0>: 1x1 )( <1,-1,0>,<1,-1,0>: 1x1 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+[[ -0.996291111, 0.05927765606]]
+
+Block (<1,1,0>,<1,1,0>):
+[[ -6.556654988e-07]]
+
+Block (<1,-1,0>,<1,-1,0>):
+[[ 0]]
+
+Block (<0,0,0>,<0,0,0>):
+[[ 0.06237132003]]
+
+
+
+ cutoff  &  Mmax 1e-11  ---  1
+Full U
+ Basis: |( <2,0,0>,<2,0,0>: 1x1 )( <1,1,0>,<1,1,0>: 1x1 )( <1,-1,0>,<1,-1,0>: 1x1 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+[[ 1]]
+
+Block (<1,1,0>,<1,1,0>):
+[[ 1]]
+
+Block (<1,-1,0>,<1,-1,0>):
+[[ 1]]
+
+Block (<0,0,0>,<0,0,0>):
+[[ 1]]
+
+
+
+Full V
+ Basis: |( <2,0,0>,<2,0,0>: 1x2 )( <1,1,0>,<1,1,0>: 1x1 )( <1,-1,0>,<1,-1,0>: 1x1 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+[[ -0.9982346601, 0.05939329398]]
+
+Block (<1,1,0>,<1,1,0>):
+[[ -1]]
+
+Block (<1,-1,0>,<1,-1,0>):
+[[ 1]]
+
+Block (<0,0,0>,<0,0,0>):
+[[ 1]]
+
+
+
+Full S
+ Basis: |( <2,0,0>,<2,0,0>: 1x1 )( <1,1,0>,<1,1,0>: 1x1 )( <1,-1,0>,<1,-1,0>: 1x1 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+0.9980530138 
+Block (<1,1,0>,<1,1,0>):
+6.556654988e-07 
+Block (<1,-1,0>,<1,-1,0>):
+0 
+Block (<0,0,0>,<0,0,0>):
+0.06237132003 
+
+
+keeps[3]=1
+keeps[2]=0
+keeps[1]=0
+keeps[0]=1
+Sum: 4 -> 2
+ svd_truncate:  Sum: 4 -> 2
+ After truncation  == u.left_basis()
+ |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+ After truncation  == u.right_basis()
+ |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+ After truncation  == u
+               Basis: |( <2,0,0>,<2,0,0>: 1x1 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+[[ 1]]
+
+Block (<0,0,0>,<0,0,0>):
+[[ 1]]
+
+
+
+ After truncation  == s
+               Basis: |( <2,0,0>,<2,0,0>: 1x1 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+0.9980530138 
+Block (<0,0,0>,<0,0,0>):
+0.06237132003 
+
+
+ After truncation  == v.left_basis()
+ |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+ After truncation  == v.right_basis()
+ |( <2,0,0>: 2 )( <0,0,0>: 1 )|
+ After truncation  == v
+               Basis: |( <2,0,0>,<2,0,0>: 1x2 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+[[ -0.9982346601, 0.05939329398]]
+
+Block (<0,0,0>,<0,0,0>):
+[[ 1]]
+
+
+
+ r2l After gemm of truncation  == u.left_basis()
+ |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+ r2l After gemm of truncation  == u.right_basis()
+ |( <2,0,0>: 2 )( <0,0,0>: 1 )|
+ r2l After gemm of truncation  == u
+               Basis: |( <2,0,0>,<2,0,0>: 1x2 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+[[ -0.996291111, 0.05927765606]]
+
+Block (<0,0,0>,<0,0,0>):
+[[ 0.06237132003]]
+
+
+
+ == SVD with lr=+1 == in ts_optimize.hpp 1 1e-11
+Time elapsed in TRUNC: 0.001092173
+lr +1, Propagating t with norm 1
+ ==  entering boundary_left_step with site 0
+Memory usage : 709396 643860 
+Sweep has been running for 0.029805976 seconds.
+
+Sweep 2, optimizing sites 1 and 2
+ =========================================== 
+    restore GS RDM-derivative behaviour      
+ =========================================== 
+ Before TwoSiteTensor--tst 
+ Before MPSTensor--twin_mps 
+ 11 in TwoSiteTensor::make_mps 
+ 11aa in TwoSiteTensor::make_mps 
+ 11bb in TwoSiteTensor::make_mps 
+ After typedef in ts_reduction::reduce_right 
+ Before for loop in ts_reduction::reduce_right 
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ 0011 --else-- in ts_reduction::reduce_right 
+ jl:0 jr:0 j:0 S2:1 S1:1 jm:1
+ 0011 --else-- in ts_reduction::reduce_right 
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ 0011 --else-- in ts_reduction::reduce_right 
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ 0011 --else-- in ts_reduction::reduce_right 
+ 1100 in TwoSiteTensor::make_mps 
+ Before SiteProblem--sp 
+ Before compute orthogonal vectors 
+parms eigensolver : IETL_JCD
+ ============================================================== 
+ =====!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!===== 
+ ===== The solve_ietl_davidson2 instead of solve_ietl_jcd ===== 
+ ===== The solve_ietl_davidson2 instead of solve_ietl_jcd ===== 
+ =====!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!===== 
+ In the solve_ietl_davidson2 solver || istate :::::: 10000
+ initial vector t :
+ Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )|
+Basis: |( <2,0,0>,<2,0,0>: 1x4 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+[[ -0.996291111, 0, 0, 0.05927765606]]
+
+Block (<0,0,0>,<0,0,0>):
+[[ 0.06237132003]]
+
+
+
+ == Davidson with pre-conditioner in davidson2.h | istate 10000
+ vector during Davidson2 iterations Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )|
+Basis: |( <2,0,0>,<2,0,0>: 1x4 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+[[ -0.996291111, 0, 0, 0.05927765606]]
+
+Block (<0,0,0>,<0,0,0>):
+[[ 0.06237132003]]
+
+
+
+ params.is_set  || state-averaged 0 energy(theta) : -5.839645343
+ finish mdiag.precondition 
+ finish one davidson step 
+ vector during Davidson2 iterations Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )|
+Basis: |( <4,0,0>,<4,0,0>: 5x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 0.06237132003],
+[ -0.996291111],
+[ 0],
+[ 0],
+[ 0.05927765606]]
+
+
+
+ params.is_set  || state-averaged 0 energy(theta) : -5.83966484
+ finish mdiag.precondition 
+ finish one davidson step 
+ vector during Davidson2 iterations Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )|
+Basis: |( <4,0,0>,<4,0,0>: 5x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ -0.06236822769],
+[ 0.9962417154],
+[ -0.009957737151],
+[ -0],
+[ -0.0592747171]]
+
+
+
+ params.is_set  || state-averaged 0 energy(theta) : -5.839664851
+ finish mdiag.precondition 
+ finish one davidson step 
+ vector during Davidson2 iterations Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )|
+Basis: |( <4,0,0>,<4,0,0>: 5x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 0.06223045026],
+[ -0.9962506798],
+[ 0.009963369046],
+[ 0],
+[ 0.05926791094]]
+
+
+
+ params.is_set  || state-averaged 0 energy(theta) : -5.839664852
+ davidson.h :: theta -5.839664852
+ davidson.h ::     u Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )|
+Basis: |( <4,0,0>,<4,0,0>: 5x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ -0.06222923672],
+[ 0.9962501598],
+[ -0.009963398382],
+[ 0],
+[ -0.05927792142]]
+
+
+
+ Change the scaling in order to mix the MPS 
+Davidson2 used 4 iterations.
+ res.second res.second res.second res.second res.second  Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )|
+Basis: |( <4,0,0>,<4,0,0>: 5x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ -0.06222923672],
+[ 0.9962501598],
+[ -0.009963398382],
+[ 0],
+[ -0.05927792142]]
+
+
+
+ ============================================= 
+ ===== The get_hami to get the full Hami ===== 
+ ============================================= 
+The re-constructed Hami for block-1,2 in sweep 2 with direction 1
+cijswpLR : Hami_1-2_sweep-2_L.txt
+<4,0,0><4,0,0>
+Time elapsed in JCD: 0.009915607
+ ==== before tst << res.second ==== 
+ ==== before tst << res.second ==== 
+ res.second.data()
+ Basis: |( <4,0,0>,<4,0,0>: 5x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ -0.06222923672],
+[ 0.9962501598],
+[ -0.009963398382],
+[ 0],
+[ -0.05927792142]]
+
+
+
+ ===== op << 0000 ===== 
+ ===== 0000 operator_shift ===== 
+ ===== 0011 operator_shift ===== 
+ ===== 0022 operator_shift ===== 
+ ===== 0033 operator_shift ===== 
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ jl:0 jr:0 j:0 S2:1 S1:1 jm:1
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ ===== 0044 operator_shift ===== 
+ ===== 0055 operator_shift ===== 
+ ===== 0066 operator_shift ===== 
+ ===== 0077 operator_shift ===== 
+ ===== 0088 operator_shift ===== 
+ ====     before res.clear     ==== 
+ ====  twin_mps.clear  ==== 
+Energy 1 -22.7842250829266
+Now the final sweep is start2 alpha_final 1e-08
+ === cutoff will start === 
+ ==== Mmax and cutoff ==== 1 1e-11
+Printout to check -- in split_mps_l2r
+ data_ in split_mps_l2r
+ Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <3,1,0>,<3,1,0>: 1x1 )( <3,-1,0>,<3,-1,0>: 1x1 )( <2,0,0>,<2,0,0>: 2x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 0.9962501598]]
+
+Block (<3,1,0>,<3,1,0>):
+[[ -0.009963398382]]
+
+Block (<3,-1,0>,<3,-1,0>):
+[[ 0]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ -0.06222923672],
+[ -0.05927792142]]
+
+
+
+ cutoff  &  Mmax 1e-11  ---  1
+Full U
+ Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <3,1,0>,<3,1,0>: 1x1 )( <3,-1,0>,<3,-1,0>: 1x1 )( <2,0,0>,<2,0,0>: 2x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 1]]
+
+Block (<3,1,0>,<3,1,0>):
+[[ 1]]
+
+Block (<3,-1,0>,<3,-1,0>):
+[[ 1]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ -0.7240683038],
+[ -0.6897282737]]
+
+
+
+Full V
+ Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <3,1,0>,<3,1,0>: 1x1 )( <3,-1,0>,<3,-1,0>: 1x1 )( <2,0,0>,<2,0,0>: 1x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 1]]
+
+Block (<3,1,0>,<3,1,0>):
+[[ -1]]
+
+Block (<3,-1,0>,<3,-1,0>):
+[[ 1]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ 1]]
+
+
+
+Full S
+ Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <3,1,0>,<3,1,0>: 1x1 )( <3,-1,0>,<3,-1,0>: 1x1 )( <2,0,0>,<2,0,0>: 1x1 )|
+Block (<4,0,0>,<4,0,0>):
+0.9962501598 
+Block (<3,1,0>,<3,1,0>):
+0.009963398382 
+Block (<3,-1,0>,<3,-1,0>):
+0 
+Block (<2,0,0>,<2,0,0>):
+0.08594387629 
+
+
+keeps[3]=1
+keeps[2]=0
+keeps[1]=0
+keeps[0]=1
+Sum: 4 -> 2
+ svd_truncate:  Sum: 4 -> 2
+ After truncation  == u.left_basis()
+ |( <4,0,0>: 1 )( <2,0,0>: 2 )|
+ After truncation  == u.right_basis()
+ |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+ After truncation  == u
+               Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <2,0,0>,<2,0,0>: 2x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 1]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ -0.7240683038],
+[ -0.6897282737]]
+
+
+
+ After truncation  == s
+               Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <2,0,0>,<2,0,0>: 1x1 )|
+Block (<4,0,0>,<4,0,0>):
+0.9962501598 
+Block (<2,0,0>,<2,0,0>):
+0.08594387629 
+
+
+ After truncation  == v.left_basis()
+ |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+ After truncation  == v.right_basis()
+ |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+ After truncation  == v
+               Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <2,0,0>,<2,0,0>: 1x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 1]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ 1]]
+
+
+
+ r2l After gemm of truncation  == u.left_basis()
+ |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+ r2l After gemm of truncation  == u.right_basis()
+ |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+ r2l After gemm of truncation  == u
+               Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <2,0,0>,<2,0,0>: 1x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 0.9962501598]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ 0.08594387629]]
+
+
+
+ == SVD with lr=+1 == in ts_optimize.hpp 1 1e-11
+Time elapsed in TRUNC: 0.000993907
+lr +1, Propagating t with norm 0.9999503641
+ ==  entering boundary_left_step with site 1
+Memory usage : 709396 643860 
+Sweep has been running for 0.042268196 seconds.
+
+Sweep 2, optimizing sites 1 and 2
+ =========================================== 
+    restore GS RDM-derivative behaviour      
+ =========================================== 
+ Before TwoSiteTensor--tst 
+ Before MPSTensor--twin_mps 
+ 11 in TwoSiteTensor::make_mps 
+ 11aa in TwoSiteTensor::make_mps 
+ 11bb in TwoSiteTensor::make_mps 
+ After typedef in ts_reduction::reduce_right 
+ Before for loop in ts_reduction::reduce_right 
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ 0011 --else-- in ts_reduction::reduce_right 
+ jl:0 jr:0 j:0 S2:1 S1:1 jm:1
+ 0011 --else-- in ts_reduction::reduce_right 
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ 0011 --else-- in ts_reduction::reduce_right 
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ 0011 --else-- in ts_reduction::reduce_right 
+ 1100 in TwoSiteTensor::make_mps 
+ Before SiteProblem--sp 
+ Before compute orthogonal vectors 
+parms eigensolver : IETL_JCD
+ ============================================================== 
+ =====!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!===== 
+ ===== The solve_ietl_davidson2 instead of solve_ietl_jcd ===== 
+ ===== The solve_ietl_davidson2 instead of solve_ietl_jcd ===== 
+ =====!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!===== 
+ In the solve_ietl_davidson2 solver || istate :::::: 10000
+ initial vector t :
+ Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )|
+Basis: |( <2,0,0>,<2,0,0>: 1x4 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+[[ -0.996299612, 0, 0, 0.05928086388]]
+
+Block (<0,0,0>,<0,0,0>):
+[[ 0.06223232568]]
+
+
+
+ == Davidson with pre-conditioner in davidson2.h | istate 10000
+ vector during Davidson2 iterations Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )|
+Basis: |( <2,0,0>,<2,0,0>: 1x4 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+[[ -0.996299612, 0, 0, 0.05928086388]]
+
+Block (<0,0,0>,<0,0,0>):
+[[ 0.06223232568]]
+
+
+
+ params.is_set  || state-averaged 0 energy(theta) : -5.839645332
+ finish mdiag.precondition 
+ finish one davidson step 
+ vector during Davidson2 iterations Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )|
+Basis: |( <4,0,0>,<4,0,0>: 5x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 0.06223232568],
+[ -0.996299612],
+[ 0],
+[ 0],
+[ 0.05928086388]]
+
+
+
+ params.is_set  || state-averaged 0 energy(theta) : -5.83966484
+ finish mdiag.precondition 
+ finish one davidson step 
+ vector during Davidson2 iterations Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )|
+Basis: |( <4,0,0>,<4,0,0>: 5x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ -0.06236897589],
+[ 0.9962411254],
+[ -0.009951892593],
+[ 0],
+[ -0.05928482693]]
+
+
+
+ params.is_set  || state-averaged 0 energy(theta) : -5.839664851
+ finish mdiag.precondition 
+ finish one davidson step 
+ vector during Davidson2 iterations Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )|
+Basis: |( <4,0,0>,<4,0,0>: 5x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 0.06223112274],
+[ -0.9962506277],
+[ 0.009963312644],
+[ 0],
+[ 0.05926809073]]
+
+
+
+ params.is_set  || state-averaged 0 energy(theta) : -5.839664852
+ davidson.h :: theta -5.839664852
+ davidson.h ::     u Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )|
+Basis: |( <4,0,0>,<4,0,0>: 5x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ -0.06222923672],
+[ 0.9962501598],
+[ -0.009963398382],
+[ 0],
+[ -0.05927792142]]
+
+
+
+ Change the scaling in order to mix the MPS 
+Davidson2 used 4 iterations.
+ res.second res.second res.second res.second res.second  Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )|
+Basis: |( <4,0,0>,<4,0,0>: 5x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ -0.06222923672],
+[ 0.9962501598],
+[ -0.009963398382],
+[ 0],
+[ -0.05927792142]]
+
+
+
+ ============================================= 
+ ===== The get_hami to get the full Hami ===== 
+ ============================================= 
+The re-constructed Hami for block-1,2 in sweep 2 with direction -1
+cijswpLR : Hami_1-2_sweep-2_R.txt
+<4,0,0><4,0,0>
+Time elapsed in JCD: 0.013817903
+ ==== before tst << res.second ==== 
+ ==== before tst << res.second ==== 
+ res.second.data()
+ Basis: |( <4,0,0>,<4,0,0>: 5x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ -0.06222923672],
+[ 0.9962501598],
+[ -0.009963398382],
+[ 0],
+[ -0.05927792142]]
+
+
+
+ ===== op << 0000 ===== 
+ ===== 0000 operator_shift ===== 
+ ===== 0011 operator_shift ===== 
+ ===== 0022 operator_shift ===== 
+ ===== 0033 operator_shift ===== 
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ jl:0 jr:0 j:0 S2:1 S1:1 jm:1
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ ===== 0044 operator_shift ===== 
+ ===== 0055 operator_shift ===== 
+ ===== 0066 operator_shift ===== 
+ ===== 0077 operator_shift ===== 
+ ===== 0088 operator_shift ===== 
+ ====     before res.clear     ==== 
+ ====  twin_mps.clear  ==== 
+Energy -1 -22.7842250829266
+Now the final sweep is start2 alpha_final 1e-08
+ === cutoff will start === 
+ ==== Mmax and cutoff ==== 1 1e-11
+Printout to check -- in split_mps_r2l
+ data_ in split_mps_r2l
+ Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <3,1,0>,<3,1,0>: 1x1 )( <3,-1,0>,<3,-1,0>: 1x1 )( <2,0,0>,<2,0,0>: 2x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 0.9962501598]]
+
+Block (<3,1,0>,<3,1,0>):
+[[ -0.009963398382]]
+
+Block (<3,-1,0>,<3,-1,0>):
+[[ 0]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ -0.06222923672],
+[ -0.05927792142]]
+
+
+
+ cutoff  &  Mmax 1e-11  ---  1
+Full U
+ Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <3,1,0>,<3,1,0>: 1x1 )( <3,-1,0>,<3,-1,0>: 1x1 )( <2,0,0>,<2,0,0>: 2x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 1]]
+
+Block (<3,1,0>,<3,1,0>):
+[[ 1]]
+
+Block (<3,-1,0>,<3,-1,0>):
+[[ 1]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ -0.7240683038],
+[ -0.6897282737]]
+
+
+
+Full V
+ Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <3,1,0>,<3,1,0>: 1x1 )( <3,-1,0>,<3,-1,0>: 1x1 )( <2,0,0>,<2,0,0>: 1x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 1]]
+
+Block (<3,1,0>,<3,1,0>):
+[[ -1]]
+
+Block (<3,-1,0>,<3,-1,0>):
+[[ 1]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ 1]]
+
+
+
+Full S
+ Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <3,1,0>,<3,1,0>: 1x1 )( <3,-1,0>,<3,-1,0>: 1x1 )( <2,0,0>,<2,0,0>: 1x1 )|
+Block (<4,0,0>,<4,0,0>):
+0.9962501598 
+Block (<3,1,0>,<3,1,0>):
+0.009963398382 
+Block (<3,-1,0>,<3,-1,0>):
+0 
+Block (<2,0,0>,<2,0,0>):
+0.08594387629 
+
+
+keeps[3]=1
+keeps[2]=0
+keeps[1]=0
+keeps[0]=1
+Sum: 4 -> 2
+ svd_truncate:  Sum: 4 -> 2
+ r2l After truncation  == u.left_basis()
+ |( <4,0,0>: 1 )( <2,0,0>: 2 )|
+ r2l After truncation  == u.right_basis()
+ |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+ r2l After truncation  == u
+               Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <2,0,0>,<2,0,0>: 2x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 1]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ -0.7240683038],
+[ -0.6897282737]]
+
+
+
+ r2l After truncation  == s
+               Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <2,0,0>,<2,0,0>: 1x1 )|
+Block (<4,0,0>,<4,0,0>):
+0.9962501598 
+Block (<2,0,0>,<2,0,0>):
+0.08594387629 
+
+
+ r2l After truncation  == v.left_basis()
+ |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+ r2l After truncation  == v.right_basis()
+ |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+ r2l After truncation  == v
+               Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <2,0,0>,<2,0,0>: 1x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 1]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ 1]]
+
+
+
+ r2l After gemm of truncation  == v.left_basis()
+ |( <4,0,0>: 1 )( <2,0,0>: 2 )|
+ r2l After gemm of truncation  == v.right_basis()
+ |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+ r2l After gemm of truncation  == v
+               Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <2,0,0>,<2,0,0>: 2x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 0.9962501598]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ -0.06222923672],
+[ -0.05927792142]]
+
+
+
+ == SVD with lr=-1 == in ts_optimize.hpp 1 1e-11
+Time elapsed in TRUNC: 0.00083453
+lr -1, Propagating t with norm 0.9999503641
+Memory usage : 709396 643860 
+Sweep has been running for 0.058623423 seconds.
+
+Sweep 2, optimizing sites 0 and 1
+ =========================================== 
+    restore GS RDM-derivative behaviour      
+ =========================================== 
+ Before TwoSiteTensor--tst 
+ Before MPSTensor--twin_mps 
+ 11 in TwoSiteTensor::make_mps 
+ 11aa in TwoSiteTensor::make_mps 
+ 11bb in TwoSiteTensor::make_mps 
+ After typedef in ts_reduction::reduce_right 
+ Before for loop in ts_reduction::reduce_right 
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ 0011 --else-- in ts_reduction::reduce_right 
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ 0011 --else-- in ts_reduction::reduce_right 
+ jl:0 jr:0 j:0 S2:1 S1:1 jm:1
+ 0011 --else-- in ts_reduction::reduce_right 
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ 0011 --else-- in ts_reduction::reduce_right 
+ 1100 in TwoSiteTensor::make_mps 
+ Before SiteProblem--sp 
+ Before compute orthogonal vectors 
+parms eigensolver : IETL_JCD
+ ============================================================== 
+ =====!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!===== 
+ ===== The solve_ietl_davidson2 instead of solve_ietl_jcd ===== 
+ ===== The solve_ietl_davidson2 instead of solve_ietl_jcd ===== 
+ =====!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!===== 
+ In the solve_ietl_davidson2 solver || istate :::::: 10000
+ initial vector t :
+ Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+Basis: |( <0,0,0>,<0,0,0>: 1x5 )|
+Block (<0,0,0>,<0,0,0>):
+[[ 0.9962501598, -0.05927792142, 0, 0, -0.06222923672]]
+
+
+
+ == Davidson with pre-conditioner in davidson2.h | istate 10000
+ vector during Davidson2 iterations Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+Basis: |( <0,0,0>,<0,0,0>: 1x5 )|
+Block (<0,0,0>,<0,0,0>):
+[[ 0.996299612, -0.05928086388, 0, 0, -0.06223232568]]
+
+
+
+ params.is_set  || state-averaged 0 energy(theta) : -5.839645332
+ finish mdiag.precondition 
+ finish one davidson step 
+ vector during Davidson2 iterations Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <2,0,0>,<2,0,0>: 4x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 0.996299612]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ -0.05928086388],
+[ 0],
+[ 0],
+[ -0.06223232568]]
+
+
+
+ params.is_set  || state-averaged 0 energy(theta) : -5.839645343
+ finish mdiag.precondition 
+ finish one davidson step 
+ vector during Davidson2 iterations Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <2,0,0>,<2,0,0>: 4x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ -0.9962905913]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ 0.0592876663],
+[ -6.432033883e-07],
+[ 0],
+[ 0.06237010706]]
+
+
+
+ params.is_set  || state-averaged 0 energy(theta) : -5.839645343
+ finish mdiag.precondition 
+ finish one davidson step 
+ vector during Davidson2 iterations Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <2,0,0>,<2,0,0>: 4x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ 0.996291111]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ -0.05927765606],
+[ 6.590621783e-07],
+[ -0],
+[ -0.06237132003]]
+
+
+
+ params.is_set  || state-averaged 0 energy(theta) : -5.839645343
+ davidson.h :: theta -5.839645343
+ davidson.h ::     u Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <2,0,0>,<2,0,0>: 4x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ -0.996291111]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ 0.05927765606],
+[ -6.556654992e-07],
+[ 0],
+[ 0.06237132004]]
+
+
+
+ Change the scaling in order to mix the MPS 
+Davidson2 used 4 iterations.
+ res.second res.second res.second res.second res.second  Physical space: |( <4,0,0>: 1 )( <3,1,0>: 2 )( <3,-1,0>: 2 )( <2,2,0>: 1 )( <2,0,0>: 4 )( <2,-2,0>: 1 )( <1,1,0>: 2 )( <1,-1,0>: 2 )( <0,0,0>: 1 )|
+Left space: |( <0,0,0>: 1 )|
+Right space: |( <4,0,0>: 1 )( <2,0,0>: 1 )|
+Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <2,0,0>,<2,0,0>: 4x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ -0.996291111]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ 0.05927765606],
+[ -6.556654992e-07],
+[ 0],
+[ 0.06237132004]]
+
+
+
+ ============================================= 
+ ===== The get_hami to get the full Hami ===== 
+ ============================================= 
+The re-constructed Hami for block-0,1 in sweep 2 with direction -1
+cijswpLR : Hami_0-1_sweep-2_R.txt
+<4,0,0><4,0,0>
+<2,0,0><2,0,0>
+Time elapsed in JCD: 0.009248765
+ ==== before tst << res.second ==== 
+ ==== before tst << res.second ==== 
+ res.second.data()
+ Basis: |( <4,0,0>,<4,0,0>: 1x1 )( <2,0,0>,<2,0,0>: 4x1 )|
+Block (<4,0,0>,<4,0,0>):
+[[ -0.996291111]]
+
+Block (<2,0,0>,<2,0,0>):
+[[ 0.05927765606],
+[ -6.556654992e-07],
+[ 0],
+[ 0.06237132004]]
+
+
+
+ ===== op << 0000 ===== 
+ ===== 0000 operator_shift ===== 
+ ===== 0011 operator_shift ===== 
+ ===== 0022 operator_shift ===== 
+ ===== 0033 operator_shift ===== 
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ jl:0 jr:0 j:0 S2:1 S1:1 jm:1
+ jl:0 jr:0 j:0 S2:0 S1:0 jm:0
+ ===== 0044 operator_shift ===== 
+ ===== 0055 operator_shift ===== 
+ ===== 0066 operator_shift ===== 
+ ===== 0077 operator_shift ===== 
+ ===== 0088 operator_shift ===== 
+ ====     before res.clear     ==== 
+ ====  twin_mps.clear  ==== 
+Energy -1 -22.7842055746346
+Now the final sweep is start2 alpha_final 1e-08
+ === cutoff will start === 
+ ==== Mmax and cutoff ==== 1 1e-11
+Printout to check -- in split_mps_r2l
+ data_ in split_mps_r2l
+ Basis: |( <2,0,0>,<2,0,0>: 1x2 )( <1,1,0>,<1,1,0>: 1x1 )( <1,-1,0>,<1,-1,0>: 1x1 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+[[ -0.996291111, 0.05927765606]]
+
+Block (<1,1,0>,<1,1,0>):
+[[ -6.556654992e-07]]
+
+Block (<1,-1,0>,<1,-1,0>):
+[[ 0]]
+
+Block (<0,0,0>,<0,0,0>):
+[[ 0.06237132004]]
+
+
+
+ cutoff  &  Mmax 1e-11  ---  1
+Full U
+ Basis: |( <2,0,0>,<2,0,0>: 1x1 )( <1,1,0>,<1,1,0>: 1x1 )( <1,-1,0>,<1,-1,0>: 1x1 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+[[ 1]]
+
+Block (<1,1,0>,<1,1,0>):
+[[ 1]]
+
+Block (<1,-1,0>,<1,-1,0>):
+[[ 1]]
+
+Block (<0,0,0>,<0,0,0>):
+[[ 1]]
+
+
+
+Full V
+ Basis: |( <2,0,0>,<2,0,0>: 1x2 )( <1,1,0>,<1,1,0>: 1x1 )( <1,-1,0>,<1,-1,0>: 1x1 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+[[ -0.9982346601, 0.05939329398]]
+
+Block (<1,1,0>,<1,1,0>):
+[[ -1]]
+
+Block (<1,-1,0>,<1,-1,0>):
+[[ 1]]
+
+Block (<0,0,0>,<0,0,0>):
+[[ 1]]
+
+
+
+Full S
+ Basis: |( <2,0,0>,<2,0,0>: 1x1 )( <1,1,0>,<1,1,0>: 1x1 )( <1,-1,0>,<1,-1,0>: 1x1 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+0.9980530138 
+Block (<1,1,0>,<1,1,0>):
+6.556654992e-07 
+Block (<1,-1,0>,<1,-1,0>):
+0 
+Block (<0,0,0>,<0,0,0>):
+0.06237132004 
+
+
+keeps[3]=1
+keeps[2]=0
+keeps[1]=0
+keeps[0]=1
+Sum: 4 -> 2
+ svd_truncate:  Sum: 4 -> 2
+ r2l After truncation  == u.left_basis()
+ |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+ r2l After truncation  == u.right_basis()
+ |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+ r2l After truncation  == u
+               Basis: |( <2,0,0>,<2,0,0>: 1x1 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+[[ 1]]
+
+Block (<0,0,0>,<0,0,0>):
+[[ 1]]
+
+
+
+ r2l After truncation  == s
+               Basis: |( <2,0,0>,<2,0,0>: 1x1 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+0.9980530138 
+Block (<0,0,0>,<0,0,0>):
+0.06237132004 
+
+
+ r2l After truncation  == v.left_basis()
+ |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+ r2l After truncation  == v.right_basis()
+ |( <2,0,0>: 2 )( <0,0,0>: 1 )|
+ r2l After truncation  == v
+               Basis: |( <2,0,0>,<2,0,0>: 1x2 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+[[ -0.9982346601, 0.05939329398]]
+
+Block (<0,0,0>,<0,0,0>):
+[[ 1]]
+
+
+
+ r2l After gemm of truncation  == v.left_basis()
+ |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+ r2l After gemm of truncation  == v.right_basis()
+ |( <2,0,0>: 1 )( <0,0,0>: 1 )|
+ r2l After gemm of truncation  == v
+               Basis: |( <2,0,0>,<2,0,0>: 1x1 )( <0,0,0>,<0,0,0>: 1x1 )|
+Block (<2,0,0>,<2,0,0>):
+[[ 0.9980530138]]
+
+Block (<0,0,0>,<0,0,0>):
+[[ 0.06237132004]]
+
+
+
+ == SVD with lr=-1 == in ts_optimize.hpp 1 1e-11
+Time elapsed in TRUNC: 0.000840886
+lr -1, Propagating t with norm 1
+Memory usage : 709396 643860 
+Sweep has been running for 0.070490178 seconds.
+ Just check if it will be used (dmrg_sim) 
+save state to checkpoint_state.0 dir
+Task took 0.248019 seconds.

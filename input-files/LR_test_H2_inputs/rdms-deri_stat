@@ -1,0 +1,5 @@
+ ls oneRDM.0.deriL_* > info1.tmp
+ ls twoRDM.0.deriL_* > info2.tmp
+ ls oneRDM.0.deriR_* > info3.tmp
+ ls twoRDM.0.deriR_* > info4.tmp
+ wc -l MPSCi_value.0.info > info_line_all.tmp

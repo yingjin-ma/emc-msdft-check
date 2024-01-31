@@ -1,0 +1,38 @@
+After obtain the 4) results in Readme.txt, we can 
+"cd LR_inputs_S1_initial_M2_no_irreps/"
+We can re-run to obtain the Hamiltonian manually for these two states, i.e.
+[yingjin-devel_branch_of_QCmaquis]/applications/dmrg/dmrg dmrg-input1_Hami_gen > dmrg.out_Hami0_gen
+[yingjin-devel_branch_of_QCmaquis]/applications/dmrg/dmrg dmrg-input2_Hami_gen > dmrg.out_Hami1_gen
+then, we can get the "dmrg.out_Hami0_gen" and "dmrg.out_Hami1_gen"
+
+Q1: Why the dimension of local Hamiltonian is not directly decided by the M values?
+
+The "dmrg-input1_Hami_gen" and "dmrg-input2_Hami_gen" specify the "IETL_DAVIDSON" solver, 
+This solver in [yingjin-devel_branch_of_QCmaquis] only generate the local Hamiltonian, which is basing on the basis without truncation. 
+In other word, this Hamiltonian (its MPO form) is used in the Davidson iteration.
+Searching "/cutoff" in dmrg.out_HamiX_gen, it can be found that the "cutoff threshold" and "Mmax" are -0.1 and 100000, respectively.
+(--> It is meanless in generating the local Hamiltonian, while it is essential in REM-deri calculation <--)
+Searching "svd_truncate" in dmrg.out_HamiX_gen, one can find that the sum of preserved states is 4 (i.e. "Sum: 4 -> 4"); If in normal DMRG sweeps, the sum of preserved states is 2 (i.e. "Sum: 4 -> 2").
+(--> It is meanless in generating the local Hamiltonian, while it is essential in REM-deri calculation <--)
+BTW, the convergence of "IETL_DAVIDSON" solver will be harmed if the M is limited, however, it will not affact extracting the Hamiltonian.
+
+
+Q2: Why these two hamiltonian has different dimension?
+
+First, the full Hamiltonian is the following [i.e. from 2) in Readme.txt],
+       0>        1>        2>        3>        4>        X>        5> 
+0>  -5.83511   0.00247   0.00002   0.03627   0.00000   0.00000   0.03796
+1>   0.00247  -5.64306   0.00000   0.00025   0.00004   0.00000   0.00786
+2>   0.00002   0.00000  -5.63861  -0.00004  -0.01599   0.00000   0.00011
+3>   0.03627   0.00025  -0.00004  -5.26910   0.00001   0.00000   0.03710
+4>   0.00000   0.00004  -0.01599   0.00001  -5.30784   0.00000  -0.00004
+X>   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
+5>   0.03796   0.00786   0.00011   0.03710  -0.00004   0.00000  -5.26861
+When the limited M is use (e.g. 2 preserved states), 
+for the  ground state, the 0>,     2>, 3>,     5> base or their dominant-renormalized configurations/MPO can be kept during the sweeps.
+for the excited state, the     1>, 2>, 3>, 4>, 5> base or their dominant-renormalized configurations/MPO can be kept during the sweeps.
+The example is listed ("dmrg-input1_ext" and "output_ext" for ground state). 
+In "output_ext" by search "Sum:", one can find that only 2 preserved states are used.
+
+
+

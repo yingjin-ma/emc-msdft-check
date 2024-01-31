@@ -1,0 +1,41 @@
+&GATEWAY
+ coord
+ 4
+ ang
+ B    0.000000   0.000000   0.00000
+ H    0.000000   0.000000   0.50000
+ H    0.000000   0.500000   0.00000
+ H    0.500000   0.000000   0.00000
+ basis=sto-3g
+ group=NOSYM
+
+&SEWARD
+
+&SCF
+&RASSCF
+ inactive = 2
+     RAS2 = 4
+  CIROot  = 2 2; 1 2; 1 1
+ RLXRoot  = 2
+    PRWF  = 0.0
+
+&RASSCF
+ inactive = 2
+     RAS2 = 4
+  CIROot  = 2 2; 1 2; 1 1
+ RLXRoot  = 2
+    PRWF  = 0.0
+
+   CIONLY
+
+&MOTRA &END
+Title
+LiH
+FROZEN
+0
+JOBIPH
+HDF5
+
+&ALASKA
+&SLAPAF
+

@@ -1,0 +1,67 @@
+// number of states to orthogonalize to
+n_ortho_states =   1
+ortho_states = "/home/yingjin/Work/SA-Draft/LiH/LiH_MPS_S1_opt.checkpoint_state.0.h5"
+
+// number of orbitals on lattice => lattice.size() in QCMaquis
+L            =   3
+
+// target irrep of point group for a given state
+irrep        =   0
+// total number of electrons
+nelec        =   4
+// spin state 2*S: 2*S=0 (singlet); 2*S=1 (doublet); 2*S=2 (triplet), ...
+spin         =    0
+
+// HF occupation for each orbital on the lattice if init_state = hf: 4 -> up/down  3 -> up  2 -> down  1 -> empty
+
+chkpfile     = '/home/yingjin/Work/SA-Draft/LiH/LiH_MPS_S1_opt.checkpoint_state.1.h5'
+resultfile   = '/home/yingjin/Work/SA-Draft/LiH/LiH_MPS_S1_opt.results_state.1.h5'
+storagedir = './tmp'
+
+symmetry = 'su2u1pg'
+
+// MEASUREMENTS/expectation value calculations (via dmrg_meas)
+// 1-RDM
+MEASURE[1rdm] = 1
+// 2-RDM
+MEASURE[2rdm] = 1
+
+// STANDARD MEASUREMENT FOR CIDEAS START GUESS DO NOT CHANGE
+
+MEASURE[ChemEntropy] = 1
+
+// STANDARD MEASUREMENT FOR CIDEAS START GUESS DO NOT CHANGE
+
+
+// FIXED SETTINGS - DO NOT CHANGE
+LATTICE                  = "orbitals"
+CONSERVED_QUANTUMNUMBERS = "Nup,Ndown"
+MODEL                    = "quantum_chemistry"
+integral_file            = "FCIDUMP"
+lattice_library          = "coded"
+model_library            = "coded"
+measure_each             = 1
+chkp_each                = 1
+optimization             = twosite
+use_compressed           = 0
+
+// SVD truncation
+truncation_initial       = 1e-50
+truncation_final         = 1e-7
+
+// Jacobi-Davidson parameters
+ietl_jcd_maxiter = 10
+ietl_jcd_tol     = 1e-8
+
+// sweep tolerance
+conv_thresh = 1e-6
+
+integral_cutoff          = 1e-300
+// END OF FIXED SETTINGS - DO NOT CHANGE
+nsweeps = 20
+max_bond_dimension = 100
+nsweeps =                   40
+conv_thresh  = 0.100000E-07
+truncation_final  = 0.100000E-10
+ietl_jcd_tol  = 0.100000E-10
+orbital_order="1,2,3"

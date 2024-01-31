@@ -1,0 +1,62 @@
+$ORBINT
+sym c1
+orbitals FCIDUMP
+electron 4
+$END
+
+$ORBSPC
+frozen, 0
+closed, 1
+   occ, 5
+$END
+
+$DMRG_input
+binary      maquis
+nstates     2 1
+inputs      dmrg-input1 dmrg-input2 
+tdm_inputs  dmrg-input_TDM_1_2 dmrg-input_TDM_2_1
+weight      1 1
+reorder     MASORB.orb
+output      dmrg.out
+mpirun      yes
+nproc       1 
+$END
+
+$DMRG-Lagrange
+DMRG-SCF    .false.
+DMRG-LR     .true.
+rlxstate     1
+irreps      .true.   
+ckp_re-use  .true.
+$END
+
+$DMRG-CASSCF
+method  microit   0 (WM initial version)
+method  orbhess   0 
+method  cp-hess   0 (Coupled NR/AH)
+method  ItdeltR   0 (Step-restricted AH) [May need change "levelshift" in AH solver (it is step-length)]
+method  WMKUBAR   0 (WMK, only in this one the redundant rotations are well considered)
+method  cp-inte   0 (WMK with perturbation) 
+method  occhess   0 
+method  newraph   0 (Newton-Raphson)
+method  augment  20 (AH)  
+! Max number for macro-iterations
+maxcycle         20
+! ====== (only used for WMK, 2 will update MPS, 0 will not, 3 for partially sweep)
+CP_integrals     0
+! ====== MPS will be updated to 1st-order via Coupled-Hessian
+!CP_Hessian      1
+! ====== MPS is forced to be update after n micro-iters
+MPSci_update     5
+! ====== Max iterations for micro-iterations
+MAX_iter         10
+! ====== Used in macro-iter ======
+THRS_energy     1.0d-8
+THRS_rotation   1.0d-8
+! ====== Used in micro-iter ======
+THRS_coupled    1.0d-5
+THRS_gradients  1.0d-3
+!omit_act_rotation  
+!old_code          
+$END
+

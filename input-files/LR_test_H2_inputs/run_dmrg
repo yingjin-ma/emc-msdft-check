@@ -1,0 +1,3 @@
+ OMP_NUM_THREADS=1  dmrg dmrg-input2 >> dmrg.out
+ OMP_NUM_THREADS=1  dmrg_meas dmrg-input2 >> dmrg.out
+ ./rdmsave_su2.py results_state.1.h5

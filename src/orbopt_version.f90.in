@@ -1,0 +1,21 @@
+module orbopt_version
+
+! stefan: DMRG interface version variables
+
+  implicit none
+
+! ORBOPT version
+#cmakedefine ORBOPT_VERSION "@ORBOPT_VERSION@"
+!
+#cmakedefine ORBOPT_VERSION_MAJOR @ORBOPT_VERSION_MAJOR@
+#cmakedefine ORBOPT_VERSION_MINOR @ORBOPT_VERSION_MINOR@
+#cmakedefine ORBOPT_VERSION_BUILD @ORBOPT_VERSION_BUILD@
+#cmakedefine ORBOPT_GIT_VERSION  "@ORBOPT_GIT_VERSION@"
+!
+! ORBOPT version (full string)
+#cmakedefine ORBOPT_VERSION_STRING "@ORBOPT_VERSION_STRING@"
+
+character(len=200), public :: orbopt_v = ORBOPT_VERSION_STRING
+character(len=200), public :: orbopt_g = ORBOPT_GIT_VERSION
+
+end module orbopt_version

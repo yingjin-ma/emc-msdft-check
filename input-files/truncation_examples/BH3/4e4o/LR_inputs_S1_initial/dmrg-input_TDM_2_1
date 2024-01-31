@@ -1,0 +1,71 @@
+// number of orbitals on lattice => lattice.size() in QCMaquis
+L            =    4
+
+// target irrep of point group for a given state
+irrep        =    0
+// total number of electrons
+nelec        =    4
+// spin state 2*S: 2*S=0 (singlet); 2*S=1 (doublet); 2*S=2 (triplet), ...
+spin         =    0
+
+// HF occupation for each orbital on the lattice if init_state = hf: 4 -> up/down  3 -> up  2 -> down  1 -> empty
+storagedir = './tmp'
+
+symmetry = 'su2u1pg'
+
+// MEASUREMENTS/expectation value calculations (via dmrg_meas)
+// 1-RDM
+MEASURE[1rdm] = 1
+// 2-RDM
+MEASURE[2rdm] = 1
+
+// STANDARD MEASUREMENT FOR CIDEAS START GUESS DO NOT CHANGE
+
+MEASURE[ChemEntropy] = 1
+
+// STANDARD MEASUREMENT FOR CIDEAS START GUESS DO NOT CHANGE
+
+
+// FIXED SETTINGS - DO NOT CHANGE
+LATTICE                  = "orbitals"
+CONSERVED_QUANTUMNUMBERS = "Nup,Ndown"
+MODEL                    = "quantum_chemistry"
+integral_file            = "FCIDUMP_ACTIVE"
+lattice_library          = "coded"
+model_library            = "coded"
+measure_each             = 1
+chkp_each                = 1
+optimization             = twosite
+use_compressed           = 0
+
+// SVD truncation
+truncation_initial       = 1e-50
+truncation_final  = 0.100000E-10
+
+// Jacobi-Davidson parameters
+ietl_jcd_maxiter = 10
+ietl_jcd_tol  = 0.100000E-10
+
+// sweep tolerance
+conv_thresh  = 0.100000E-07
+
+integral_cutoff          = 1e-300
+// END OF FIXED SETTINGS - DO NOT CHANGE
+nsweeps = 1000
+max_bond_dimension = 100
+orbital_order = "1,2,3,4"
+
+// ==================================================================
+// ===== The following parameters may be affected in DMRG-MCLR  =====
+// ==================================================================
+
+// number of states to orthogonalize to
+n_ortho_states =   0
+ortho_states = ""
+
+eigensolver      = IETL_DAVIDSON
+
+refchkpfile  = ref_checkpoint_state.1
+chkpfile     = ref_checkpoint_state.0
+resultfile   = results_state.1.0.h5
+

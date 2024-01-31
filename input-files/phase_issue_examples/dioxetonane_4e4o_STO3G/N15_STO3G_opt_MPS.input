@@ -1,0 +1,38 @@
+&GATEWAY
+ coord=N15.xyz
+ basis=STO-3G
+ group=NOSYM
+
+&SEWARD
+&RASSCF
+
+ fileorb  = N15_STO3G_RASSCF.RasOrb
+ inactive = 17
+     RAS2 = 4
+  CIROot  = 2 2; 1 2; 1 1
+ RLXRoot  = 1
+    PRWF  = 0
+  CIONLY  
+
+  DMRG
+  RGinput
+    nsweeps = 20
+    max_bond_dimension = 1000
+  endRG
+   LRRAS2 = 4
+
+&MOTRA &END
+Title
+dio
+FROZEN
+0
+JOBIPH
+HDF5
+
+&ALASKA
+&SLAPAF
+
+*&grid_it
+* fileorb=N15_STO3G_SCF.ScfOrb
+* all 
+

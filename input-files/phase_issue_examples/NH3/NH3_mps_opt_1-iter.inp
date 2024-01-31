@@ -1,0 +1,41 @@
+&GATEWAY
+ coord=NH3_nosym.xyz
+ basis=ANO-S-MB
+ group=NOSYM
+
+&SEWARD
+&SCF
+* Used for fast convergence
+&RASSCF
+ inactive=  4
+    ras2 =  3
+ CIroot=  2,2; 1 2; 1 1
+  PRWF = 0.00
+
+&RASSCF
+
+ inactive=  4
+    ras2 =  3
+ CIroot=  2,2; 1 2; 1 1
+  PRWF = 0.00
+  CIONLY
+
+  DMRG
+  RGinput
+    nsweeps = 20
+    max_bond_dimension = 100
+  endRG
+   LRRAS2 = 3
+
+&MOTRA &END
+Title
+NH3
+FROZEN
+0
+JOBIPH
+HDF5
+
+&ALASKA
+&SLAPAF
+
+

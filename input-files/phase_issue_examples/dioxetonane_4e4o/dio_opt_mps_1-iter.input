@@ -1,0 +1,37 @@
+&GATEWAY
+ coord=SCF_opted.xyz
+ basis=ANO-RCC-VDZP
+ group=NOSYM
+
+&SEWARD
+ R02OP02
+
+&RASSCF
+
+ fileorb  = HF_opted_RASSCF_4e4o.RasOrb
+ inactive = 17
+     RAS2 = 4
+  CIROot  = 2 2; 1 2; 1 1
+ RLXRoot  = 1
+  CIONLY  
+    PRWF  = 0.0
+
+  DMRG
+  RGinput
+    nsweeps = 20
+    max_bond_dimension = 1000
+  endRG
+   LRRAS2 = 4
+
+&MOTRA &END
+Title
+H2
+FROZEN
+0
+JOBIPH
+HDF5
+
+&ALASKA
+&SLAPAF
+
+

@@ -1,0 +1,23 @@
+&GATEWAY
+ coord=N15.xyz
+ basis=STO-3G
+ group=NOSYM
+
+&SEWARD
+&RASSCF
+
+ fileorb  = N15_STO3G_RASSCF.RasOrb
+ inactive = 17
+     RAS2 = 4
+  CIROot  = 2 2; 1 2; 1 1
+ RLXRoot  = 1
+    PRWF  = 0
+  CIONLY  
+
+&ALASKA
+&SLAPAF
+
+*&grid_it
+* fileorb=N15_STO3G_SCF.ScfOrb
+* all 
+
