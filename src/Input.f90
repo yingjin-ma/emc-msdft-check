@@ -3,10 +3,10 @@
         use global_control
 
 ! Ax: temporary char array
-        character    A0
-        character*72 A1
-        character*10 A2
-        character*10 A3 
+        character      A0
+        character*72   A1
+        character*16   A2
+        character*255  A3 
         integer IL(8)
         double precision D1,D2
         logical        :: is_available
@@ -121,6 +121,7 @@
                   exit 
                 end if
               end do
+              !write(6,*)"FCIDUMP :",FCIDUMP
               call group_table() 
 
 ! active space orbitals
@@ -707,7 +708,7 @@
 
         use global_control
 
-        character*10 A2,A3
+        character*10 A2,A3,A4
         integer,allocatable::IL(:)
         double precision D1,D2
 
@@ -723,7 +724,9 @@
 ! total orbitals
               open(unit=101,file=FCIDUMP)
               !open(unit=121,file='dump.tmp')
-                read(101,*)A2,A3,norb 
+                read(101,*)A2,A3
+                write(6,*)"A2 : ",A2 ," A3 :", A3
+                call flush(6) 
                 ! write(121,*)A2,A3,norb 
                 allocate(IL(norb))                         !define  
                 ! write(*,*)"fsdgdsgvcsdgchjsdcjhshjc",norb
