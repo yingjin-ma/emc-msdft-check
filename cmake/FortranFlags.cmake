@@ -6,7 +6,7 @@ endif()
 if(NOT DEFINED DEFAULT_Fortran_FLAGS_SET OR RESET_FLAGS)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES GNU) # this is gfortran
-    set(CMAKE_Fortran_FLAGS         "-g -fno-align-commons -fbacktrace -DVAR_GFORTRAN -fno-range-check")
+    set(CMAKE_Fortran_FLAGS         "-g -fno-align-commons -fbacktrace -DVAR_GFORTRAN -fno-range-check -fallow-argument-mismatch -Wno-argument-mismatch")
     if(ENABLE_STATIC_LINKING)
         set(CMAKE_Fortran_FLAGS
             "${CMAKE_Fortran_FLAGS} -static"
