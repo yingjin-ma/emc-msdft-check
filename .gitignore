@@ -2,3 +2,11 @@ src/orbopt_version.f90
 orbopt_version.f90
 buildv1/
 v1/
+fort.*
+dmrg.out
+FCIDUMP_ACTIVE
+linux.version
+oneRDM.*
+twoRDM.*
+rdm_ckp_operate1
+run_dmrg
