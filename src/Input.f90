@@ -724,8 +724,16 @@
 ! total orbitals
               open(unit=101,file=FCIDUMP)
               !open(unit=121,file='dump.tmp')
-                read(101,*)A2,A3
-                write(6,*)"A2 : ",A2 ," A3 :", A3
+                read(101,*)A2,A3,A4
+                write(6,*)"A2 : ",A2 ," A3 : ", A3, " A4 : ", A4
+                if (A3(1:5).eq."NORB=") then
+                   A4=""
+                   A4=trim(A3(6:))
+                   write(6,*)" A4 : ", A4
+                   read(A4,*) norb
+                else
+                   read(A4,*) norb                   
+                end if
                 call flush(6) 
                 ! write(121,*)A2,A3,norb 
                 allocate(IL(norb))                         !define  
