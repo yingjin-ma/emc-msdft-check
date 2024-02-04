@@ -1062,7 +1062,7 @@
           end if
  
           write(1,*)"AH XP"
-          call print_mat(nij,1,XP,1) 
+          !call print_mat(nij,1,XP,1) 
           !          stop
 
           do i=1,nij
@@ -1209,7 +1209,7 @@
           deallocate(T1) 
           deallocate(T2) 
         end if
-        call print_mat(norb,norb,mat2%R,6)
+        !call print_mat(norb,norb,mat2%R,6)
         write(*,2435,advance='no')"    ",Rabs(icycle)  
         write(*,2436)"   ",method(icycle)  
 2435    format(A4,f8.4)

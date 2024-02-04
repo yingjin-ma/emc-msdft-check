@@ -721,6 +721,7 @@
         else
           FCIDUMP=trim(FCIDUMP) 
         end if
+
 ! total orbitals
               open(unit=101,file=FCIDUMP)
               !open(unit=121,file='dump.tmp')
