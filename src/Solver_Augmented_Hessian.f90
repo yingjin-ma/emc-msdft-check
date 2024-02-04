@@ -604,7 +604,7 @@
                 exit 
               end if 
               if(Lfinish)then
-                write(1,*)"Tiny orbital rotations, should close to converge"
+            write(1,*)"Tiny orbital rotations, should close to converge"
                 exit          
               end if 
             end if

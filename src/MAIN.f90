@@ -114,8 +114,7 @@
             if(i.eq.1)then
               call Run_DMRG(i,0)
             else
-              call FCIDUMP_READ()
-              
+              call FCIDUMP_READ()              
             end if
 
             walltime(5)  = wtime()
@@ -137,14 +136,18 @@
             !            write(6,*)"before RDMs read in MAIN.f90 "; call flush(6)
             call RDMs_READ()
 
-            !write(6,*)"After RDMs read in"; call flush(6)
+            write(6,*)"After RDMs read in", nocc ; call flush(6)
             ! Update them to occupied RDMs
             allocate(TM1(nocc,nocc));           TM1=0.0d0
             allocate(GM1(nocc,nocc,nocc,nocc)); GM1=0.0d0
             !call print_mat(nact,nact,mat2%d,6)
             !call print_gat(nact,nact,nact,nact,mat2%p,6)
+            !stop
             call closed_shell_update(mat2%d,mat2%P,TM1,GM1,1.0d0)  !CCCC
+
             deallocate(mat2%d,mat2%P)
+
+
             allocate(mat2%d(nocc,nocc))
             allocate(mat2%P(nocc,nocc,nocc,nocc))
             mat2%d=TM1
@@ -165,12 +168,12 @@
             walltime(12) = wtime()
             call timing_reporter&
             (3,"generation of orb-opt-related operators",walltime(12)-walltime(11))
-            !            write(6,*)"After PreOneSCF"; call flush(6)
+            !           write(6,*)"After PreOneSCF"; call flush(6)
             !            stop
             call Initial_value()
-            !            write(6,*)"After Initial_value "; call flush(6)
+            !           write(6,*)"After Initial_value "; call flush(6)
             call NonLinear_solver(i)
-            !            write(6,*)"After Nonlinear solver "; call flush(6)
+            !           write(6,*)"After Nonlinear solver "; call flush(6)
             !            call print_mat(norb,norb,mat2%U,6)
             walltime(3) = wtime()
             call timing_reporter(3,"non-linear solver",walltime(3)-walltime(12))

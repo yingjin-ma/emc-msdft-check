@@ -491,7 +491,7 @@
 
                   mat2%d=0.0d0
                   open(unit=110,file=oneRDMfile)
-        !           read(110,*)ij
+                    read(110,*)ij
                     do i=1,nact
                       do j=1,nact
                         !                write(6,*)"Import 1-RDMs"
@@ -507,7 +507,7 @@
 
           mat2%p=0.0d0
           open(unit=110,file=twoRDMfile)
-          !          READ(110,*)ijkl
+                    READ(110,*)ijkl
           if(dmrg_binary_name.eq."maquis")then
             ijkl=0  ! Just a counter
             do
@@ -583,7 +583,7 @@
         mat2%p=GM1
         deallocate(TM1,GM1)
 
-        ! In order to match the energy expression containing the "1/2"
+        !In order to match the energy expression containing the "1/2"
         mat2%p=mat2%p*2.0d0
 
         ! Not needed
@@ -725,11 +725,11 @@
               open(unit=101,file=FCIDUMP)
               !open(unit=121,file='dump.tmp')
                 read(101,*)A2,A3,A4
-                write(6,*)"A2 : ",A2 ," A3 : ", A3, " A4 : ", A4
+                !write(6,*)"A2 : ",A2 ," A3 : ", A3, " A4 : ", A4
                 if (A3(1:5).eq."NORB=") then
                    A4=""
                    A4=trim(A3(6:))
-                   write(6,*)" A4 : ", A4
+                   !write(6,*)" A4 : ", A4
                    read(A4,*) norb
                 else
                    read(A4,*) norb                   
@@ -741,7 +741,7 @@
                 read(101,"(A9)",advance='no')A2
                 !write(121,"(A9)",advance='no')A2
                 read(101,*)(IL(i),i=1,norb)
-                write(6,*)"UUUUUUUUUUUUUUUUUUUUUu",norb
+                !write(6,*)"UUUUUUUUUUUUUUUUUUUUUu",norb
                 ! do i=1,norb
                 !  write(121,"(I2A1)",advance='no')IL(i),","
                 !  write(*,*)"fsdgdsgvcsdgchjsdcjhshjc",IL(i)
@@ -818,9 +818,9 @@
               ! working integrals
               allocate(T(norb,norb)) ; T=0.0d0            !define
               allocate(U(norb,norb,norb,norb)) ; U=0.0d0
-              write(6,*)"UUUUUUUUUUUUUUUUUUUUUu",norb
-              U(7,7,1,1)=1.87898
-              write(6,*)"UUUUUUUUUUUUUUUUUUUUUu",U(7,7,1,1)
+              !write(6,*)"UUUUUUUUUUUUUUUUUUUUUu",norb
+              !U(7,7,1,1)=1.87898
+              !write(6,*)"UUUUUUUUUUUUUUUUUUUUUu",U(7,7,1,1)
               ! origionl in each macto-iter
               allocate(T_origin(norb,norb)) ; T_origin=0.0d0     !define
               allocate(U_origin(norb,norb,norb,norb)) ; U_origin=0.0d0
@@ -895,6 +895,12 @@
 
 !              stop 
         nullify(head,ptr,tail)
+
+
+        write(6,*)" FCIDUMP : ", trim(FCIDUMP)
+        write(6,*)"          with totally ", norb , " orbitals"
+        write(6,*)" **** Done the initial Integrals importing ****"
+        write(6,*)
 
       end subroutine FCIDUMP_READ
 

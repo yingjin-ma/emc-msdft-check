@@ -49,10 +49,10 @@
           ioffset2=ioffset2+orb%occ(i)-orb%closed(i)
         end do
 
-        write(6,*)"base:",base
-        write(6,*)"base1:",base1
-        write(6,*)"base2:",base2
-        write(6,*)"total:",orb%total
+!        write(6,*)"base:",base
+!        write(6,*)"base1:",base1
+!        write(6,*)"base2:",base2
+!        write(6,*)"total:",orb%total
         !write(*,*)orb%closed
 !        write(*,*)fcidump0,fcidump1
       !  write(*,*)"ifcore, ifcore2", ifcore, ifcore2
@@ -305,7 +305,7 @@
 
             allocate(PartT(nact,nact))
             PartT=0.0d0
-            write(6,*)"nact**************8",nact
+!            write(6,*)"nact**************8",nact
  
               
             ioffset=0

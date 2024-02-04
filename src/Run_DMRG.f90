@@ -933,6 +933,7 @@
 !        if(icycle.eq.2)stop
         write(2,*)"   DMRG calculation finished   "
         write(2,*)"  Currently no TDM calculation  "
+        call flush(2)
 
       end Subroutine run_DMRG
 
