@@ -709,6 +709,7 @@
         use global_control
 
         character*10 A2,A3,A4
+        integer :: istatus
         integer,allocatable::IL(:)
         double precision D1,D2
 
@@ -716,18 +717,22 @@
         !null(ptr)
         !null(tail)
         nullify(head,ptr,tail)
-        if(index(trim(FCIDUMP),trim(Cworkdir)).eq.0)then
-          FCIDUMP=trim(Cworkdir)//trim(FCIDUMP) 
-        else
-          FCIDUMP=trim(FCIDUMP) 
-        end if
+!        if(istatus==0)then
+          if(index(trim(FCIDUMP),trim(Cworkdir)).eq.0)then
+            FCIDUMP=trim(Cworkdir)//trim(FCIDUMP) 
+          else
+            FCIDUMP=trim(FCIDUMP) 
+          end if
+!        else
+!          FCIDUMP="FCIDUMP" 
+!        end if
 
 ! total orbitals
               open(unit=101,file=FCIDUMP)
               !open(unit=121,file='dump.tmp')
                 read(101,*)A2,A3,A4
                 !write(6,*)"A2 : ",A2 ," A3 : ", A3, " A4 : ", A4
-                if (A3(1:5).eq."NORB=") then
+                if (A3(1:5).ne."NORB=") then
                    A4=""
                    A4=trim(A3(6:))
                    !write(6,*)" A4 : ", A4
