@@ -5,8 +5,7 @@
 
         logical::if_trans
         
-        character*10 A2
-        character*10 A3 
+        character*10 A2,A3,A4 
         integer,allocatable::base(:),IL(:) 
         double precision d1,d2
         
@@ -32,8 +31,15 @@
         !        stop 
                 !write(*,*)T
         open(unit=111,file="FCIDUMP_NEW")
-        open(unit=121,file="FCIDUMP")
-          read(121,*)A2,A3,norb
+        open(unit=121,file=FCIDUMP)
+          read(121,*)A2,A3,A4
+          if (A3(1:5).ne."NORB=") then
+            A4=""
+            A4=trim(A3(6:))
+            read(A4,*) norb
+          else
+            read(A4,*) norb
+          end if
           write(111,"(1X,A4,1X,A5,I4)")A2,A3,norb 
           allocate(IL(norb))                         !define  
           !write(*,*)norb

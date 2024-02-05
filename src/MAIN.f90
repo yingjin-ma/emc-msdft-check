@@ -114,7 +114,7 @@
             if(i.eq.1)then
               call Run_DMRG(i,0)
             else
-              call FCIDUMP_READ()              
+              call FCIDUMP_READ(i)              
             end if
 
             walltime(5)  = wtime()
@@ -136,7 +136,7 @@
             !            write(6,*)"before RDMs read in MAIN.f90 "; call flush(6)
             call RDMs_READ()
 
-            write(6,*)"After RDMs read in", nocc ; call flush(6)
+            !write(6,*)"After RDMs read in", nocc ; call flush(6)
             ! Update them to occupied RDMs
             allocate(TM1(nocc,nocc));           TM1=0.0d0
             allocate(GM1(nocc,nocc,nocc,nocc)); GM1=0.0d0

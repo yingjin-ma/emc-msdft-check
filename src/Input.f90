@@ -153,7 +153,7 @@
               end do
 
               orb%act=orb%occ-orb%frozen-orb%closed
-              call FCIDUMP_READ()
+              call FCIDUMP_READ(0)
 !              write(*,*)"fcidump_after"
               !stop 
             else if(A1(1:11).eq."$DMRG_input")then
@@ -704,7 +704,7 @@
 
       end Subroutine FCIDUMP_READ_MATRIX
 
-      Subroutine FCIDUMP_READ()
+      Subroutine FCIDUMP_READ(istatus)
 
         use global_control
 
@@ -718,17 +718,21 @@
         !null(tail)
         nullify(head,ptr,tail)
 !        if(istatus==0)then
-          if(index(trim(FCIDUMP),trim(Cworkdir)).eq.0)then
-            FCIDUMP=trim(Cworkdir)//trim(FCIDUMP) 
-          else
-            FCIDUMP=trim(FCIDUMP) 
-          end if
+        if(index(trim(FCIDUMP),trim(Cworkdir)).eq.0)then
+          FCIDUMP=trim(Cworkdir)//trim(FCIDUMP) 
+        else
+          FCIDUMP=trim(FCIDUMP) 
+        end if
 !        else
 !          FCIDUMP="FCIDUMP" 
 !        end if
 
 ! total orbitals
+            if(istatus==0)then
               open(unit=101,file=FCIDUMP)
+            else
+              open(unit=101,file="FCIDUMP")
+            end if 
               !open(unit=121,file='dump.tmp')
                 read(101,*)A2,A3,A4
                 !write(6,*)"A2 : ",A2 ," A3 : ", A3, " A4 : ", A4
@@ -902,11 +906,12 @@
 !              stop 
         nullify(head,ptr,tail)
 
-
-        write(6,*)" FCIDUMP : ", trim(FCIDUMP)
-        write(6,*)"          with totally ", norb , " orbitals"
-        write(6,*)" **** Done the initial Integrals importing ****"
-        write(6,*)
+        if (istatus==0)then
+          write(6,*)" FCIDUMP : ", trim(FCIDUMP)
+          write(6,*)"          with totally ", norb , " orbitals"
+          write(6,*)" **** Done the initial Integrals importing ****"
+          write(6,*)
+        end if  
 
       end subroutine FCIDUMP_READ
 
