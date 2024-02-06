@@ -57,9 +57,9 @@
                 end if
               end do
               ! write(6,*)"ii  kk",redu%irreps,redu%irreps
-              write(6,*)"TTTTTTii  kk",T(7,7),T(21,21),thrs%s
+!              write(6,*)"TTTTTTii  kk",T(7,7),T(21,21),thrs%s
               if(dabs(T(ii,ii)-T(kk,kk)).lt.thrs%s)then
-                write(6,*)"ii  kk",ii,kk,T(ii,ii),T(kk,kk)
+!                write(6,*)"ii  kk",ii,kk,T(ii,ii),T(kk,kk)
                 do i=1,orb%total(isym)
                   do j=1,orb%total(isym)
                     ii=is0+i;  jj=is0+j

@@ -18,7 +18,7 @@
 
         call getenv('QCMAQUIS_LR_PATH',runprefix)
         if (trim(runprefix).eq.'') then
-          write (*,*) "WARNING: QCMAQUIS_LR_PATH is not set."
+          write (1,*) "WARNING: QCMAQUIS_LR_PATH is not set."
         end if
 
         do iroot=0,dmrg_nstates-1

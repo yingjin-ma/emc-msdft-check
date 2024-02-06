@@ -306,6 +306,7 @@
               thrs%d=1.0d-12  ! davidson
               thrs%c=1.0d-4   ! coupling
               thrs%g=1.0d-2   ! gradients
+              thrs%eri=1.0d-12  ! davidson
               Nci_update=1000
               NH2_update=0
               step_damping=0.0d0
@@ -736,7 +737,7 @@
               !open(unit=121,file='dump.tmp')
                 read(101,*)A2,A3,A4
                 !write(6,*)"A2 : ",A2 ," A3 : ", A3, " A4 : ", A4
-                if (A3(1:5).ne."NORB=") then
+                if (A3(1:6).ne."NORB= ") then
                    A4=""
                    A4=trim(A3(6:))
                    !write(6,*)" A4 : ", A4

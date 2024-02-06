@@ -80,6 +80,7 @@ module global_control
         double precision G ! gradients
         double precision C ! run MPS update when coupled
         double precision S ! symmetry restrict  
+        double precision eri ! symmetry restrict  
       end type thresholds
       type(thresholds) :: thrs
 

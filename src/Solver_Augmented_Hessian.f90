@@ -1082,7 +1082,7 @@
                 mat2%R(j1,i1)= -XP(i+1)/1.0d0
                 write(1,*)"rotation R in",iloop,"micro-iter",&
                           i1,j1,mat2%R(i1,j1)
-                if(dabs(mat2%R(i1,j1)).gt.0.10)then
+                if(dabs(mat2%R(i1,j1)).gt.0.1)then
                   write(2,*)"notice : large rotation between",i1,j1,&
                             " : ",mat2%R(i1,j1)
                   ! reduce the redundant affect 
@@ -1105,7 +1105,7 @@
                         ii=i+is0; jj=j+is0
                         kk=i+js0; ll=j+js0
                 ! avoid possible over-shooting by 1/2 (?)
-                mat2%R(ii,jj)=mat2%R(ii,jj)/2.0d0
+                mat2%R(ii,jj)=mat2%R(ii,jj)/1.0d0
                 mat2%R(kk,ll)=mat2%R(ii,jj)*redu%sign_mat(kk,ll)
                write(1,*)ii,jj,mat2%R(ii,jj),kk,ll,mat2%R(kk,ll)
                       end do

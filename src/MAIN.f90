@@ -115,6 +115,7 @@
               call Run_DMRG(i,0)
             else
               call FCIDUMP_READ(i)              
+              call Run_DMRG(i,0)
             end if
 
             walltime(5)  = wtime()

@@ -33,7 +33,7 @@
         open(unit=111,file="FCIDUMP_NEW")
         open(unit=121,file=FCIDUMP)
           read(121,*)A2,A3,A4
-          if (A3(1:5).ne."NORB=") then
+          if (A3(1:6).ne."NORB= ") then
             A4=""
             A4=trim(A3(6:))
             read(A4,*) norb
@@ -82,12 +82,14 @@
                       k2=k+base(k0)
                       l2=l+base(l0)
                       d2=U(i2,j2,k2,l2)
-                      if(i0.eq.k0)then
-                        if(ij.ge.kl)then
+                      if(dabs(d2)>thrs%eri)then
+                        if(i0.eq.k0)then
+                          if(ij.ge.kl)then
+                            write(111,112)d2,i2,j2,k2,l2
+                          end if
+                        else
                           write(111,112)d2,i2,j2,k2,l2
                         end if
-                      else
-                        write(111,112)d2,i2,j2,k2,l2
                       end if
                     end do
                   end do
