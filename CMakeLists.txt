@@ -164,6 +164,8 @@ set(ORBOPT_SOURCE_FILES
    ${PROJECT_SOURCE_DIR}/src/Transform_Nindex.f90
    ${PROJECT_SOURCE_DIR}/src/Y_gen.f90
    ${PROJECT_SOURCE_DIR}/src/orbopt_version.f90
+   ${PROJECT_SOURCE_DIR}/src/mgmres.f90
+   ${PROJECT_SOURCE_DIR}/src/Solver_gmres.f90
 )
 
 set(ORBOPT_MAIN

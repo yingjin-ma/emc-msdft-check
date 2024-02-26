@@ -156,7 +156,16 @@ module matrix
       type(LR_noredundant) L_R
       double precision,allocatable::HLR(:,:)
       double precision,allocatable::MhD(:,:)
-      integer,allocatable::iorder(:) 
+      integer,allocatable::iorder(:)
+      !spmat_CSR
+      integer,allocatable::rowoffset(:) 
+      integer,allocatable::colindex(:) 
+      double precision,allocatable::values(:)
+      integer::nonzeros
+      !spmat_COO
+      integer,allocatable::coo_rows(:)
+      integer,allocatable::coo_cols(:)
+      double precision,allocatable::coo_values(:) 
 
 end module matrix
 
