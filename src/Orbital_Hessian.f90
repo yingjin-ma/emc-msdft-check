@@ -46,27 +46,10 @@
                 call delt(i,s,dis)
                 call delt(r,s,drs)
 
-                adelt=aplus(r,s)*dij-aplus(i,s)*drj-aplus(r,j)*dis&
-                     +aplus(i,j)*drs   ! all
-
-          !                adelt=aplus(i,j)*drs  ! act-vir
-
-                hess(r,i,s,j)=hess(r,i,s,j)+dh(r,s,i,j)-dh(i,s,r,j)&
-                                           -dh(r,j,i,s)+dh(i,j,r,s) ! all
-
-          !                hess(r,i,s,j)=hess(r,i,s,j)+dh(i,j,r,s) ! act-vir
-
-                hess(r,i,s,j)=hess(r,i,s,j)+Y(r,i,s,j)-Y(i,r,s,j)&
-                                           -Y(r,i,j,s)+Y(i,r,j,s)  ! all
-
-          !                hess(r,i,s,j)=hess(r,i,s,j)+Y(i,r,j,s) ! act-vir
-
+                adelt=aplus(r,s)*dij-aplus(i,s)*drj-aplus(r,j)*dis+aplus(i,j)*drs   ! all
+                hess(r,i,s,j)=hess(r,i,s,j)+dh(r,s,i,j)-dh(i,s,r,j)-dh(r,j,i,s)+dh(i,j,r,s)
+                hess(r,i,s,j)=hess(r,i,s,j)+Y(r,i,s,j)-Y(i,r,s,j)-Y(r,i,j,s)+Y(i,r,j,s)
                 hess(r,i,s,j)=hess(r,i,s,j)-0.5d0*adelt
- 
-          !                write(2,*)r,i,s,j,"r,i,s,j"   ! debugging
-          !                write(2,*)"adelt",adelt,"dh",dh(i,j,r,s),"Y",Y(i,r,j,s)
-          !                write(2,*)" hess = ",hess(r,i,s,j)
-
               end do
             end do
             Hdiag(r,i)=hess(r,i,r,i)
