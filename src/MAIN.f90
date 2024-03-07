@@ -284,12 +284,22 @@
         if(allocated(U2nd))then
           deallocate(U2nd)
         end if
-
-        deallocate(T_origin)
-        deallocate(U_origin)
-
-        deallocate(T_ini,U_ini)
-        deallocate(Udiis) ! allocated in DMRG_CASSCF()
+        if(allocated(T_origin))then
+          deallocate(T_origin)
+        end if
+        if(allocated(U_origin))then
+          deallocate(U_origin)
+        end if
+        if(allocated(T_ini))then
+          deallocate(T_ini)
+        end if
+        if(allocated(U_ini))then
+          deallocate(U_ini)
+        end if
+        if(allocated(Udiis))then
+          deallocate(Udiis)
+        end if
+        ! allocated in DMRG_CASSCF()
 !        write(6,*)DMRG_SCF,DMRG_LAG
 
         walltime(15) = wtime()
@@ -361,12 +371,24 @@
         end if
 
         ! MO Integrals [not relax in LR (only in CP-NR)]
-        deallocate(T,U)
-        deallocate(T_origin)
-        deallocate(U_origin)
-
-        deallocate(redu%irreps)
-        deallocate(redu%sign_mat)
+        if(allocated(T))then
+          deallocate(T)
+        end if
+        if(allocated(U))then
+          deallocate(U)
+        end if
+        if(allocated(T_origin))then
+          deallocate(T_origin)
+        end if
+        if(allocated(U_origin))then
+          deallocate(U_origin)
+        end if
+        if(allocated(redu%irreps))then
+          deallocate(redu%irreps)
+        end if
+        if(allocated(redu%sign_mat))then
+          deallocate(redu%sign_mat)
+        end if
 
         write(*,*)" "
         write(*,*)"----------- Normal Termination ------------ "

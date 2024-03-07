@@ -805,7 +805,7 @@ subroutine mgmres_st ( n, nz_num, ia, ja, a, x, rhs, itr_max, mr, tol_abs, &
     rho = sqrt ( dot_product ( r(1:n), r(1:n) ) )
 
     if ( verbose ) then
-      write ( *, '(a,i8,a,g14.6)' ) '  ITR = ', itr, '  Residual = ', rho
+      ! write ( *, '(a,i8,a,g14.6)' ) '  ITR = ', itr, '  Residual = ', rho
     end if
 
     if ( itr == 1 ) then
@@ -873,10 +873,11 @@ subroutine mgmres_st ( n, nz_num, ia, ja, a, x, rhs, itr_max, mr, tol_abs, &
       itr_used = itr_used + 1
 
       if ( verbose ) then
-        write ( *, '(a,i8,a,g14.6)' ) '  K =   ', k, '  Residual = ', rho
+        ! write ( *, '(a,i8,a,g14.6)' ) '  K =   ', k, '  Residual = ', rho
       end if
 
-      if ( rho <= rho_tol .and. rho <= tol_abs ) then
+      ! if ( rho <= rho_tol .and. rho <= tol_abs ) then
+      if ( rho <= 1.0D-08 ) then
         exit
       end if
 
@@ -894,7 +895,8 @@ subroutine mgmres_st ( n, nz_num, ia, ja, a, x, rhs, itr_max, mr, tol_abs, &
       x(i) = x(i) + dot_product ( v(i,1:k+1), y(1:k+1) )
     end do
 
-    if ( rho <= rho_tol .and. rho <= tol_abs ) then
+    ! if ( rho <= rho_tol .and. rho <= tol_abs ) then
+    if ( rho <= 1.0D-08 ) then
       exit
     end if
 
