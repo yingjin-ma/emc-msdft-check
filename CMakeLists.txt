@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.19)
 
-project(orbopt Fortran)
+project(orbopt C CXX CUDA Fortran)
 
 # HOWTO compile the sources from the source code directory:
 #
@@ -166,6 +166,7 @@ set(ORBOPT_SOURCE_FILES
    ${PROJECT_SOURCE_DIR}/src/orbopt_version.f90
    ${PROJECT_SOURCE_DIR}/src/mgmres.f90
    ${PROJECT_SOURCE_DIR}/src/Solver_gmres.f90
+   ${PROJECT_SOURCE_DIR}/src/trycuda.cu
 )
 
 set(ORBOPT_MAIN

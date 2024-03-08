@@ -22,12 +22,19 @@
         Hess =0.0d0
         aplus=0.0d0
 
-        do i=1,norb
-          do j=1,norb
-            aplus(i,j)=F(i,j)+F(j,i)
-          end do
-        end do
-
+        
+        !call aplus_c(aplus,F,norb)
+        ! call helloworldcuda()
+        call  hess3c(aplus,F,norb,hess,dh,Y,Hdiag)
+        write(*,*) norb
+        write(*,*) 
+        
+        ! do i=1,norb
+        !   do j=1,norb
+        !     aplus(i,j)=F(i,j)+F(j,i)
+        !   end do
+        ! end do
+        ! write(*,*)aplus(:114,1)
         write(2,*)" ==================== Warning ===================== "
         write(2,*)"  The Hessian not fully-tested for irreps cases, "
         write(2,*)"      especially for closed-shell approximation. "
@@ -35,26 +42,26 @@
         call flush(2)
 
         ! Hessian_ri,sj  ::  r,s all type, i,j active       
-        do r=1,norb
-          do i=1,norb    ! only for c1 if nact
-            do s=1,norb
-              do j=1,norb   ! only for c1 if nact
+        ! do r=1,norb
+        !   do i=1,norb    ! only for c1 if nact
+        !     do s=1,norb
+        !       do j=1,norb   ! only for c1 if nact
 
-                adelt=0.0d0
-                call delt(i,j,dij)
-                call delt(r,j,drj)
-                call delt(i,s,dis)
-                call delt(r,s,drs)
+        !         adelt=0.0d0
+        !         call delt(i,j,dij)
+        !         call delt(r,j,drj)
+        !         call delt(i,s,dis)
+        !         call delt(r,s,drs)
 
-                adelt=aplus(r,s)*dij-aplus(i,s)*drj-aplus(r,j)*dis+aplus(i,j)*drs   ! all
-                hess(r,i,s,j)=hess(r,i,s,j)+dh(r,s,i,j)-dh(i,s,r,j)-dh(r,j,i,s)+dh(i,j,r,s)
-                hess(r,i,s,j)=hess(r,i,s,j)+Y(r,i,s,j)-Y(i,r,s,j)-Y(r,i,j,s)+Y(i,r,j,s)
-                hess(r,i,s,j)=hess(r,i,s,j)-0.5d0*adelt
-              end do
-            end do
-            Hdiag(r,i)=hess(r,i,r,i)
-          end do
-        end do
+        !         adelt=aplus(r,s)*dij-aplus(i,s)*drj-aplus(r,j)*dis+aplus(i,j)*drs   ! all
+        !         hess(r,i,s,j)=hess(r,i,s,j)+dh(r,s,i,j)-dh(i,s,r,j)-dh(r,j,i,s)+dh(i,j,r,s)
+        !         hess(r,i,s,j)=hess(r,i,s,j)+Y(r,i,s,j)-Y(i,r,s,j)-Y(r,i,j,s)+Y(i,r,j,s)
+        !         hess(r,i,s,j)=hess(r,i,s,j)-0.5d0*adelt
+        !       end do
+        !     end do
+        !     Hdiag(r,i)=hess(r,i,r,i)
+        !   end do
+        ! end do
 
       End Subroutine Hessian3
 
