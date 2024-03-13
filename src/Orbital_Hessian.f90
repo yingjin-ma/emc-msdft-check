@@ -11,6 +11,7 @@
         double precision,allocatable::aplus(:,:)
  
         integer r,s
+        
 
         allocate(aplus(norb,norb))
 
@@ -25,7 +26,9 @@
         
         !call aplus_c(aplus,F,norb)
         ! call helloworldcuda()
+        call cpu_time(start_time)
         call  hess3c(aplus,F,norb,hess,dh,Y,Hdiag)
+        
         write(*,*) norb
         write(*,*) 
         
@@ -34,14 +37,14 @@
         !     aplus(i,j)=F(i,j)+F(j,i)
         !   end do
         ! end do
-        ! write(*,*)aplus(:114,1)
-        write(2,*)" ==================== Warning ===================== "
-        write(2,*)"  The Hessian not fully-tested for irreps cases, "
-        write(2,*)"      especially for closed-shell approximation. "
-        write(2,*)" ==================== Warning ===================== "
-        call flush(2)
+        ! ! write(*,*)aplus(:114,1)
+        ! ! write(2,*)" ==================== Warning ===================== "
+        ! ! write(2,*)"  The Hessian not fully-tested for irreps cases, "
+        ! ! write(2,*)"      especially for closed-shell approximation. "
+        ! ! write(2,*)" ==================== Warning ===================== "
+        ! call flush(2)
 
-        ! Hessian_ri,sj  ::  r,s all type, i,j active       
+        ! ! Hessian_ri,sj  ::  r,s all type, i,j active       
         ! do r=1,norb
         !   do i=1,norb    ! only for c1 if nact
         !     do s=1,norb
@@ -62,6 +65,12 @@
         !     Hdiag(r,i)=hess(r,i,r,i)
         !   end do
         ! end do
+        call cpu_time(end_time)
+
+        ! 计算经过的时间
+
+        elapsed_time = end_time - start_time
+        write(*, *) "hessian3_time: ", elapsed_time, " 秒"
 
       End Subroutine Hessian3
 

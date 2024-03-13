@@ -5,6 +5,7 @@
         use matrix
         use date_time
         use orbopt_header
+        USE OMP_LIB
 
 !"====================================================================="
 !"       Orbital optimization program, version 0.2 (alpha)             "
@@ -85,12 +86,10 @@
         call detect_system()
         call detect_redundancies()
         walltime(2)  = wtime()
-        call timing_reporter(3,"redundancies check",walltime(2)-walltime(1))
-
+        ! call timing_reporter(3,"redundancies check",walltime(2)-walltime(1))
         call HFenergy()
-
         walltime(3)  = wtime()
-        call timing_reporter(3,"HF-energy check",walltime(3)-walltime(2))
+        ! call timing_reporter(3,"HF-energy check",walltime(3)-walltime(2))
 
         call print_parameter(6)
         call DMRG_CASSCF()
@@ -100,8 +99,7 @@
         ! If allow the DMRG-SCF calculations
 
         walltime(4)  = wtime()
-        call timing_reporter(3,"parameter initialization",walltime(4)-walltime(3))
-
+        ! call timing_reporter(3,"parameter initialization",walltime(4)-walltime(3))
         ! to Leon : IF DMRG-MCLR, use the convergenced w.f. for MOLCAS;
         !           In order to keep the consistency for MCLR part
         !           (i.e. don't use this DMRG-SCF utility)
@@ -123,8 +121,8 @@
             " Macro-iter:",i
             write(30,"(A,I3)") &
             " Macro-iter:",i
-            call timing_reporter(3,"MPS optimization",walltime(5)-walltime(10))
-            call timing_reporter(30,"MPS optimization",walltime(5)-walltime(10))
+            ! call timing_reporter(3,"MPS optimization",walltime(5)-walltime(10))
+            ! call timing_reporter(30,"MPS optimization",walltime(5)-walltime(10))
 
             !1122      continue
             ! This should be removed later
@@ -156,8 +154,7 @@
             deallocate(TM1,GM1)
 
             walltime(11) = wtime()
-            call timing_reporter(3,"closed-shell preparation",walltime(11)-walltime(5))
-
+            ! call timing_reporter(3,"closed-shell preparation",walltime(11)-walltime(5))
             write(15,*)"After closed shell update"; call flush(15)
             call print_mat(nocc,nocc,mat2%d,15)
             write(16,*)"After closed shell update"; call flush(16)
@@ -167,8 +164,8 @@
             call PreOneSCF(i)
 
             walltime(12) = wtime()
-            call timing_reporter&
-            (3,"generation of orb-opt-related operators",walltime(12)-walltime(11))
+            ! call timing_reporter&
+            ! (3,"generation of orb-opt-related operators",walltime(12)-walltime(11))
             !           write(6,*)"After PreOneSCF"; call flush(6)
             !            stop
             call Initial_value()
@@ -177,7 +174,7 @@
             !           write(6,*)"After Nonlinear solver "; call flush(6)
             !            call print_mat(norb,norb,mat2%U,6)
             walltime(3) = wtime()
-            call timing_reporter(3,"non-linear solver",walltime(3)-walltime(12))
+            ! call timing_reporter(3,"non-linear solver",walltime(3)-walltime(12))
 
             if(LDIIS)then
               call DIIS_acceleration(i,ITERVAL_DIIS)
@@ -192,13 +189,12 @@
             call CS_dim_fro2cls()  ! CCCC
 
             walltime(4) = wtime()
-            call timing_reporter(3,"closed-shell update",walltime(4)-walltime(3))
+            ! call timing_reporter(3,"closed-shell update",walltime(4)-walltime(3))
 
             call transform_INT(.true.)
 
             walltime(13) = wtime()
-            call timing_reporter(3,"4-index transformation",walltime(13)-walltime(4))
-
+            ! call timing_reporter(3,"4-index transformation",walltime(13)-walltime(4))
             !call system("mv FCIDUMP_NEW_ACTIVE FCIDUMP_ACTIVE")
             call Scf_save(i,dmrg_binary_name) ! Also FCIDUMP and FCIDUMP_AVTIVE
             !            stop
@@ -235,8 +231,15 @@
             deallocate(mat2%B0)
 
             walltime(14) = wtime()
-            call timing_reporter(3,"macro-iteration loop",walltime(14)-walltime(10))
-            call timing_reporter(30,"macro-iteration loop",walltime(14)-walltime(10))
+            ! call timing_reporter(3,"macro-iteration loop",walltime(14)-walltime(10))
+            ! call timing_reporter(30,"macro-iteration loop",walltime(14)-walltime(10))
+            write(*,*)"*******************MPS optimization",walltime(5)-walltime(10)
+            write(*,*) "*******************closed-shell preparation",walltime(11)-walltime(5)
+            write(*,*) "*******************generation of orb-opt-related operators",walltime(12)-walltime(11)
+            write(*,*)"*******************non-linear solver",walltime(3)-walltime(12)
+            write(*,*)"*******************closed-shell update",walltime(4)-walltime(3)
+            write(*,*)"*******************4-index transformation",walltime(13)-walltime(4)
+            write(*,*)"*******************macro-iteration loop",walltime(14)-walltime(10)
 
             if(Rabs(i).lt.thrs%r.and.Echeck.lt.thrs%e)then
               write(*,*)

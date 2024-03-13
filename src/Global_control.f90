@@ -150,5 +150,9 @@ module global_control
 ! If correct the phase after calculation 
       logical Lcorrected_Phase
 
+      real :: start_time, end_time, elapsed_time
+      real :: start_timeDhgen, end_timeDhgen, elapsed_timeDhgen
+      real :: start_timeYgen, end_timeYgen, elapsed_timeYgen
+
 end module global_control
 

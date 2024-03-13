@@ -417,8 +417,6 @@ Subroutine Solver_gmres(icycle)
           end do
           YP=-YP
 
-          
-          
           allocate(x_estimate(nij));x_estimate=0.0d0
           allocate(XP(nij));XP=0.0d0
           itr_max=2
@@ -426,12 +424,19 @@ Subroutine Solver_gmres(icycle)
           tol_abs = 1.0D-08
           tol_rel = 1.0D-08
 
-          call matrix_to_coo(HP,nij,nij)
-          call mgmres_st ( nij, nonzeros, coo_rows, coo_cols, coo_values, x_estimate, YP, itr_max, mr, tol_abs, tol_rel )
+          call matrix_to_csr(HP,nij,nij)
+          call pmgmres_ilu_cr( nij, nonzeros, rowoffset, colindex, values, x_estimate, YP, itr_max, mr, tol_abs, tol_rel )
+
+          ! call matrix_to_coo(HP,nij,nij)
+          !call mgmres_st ( nij, nonzeros, coo_rows, coo_cols, coo_values, x_estimate, YP, itr_max, mr, tol_abs, tol_rel )
           nonzeros=0
-          deallocate(coo_rows)
-          deallocate(coo_cols)
-          deallocate(coo_values)
+          deallocate(rowoffset)
+          deallocate(colindex)
+          deallocate(values)
+
+          ! deallocate(coo_rows)
+          ! deallocate(coo_cols)
+          ! deallocate(coo_values)
           XP=x_estimate
         !   write(*,*),XP(:200)
 
@@ -493,89 +498,11 @@ Subroutine Solver_gmres(icycle)
             end do
             is0=is0+orb%total(isym)
           end do
-  
-
-
-
-      !          ij=0; d0=0.0d0
-      !          do i=1,ndim1
-      !            do j=1,ndim1
-      !               ij=ij+1
-      !                mat2%R(i,j)=X(ij)
-      !               d0=d0+dabs(X(ij))
-      !            end do
-      !          end do
       Rabs(icycle)=d0
 
     !   deallocate(HPA)
       deallocate(XP)
     !   deallocate(D)
-  ! end
-!   !不执行
-!     else            ! Here use Full(alternative) inverse
-
-!       YP=-1.0d0*YP
-!       allocate(HPA(nij+1,nij+1))
-!       HPA=0.0d0
-
-!       ! The new augmented Hessian matrix {except HPA(1,1)}
-!       HPA(2:nij+1,1)=YP
-!       HPA(1,2:nij+1)=YP
-!       HPA(2:nij+1,2:nij+1)=HP
-!       ! And the augmented x-vector
-!       allocate(XP(nij+1))
-!       allocate(D(nij+1))
-!       XP=0.0d0
-!        D=0.0d0
-!       allocate(T1(nij+1,nij+1)); T1=0.0d0
-    
-!       T1=HPA
-!       !          call print_mat(nij,nij,HP,6)
-
-!       call eigtql2(nij+1,T1,D) 
-
-!       !          call Davidson(nij,T2,XP,D,1.0d0,.false.,8,1.0d-12) 
-
-!       XP=0.0d0
-!       do i=1,nij
-!         do k=1,nij
-!           do l=1,nij
-!             if(D(l).gt.1.0d-9)then
-!               XP(i+1)=XP(i+1)+T1(i+1,l)*T1(k+1,l+1)*YP(k)/D(l+1)
-!             else if(D(l).lt.-1.0d-9)then
-!               XP(i+1)=XP(i+1)-T1(i+1,l)*T1(k+1,l+1)*YP(k)/D(l+1)
-!             end if
-!           end do
-!         end do
-!       end do
-
-!       !          call LENGTH(XP,nij+1,dv)
-
-!       do i=1,nij
-!         X(porb(i))=-XP(i+1)
-!         !X(porb(i))=-XP(i+1)/dv
-!       end do 
-
-!       write(1,*)"AH XP ",XP
-!       !         stop
-
-!       ij=0; d0=0.0d0
-!       do i=1,ndim1
-!         do j=1,ndim1
-!            ij=ij+1
-!            mat2%R(i,j)=X(ij)
-!            d0=d0+dabs(X(ij))
-!         end do
-!       end do
-!       Rabs(icycle)=d0
-
-!       deallocate(D)
-!       deallocate(XP)
-!       deallocate(T1)
-
-!     end if
-!   !end
-  !更新T和U
     if(.true.)then
       call CAL_T(norb,mat2%R,d3,150,mat2%T)
       call T_TO_U(norb,mat2%T,mat2%U)
