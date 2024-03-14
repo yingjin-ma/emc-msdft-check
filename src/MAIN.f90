@@ -146,7 +146,6 @@
 
             deallocate(mat2%d,mat2%P)
 
-
             allocate(mat2%d(nocc,nocc))
             allocate(mat2%P(nocc,nocc,nocc,nocc))
             mat2%d=TM1
