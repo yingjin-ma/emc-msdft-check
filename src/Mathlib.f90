@@ -1,7 +1,9 @@
 ! @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
       SUBROUTINE transform_subspaces(nsub,act,tot,norb,TRANS,T,U,group)
-        ! Yingjin in around 2013          
+        ! Yingjin in around 2013
+        ! use omp_lib
+        use date_time          
 
         INTEGER::norb
         DOUBLE PRECISION::TRANS(norb,norb)
@@ -27,7 +29,7 @@
             allocate(UM(i)%U(tot(i),tot(i)))
             UM(i)%U=0.0d0
             UM(i)%U=TRANS(i0+1:i0+tot(i),i0+1:i0+tot(i))
-        !            call print_mat(tot(i),tot(i),UM(i)%U)
+            !            call print_mat(tot(i),tot(i),UM(i)%U)
             i0=i0+tot(i)
           end if
         end do
@@ -48,12 +50,12 @@
           end if 
         end do     
         ! The transformed 1-body integrals
-        T=TM 
-
+        T=TM
         ! Two Electron Integrals
         ! Transform
         ALLOCATE(TG1(norb,norb,norb,norb));TG1=0.0d0
         ALLOCATE(TG2(norb,norb,norb,norb));TG2=0.0d0
+        walltime(80) = wtime()
         i0=0
         DO i=1,nsub
           j0=0
@@ -63,32 +65,26 @@
               l0=0
               DO l=1,nsub
                 if(group(i,group(j,group(k,l))).eq.1)then
+                  ! $OMP PARALLEL
+                  ! $OMP DO
                   do ii=1,tot(i)
                     do jj=1,tot(j) 
-                   
                       if(tot(k).ne.0.and.tot(l).ne.0)then
- 
                         allocate(TM1(tot(k),tot(l)));TM1=0.0d0
                         allocate(TM2(tot(k),tot(l)));TM2=0.0d0
                         allocate(TM3(tot(k),tot(l)));TM3=0.0d0
-
                         TM1=U(I0+ii,J0+jj,k0+1:k0+tot(k),l0+1:l0+tot(l))
-
-                        !                      write(*,*)"i,j,k,l",i,j,k,l 
-
                         call MXMG(tot(k),tot(l),tot(k),UM(k)%U,TM1,TM2,"TN")
                         call MXMG(tot(k),tot(l),tot(l),TM2,UM(l)%U,TM3,"NN")
-
                         TG1(I0+ii,J0+jj,k0+1:k0+tot(k),l0+1:l0+tot(l))=TM3
-  
                         deallocate(TM1)
                         deallocate(TM2)
                         deallocate(TM3)
-
                       end if 
-
                     end do
                   end do
+                  ! $OMP END DO
+                  ! $OMP END PARALLEL
                 end if
                 l0=l0+tot(l)
               END DO
@@ -98,6 +94,7 @@
           END DO
           i0=i0+tot(i)
         END DO
+        walltime(81) = wtime()
 
         !        call print_gat(norb,norb,norb,norb,MIDU1,11)
         !        stop
@@ -145,11 +142,15 @@
           i0=i0+tot(i)
         END DO
 
+        walltime(82) = wtime()
+        write(*,*)"*******************T_1*****",walltime(81)-walltime(80)
+        write(*,*)"*******************T_2*****",walltime(82)-walltime(81)
+
+
         !        call print_gat(norb,norb,norb,norb,TG2,15)
         !        stop  !!!!=======================!!!!
         ! The transformerd 2-body matrix
         U=TG2 
-        
         deallocate(TM)
         deallocate(UM)
         deallocate(TG1)

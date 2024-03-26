@@ -167,6 +167,7 @@ set(ORBOPT_SOURCE_FILES
    ${PROJECT_SOURCE_DIR}/src/mgmres.f90
    ${PROJECT_SOURCE_DIR}/src/Solver_gmres.f90
    ${PROJECT_SOURCE_DIR}/src/trycuda.cu
+   ${PROJECT_SOURCE_DIR}/src/operator.cu
 )
 
 set(ORBOPT_MAIN

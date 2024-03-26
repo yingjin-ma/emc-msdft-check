@@ -5,7 +5,8 @@
 
         logical::if_trans
         
-        character*10 A2,A3,A4 
+        character*10 A2
+        character*10 A3 
         integer,allocatable::base(:),IL(:) 
         double precision d1,d2
         
@@ -22,7 +23,6 @@
         !        call transform_RAM(norb,mat2%U,T,U)
               
         ! The is the subspace integrals transform
-        
         if(if_trans)then
           call transform_subspaces&
              (orb%nsub,orb%occ,orb%total,norb,MAT2%U,T,U,orb%grouptable)
@@ -32,15 +32,8 @@
         !        stop 
                 !write(*,*)T
         open(unit=111,file="FCIDUMP_NEW")
-        open(unit=121,file=FCIDUMP)
-          read(121,*)A2,A3,A4
-          if (A3(1:6).ne."NORB= ") then
-            A4=""
-            A4=trim(A3(6:))
-            read(A4,*) norb
-          else
-            read(A4,*) norb
-          end if
+        open(unit=121,file="FCIDUMP")
+          read(121,*)A2,A3,norb
           write(111,"(1X,A4,1X,A5,I4)")A2,A3,norb 
           allocate(IL(norb))                         !define  
           !write(*,*)norb
@@ -83,14 +76,12 @@
                       k2=k+base(k0)
                       l2=l+base(l0)
                       d2=U(i2,j2,k2,l2)
-                      if(dabs(d2)>thrs%eri)then
-                        if(i0.eq.k0)then
-                          if(ij.ge.kl)then
-                            write(111,112)d2,i2,j2,k2,l2
-                          end if
-                        else
+                      if(i0.eq.k0)then
+                        if(ij.ge.kl)then
                           write(111,112)d2,i2,j2,k2,l2
                         end if
+                      else
+                        write(111,112)d2,i2,j2,k2,l2
                       end if
                     end do
                   end do

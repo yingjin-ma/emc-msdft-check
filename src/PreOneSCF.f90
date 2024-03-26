@@ -86,6 +86,7 @@
   
         use global_control
         use matrix
+        use date_time
 
         integer::icycle
         character*72 oneRDMfile,twoRDMfile
@@ -114,7 +115,7 @@
 !  ==============     Active the closed shell approximatation    ============
 !  ==============        Modifying the RDMs (can be omited)      ============
 !  ==========================================================================
-        goto 2222
+goto 2222
 
         if(ifcore) then
           allocate(TM1(nact,nact))               ;  TM1=mat2%d
@@ -135,7 +136,8 @@
                TM1(j1+1:j1+orb%act(i),j1+1:j1+orb%act(i))
             ioffset=ioffset+orb%occ(i)
             ioffset1=ioffset1+orb%act(i)
-          end do          
+          end do
+                 
 
           !          stop
           allocate(TM2(nocc,nocc))  ; TM2=mat2%d         
@@ -257,17 +259,13 @@
 
 2222    continue
 
-        !        call print_mat(nocc,nocc,mat2%d)
-        !        call print_GAT(nocc,nocc,nocc,nocc,mat2%p,11)
-        !        stop 
-
         allocate(mat1(orb%nsub)) 
         !mat1=0.0d0;
         j0=0; k0=0
         do i=1,orb%nsub
           allocate(mat1(i)%D(orb%act(i),orb%act(i)))
           mat1(i)%D=0.0d0
-          do j=1,orb%act(i)  
+          do j=1,orb%act(i)
             do k=1,orb%act(i)
               mat1(i)%D(j,k)=mat2%d(j0+j,k0+k)
             end do
@@ -275,6 +273,13 @@
           j0=j0+orb%act(i)
           k0=k0+orb%act(i)
         end do
+        write(*,*)"**************************"
+        write(*,*)mat2%d(1,:)
+        write(*,*) size(mat2%d),size(mat2%d, dim=1),size(mat2%d, dim=2)
+        write(*,*) orb%act(1)
+
+        write(*,*) size(mat2%p),size(mat2%p, dim=1),size(mat2%P, dim=2)
+        write(*,*) nocc
  
         if(.NOT.ALLOCATED(mat2%T))then
           allocate(mat2%T(norb,norb))
@@ -293,7 +298,6 @@
 !        allocate(mat2%G(norb,nact,nact,norb)) ! partly reduced on 2015.3.16 (later)
 !        end if        
         allocate(mat2%H(norb,norb,norb,norb)) !  
-
         allocate(mat2%Rocc(nact,nact))
         allocate(mat2%Aocc(nact,nact))
         allocate(mat2%Hocc(nact,nact,nact,nact)) !  
@@ -341,17 +345,13 @@
             end do
           else  ! === new code ===
             ioffset=0
-            do i=1,orb%nsub 
+            do i=1,orb%nsub
               N=orb%occ(i)
               if(N.ne.0)then
                 M=ioffset 
                 call MXM(N,T(M+1:M+N,M+1:M+N),mat1(i)%D,mat1(i)%hD(1:N,1:N))
-              !             call print_mat(orb%occ(i),mat1(i)%hD(1:N,1:N))
-              !             call print_mat(orb%total(i),mat1(i)%hD)
                 call trace(N,mat1(i)%hD(1:N,1:N),dtmp)
                 RDM_ENERGY=RDM_ENERGY+dtmp
-                !write(*,*)"RDM_ENERGY in step",i,"is",RDM_ENERGY
-                !write(*,*)"RDM_ENERGY_MAT in step",i,"is",RDM_ENERGY_MAT
               end if 
             ioffset=ioffset+orb%total(i)
             end do
@@ -430,9 +430,6 @@
             end do
   
           else ! === new code === 
-
-          ! Will be used later
-          !dtmp2=0.0d0
           ioffset=0
           ioffset1=0
           do i=1,orb%nsub; do i1=1,orb%occ(i)
@@ -510,15 +507,10 @@
                   joffset1=0   
                   do j=1,orb%nsub; do j1=1,orb%occ(j)
                     mat2%A(n1+noffset,m1+moffset)=mat2%A(n1+noffset,m1+moffset)&
-                  +2.0d0*T(n1+noffset,j1+joffset)*mat2%D(m1+moffset1,j1+joffset1) 
-              !                if(T(n1+noffset,j1+joffset).ne.0.and.mat2%D(m1+moffset1,j1+joffset1).ne.0)then
-              !                  write(*,*)n,n1,m,m1,j,j1
-              !                  write(*,*)T(n1+noffset,j1+joffset)
-              !                  write(*,*)mat2%D(m1+moffset1,j1+joffset1)
-              !                end if
+                  +2.0d0*T(n1+noffset,j1+joffset)*mat2%D(m1+moffset1,j1+joffset1)
                   end do
                   joffset=joffset+orb%total(j)
-                  joffset1=joffset1+orb%occ(j) 
+                  joffset1=joffset1+orb%occ(j)
                   end do 
                 end do  
                 moffset=moffset+orb%total(m)
@@ -527,64 +519,72 @@
               end do 
               noffset=noffset+orb%total(n)
               noffset1=noffset1+orb%occ(n) 
-              end do       
-
+              end do
             else ! === new code ===
 
               ! The hD part -- MKL form
-              noffset=0 
-              do n=1,orb%nsub
-                n1=orb%total(n)
-                n2=orb%occ(n)
-                if(n2.ne.0)then
-                  n0=noffset 
-                  allocate(TM1(N1,N2));TM1=0.0d0 
-                  allocate(TM2(N2,N2));TM2=0.0d0
-                  allocate(TM3(N1,N2));TM3=0.0d0
-                  mat1(n)%hD=0.0d0
-                  TM1=T(n0+1:n0+n1,n0+1:n0+n2)
-                  TM2=mat1(n)%D
-                  call MXMG(n1,n2,n2,TM1,TM2,TM3,"NN")
-                  TM3=TM3*2.0d0
-                  !              mat1(n)%hD(1:n1,1:n2)=TM3
-                  !              call print_mat(n1,n1,mat1(n)%hD)
-                  mat2%A(n0+1:n0+n1,n0+1:n0+n2)=TM3
-                  deallocate(TM1)
-                  deallocate(TM2)
-                  deallocate(TM3)
-                end if 
-                noffset=noffset+orb%total(n)
-              end do
+              write(*,*) "dfsghjkdgfsdhjgfhjsdghjdfgjsdhgfhsdgfjsdgfjhgdsjhfgjshdgfjhdgfjhsgdfjhd"
+              write(*,*),orb%total
+              write(*,*)
+              write(*,*),orb%occ
+              write(*,*)
+              write(*,*),norb
+              write(*,*),nocc
+              write(*,*),nact
+              
+              ! noffset=0
+              ! do n=1,orb%nsub
+              !   n1=orb%total(n)
+              !   n2=orb%occ(n)
+              !   if(n2.ne.0)then
+              !     n0=noffset 
+              !     allocate(TM1(N1,N2));TM1=0.0d0
+              !     allocate(TM2(N2,N2));TM2=0.0d0
+              !     allocate(TM3(N1,N2));TM3=0.0d0
+              !     mat1(n)%hD=0.0d0
+              !     TM1=T(n0+1:n0+n1,n0+1:n0+n2)
+              !     TM2=mat1(n)%D
+              !     call MXMG(n1,n2,n2,TM1,TM2,TM3,"NN")
+              !     TM3=TM3*2.0d0
+              !     mat2%A(n0+1:n0+n1,n0+1:n0+n2)=TM3
+              !     deallocate(TM1)
+              !     deallocate(TM2)
+              !     deallocate(TM3)
+              !   end if
+              !   noffset=noffset+orb%total(n)
+              ! end do
 
+              ! noffset=0
+              ! noffset1=0
+              ! do n=1,orb%nsub
+              !   moffset=0
+              !   moffset1=0
+              !   do m=1,orb%nsub
+              !     joffset=0
+              !     joffset1=0
+              !     do j=1,orb%nsub
+              !       do n1=1,orb%total(n)
+              !         do m1=1,orb%occ(m)
+              !           do j1=1,orb%occ(j)
+              !             mat2%A(n1+noffset,m1+moffset)=mat2%A(n1+noffset,m1+moffset)&
+              !             +2.0d0*T(n1+noffset,j1+joffset)*mat2%D(m1+moffset1,j1+joffset1)
+              !           end do
+              !         end do
+              !       end do
+              !       joffset=joffset+orb%total(j)
+              !       joffset1=joffset1+orb%occ(j)
+              !     end do
+              !     moffset=moffset+orb%total(m)
+              !     moffset1=moffset1+orb%occ(m)
+              !   end do
+              !   noffset=noffset+orb%total(n)
+              !   noffset1=noffset1+orb%occ(n)
+              ! end do
+
+              call operator(orb%nsub,mat2%A,T,mat2%D,norb,nocc,orb%total,orb%occ,mat2%p,U,mat2%G)
+              
             end if ! ===
 
-              !         call print_mat(norb,norb,mat2%A,6)
-              !          mat2%A=0.0d0
-
-              !          write(*,*)"RDM_ENERGY",RDM_ENERGY
-              !          write(*,*)"RDM_ENERGY_MAT",RDM_ENERGY_MAT
-              !RDM_ENERGY=0.0d0
-              !          ioffset=0
-              !          ioffset1=0
-              !          RDM_IJKL=0.0d0
-              !          do i=1,orb%nsub; do i1=1,orb%occ(i)
-                !dtemp=0.0d0
-                !write(*,*)"RDM2-I",RDM_ENERGY+FRONRE
-                !write(2,*)"RDM2-I",RDM_ENERGY+FRONRE
-
-              !          call Print_MAT(norb,norb,mat2%A)
-
-              !          do i=1,norb
-              !            do j=1,norb
-              !              write(*,*)i,j,mat2%A(i,j)
-              !            end do 
-              !          end do
-              !          stop 
-              
-              !          write(202,*)mat2%A
-              !          stop
-
-              !          mat2%A=0.0d0 ! for testing
 
               ! The sum_kl[J^(kl)P^(lk)] part         
           
@@ -605,16 +605,8 @@
                       loffset1=0
                       do l=1,orb%nsub; do l1=1,orb%occ(l)
                         mat2%A(n1+noffset,m1+moffset)=mat2%A(n1+noffset,m1+moffset)&
-                +2.0d0*mat2%p(m1+moffset1,k1+koffset1,l1+loffset1,j1+joffset1)&
+                        +2.0d0*mat2%p(m1+moffset1,k1+koffset1,l1+loffset1,j1+joffset1)&
                         *U(n1+noffset,j1+joffset,k1+koffset,l1+loffset)
-              !                    if(n.eq.2.and.n1.eq.1.and.m.eq.2.and.m1.eq.1)then  ! n,m,n1,m1
-              !                      if(U(n1+noffset,j1+joffset,k1+koffset,l1+loffset).ne.0.and.&
-              !                        mat2%p(m1+moffset1,k1+koffset1,l1+loffset1,j1+joffset1).ne.0)then
-              !                        write(3,*)n,m,j,k,l
-              !                        write(3,*)"U",U(n1+noffset,j1+joffset,k1+koffset,l1+loffset)
-              !                        write(3,*)"P",mat2%p(m1+moffset1,k1+koffset1,l1+loffset1,j1+joffset1)
-              !                      end if
-              !                    end if 
                       end do
                       loffset=loffset+orb%total(l)
                       loffset1=loffset1+orb%occ(l)
@@ -640,103 +632,139 @@
 
               ! The sum_kl[J^(kl)P^(lk)] part --- mkl part,done, will be used later
             else ! === new code ===+
+
+              ! call dshghdg(orb%nsub,mat2%A,T,mat2%D,norb,nocc,orb%total,orb%occ,mat2%p,U)
             
-              allocate(TM4(norb,norb));TM4=0.0d0
-              koffset=0
-              koffset1=0
-              do k=1,orb%nsub; do k1=1,orb%occ(k) 
-                loffset=0
-                loffset1=0
-                do l=1,orb%nsub; do l1=1,orb%occ(l)
-                  noffset=0 
-                  do n=1,orb%nsub
-                    n0=noffset 
-                    n1=orb%total(n)
-                    n2=orb%occ(n)
-                    moffset=0
-                    moffset1=0
-                    do m=1,orb%nsub
-                      m0=moffset
-                      m1=orb%total(m)
-                      m2=orb%occ(m)
-                      mx=moffset1
-                      
-                      joffset=0
-                      joffset1=0
-                      do j=1,orb%nsub
-                        if(orb%occ(j).ne.0.and.m2.ne.0)then
-                          if(orb%grouptable(n,j).eq.orb%grouptable(k,l))then
-                            j0=joffset
-                            j1=orb%total(j) 
-                            j2=orb%occ(j) 
-                            jx=joffset1
-                            allocate(TM1(N1,J2));TM1=0.0d0 
-                            allocate(TM2(J2,M2));TM2=0.0d0
-                            allocate(TM3(N1,M2));TM3=0.0d0               
-                            TM1=U(n0+1:n0+n1,j0+1:j0+j2,k1+koffset,l1+loffset) 
-                            TM2=mat2%p(mx+1:mx+m2,k1+koffset1,l1+loffset1,jx+1:jx+j2)
-                            !                          TM2=mat2%p(mx+1:mx+m2,l1+loffset1,k1+koffset1,jx+1:jx+j2)
-                            !                        if(n.eq.1.and.m.eq.1)then
-                            !                          write(*,*)"========k,l,n,m,j==========",k,l,n,m,j
-                            !                          call print_MAT(n1,j2,TM1)  
-                            !                          write(*,*)"        ---       "
-                            !                          call print_MAT(j2,m2,TM2) 
-                            !                        end if
-                            call MXMG(n1,m2,j2,TM1,TM2,TM3,"NT") 
-                            TM3=TM3*2.0d0 
-                            TM4(N0+1:N0+N1,M0+1:M0+M2)=TM4(N0+1:N0+N1,M0+1:M0+M2)+TM3
-                            deallocate(TM1)
-                            deallocate(TM2)
-                            deallocate(TM3)                    
-                          end if
-                        end if
-                        joffset=joffset+orb%total(j)
-                        joffset1=joffset1+orb%occ(j)
-                      end do 
-                        
-                      moffset=moffset+orb%total(m)
-                      moffset1=moffset1+orb%occ(m)
-                    end do
-                    noffset=noffset+orb%total(n)
-                  end do
-                end do
-                loffset=loffset+orb%total(l)
-                loffset1=loffset1+orb%occ(l)
-                end do
-              end do 
-              koffset=koffset+orb%total(k)
-              koffset1=koffset1+orb%occ(k)
-              end do
-              mat2%A=mat2%A+TM4
-              deallocate(TM4)
+              ! allocate(TM4(norb,norb));TM4=0.0d0
+              ! koffset=0
+              ! koffset1=0
+              ! do k=1,orb%nsub; do k1=1,orb%occ(k)
+              !   loffset=0
+              !   loffset1=0
+              !   do l=1,orb%nsub; do l1=1,orb%occ(l)
+              !     noffset=0 
+              !     do n=1,orb%nsub
+              !       n0=noffset
+              !       n1=orb%total(n)
+              !       n2=orb%occ(n)
+              !       moffset=0
+              !       moffset1=0
+              !       do m=1,orb%nsub
+              !         m0=moffset
+              !         m1=orb%total(m)
+              !         m2=orb%occ(m)
+              !         mx=moffset1
+              !         joffset=0
+              !         joffset1=0
+              !         do j=1,orb%nsub
+              !           if(orb%occ(j).ne.0.and.m2.ne.0)then
+              !             if(orb%grouptable(n,j).eq.orb%grouptable(k,l))then
+              !               j0=joffset
+              !               j1=orb%total(j) 
+              !               j2=orb%occ(j) 
+              !               jx=joffset1
+              !               allocate(TM1(N1,J2));TM1=0.0d0 
+              !               allocate(TM2(J2,M2));TM2=0.0d0
+              !               allocate(TM3(N1,M2));TM3=0.0d0               
+              !               TM1=U(n0+1:n0+n1,j0+1:j0+j2,k1+koffset,l1+loffset) 
+              !               TM2=mat2%p(mx+1:mx+m2,k1+koffset1,l1+loffset1,jx+1:jx+j2)
+              !               call MXMG(n1,m2,j2,TM1,TM2,TM3,"NT") 
+              !               TM3=TM3*2.0d0
+              !               TM4(N0+1:N0+N1,M0+1:M0+M2)=TM4(N0+1:N0+N1,M0+1:M0+M2)+TM3
+              !               deallocate(TM1)
+              !               deallocate(TM2)
+              !               deallocate(TM3)                   
+              !             end if
+              !           end if
+              !           joffset=joffset+orb%total(j)
+              !           joffset1=joffset1+orb%occ(j)
+              !         end do 
+              !         moffset=moffset+orb%total(m)
+              !         moffset1=moffset1+orb%occ(m)
+              !       end do
+              !       noffset=noffset+orb%total(n)
+              !     end do
+              !   end do
+              !   loffset=loffset+orb%total(l)
+              !   loffset1=loffset1+orb%occ(l)
+              !   end do
+              ! end do 
+              ! koffset=koffset+orb%total(k)
+              ! koffset1=koffset1+orb%occ(k)
+              ! end do
+              ! mat2%A=mat2%A+TM4
+              ! deallocate(TM4)
+
+              ! noffset=0
+              ! noffset1=0
+              ! do n=1,orb%nsub
+              !   moffset=0
+              !   moffset1=0
+              !   do m=1,orb%nsub
+              !     joffset=0
+              !     joffset1=0
+              !     do j=1,orb%nsub
+              !       koffset=0
+              !       koffset1=0
+              !       do k=1,orb%nsub
+              !         loffset=0
+              !         loffset1=0
+              !         do l=1,orb%nsub
+              !           do n1=1,orb%total(n)
+              !             do m1=1,orb%occ(m)
+              !               do j1=1,orb%occ(j)
+              !                 do k1=1,orb%occ(k)
+              !                   do l1=1,orb%occ(l)
+              !                     mat2%A(n1+noffset,m1+moffset)=mat2%A(n1+noffset,m1+moffset)&
+              !                     +2.0d0*mat2%p(m1+moffset1,k1+koffset1,l1+loffset1,j1+joffset1)&
+              !                     *U(n1+noffset,j1+joffset,k1+koffset,l1+loffset)
+              !                   end do
+              !                 end do
+              !               end do
+              !             end do
+              !           end do
+              !           loffset=loffset+orb%total(l)
+              !           loffset1=loffset1+orb%occ(l)
+              !         end do
+              !         koffset=koffset+orb%total(k)
+              !         koffset1=koffset1+orb%occ(k)
+              !       end do
+              !       joffset=joffset+orb%total(j)
+              !       joffset1=joffset1+orb%occ(j)
+              !     end do
+              !     moffset=moffset+orb%total(m)
+              !     moffset1=moffset1+orb%occ(m)
+              !   end do
+              !   noffset=noffset+orb%total(n)
+              !   noffset1=noffset1+orb%occ(n)
+              ! end do
+
             end if ! ===
-         !write(*,*)" ====A(1)/A(2)== "
-         !call print_MAT(norb,norb,MAT2%A,6)
 
-          
-          ioffset=0 
-          do i=1,orb%nsub
-            do k=1,orb%total(i)
-              do l=1,orb%total(i)
-                if(dabs(mat2%A(k+ioffset,l+ioffset)).lt.1.0e-9)then
-                   mat2%A(k+ioffset,l+ioffset)=0.0d0
-                end if
-                mat1(i)%A(k,l)=mat2%A(k+ioffset,l+ioffset)
-              end do
-            end do
-            ioffset=ioffset+orb%total(i)
-          end do
 
-          do i=1,norb
-            do j=1,norb
-              if(dabs(mat2%A(i,j)).lt.1.0d-9) mat2%A(i,j)=0.0d0
-              if(mat2%A(i,j)-mat2%A(j,i).gt.1.0d-6) then
-                write(1,*)i,j,"i,j",mat2%A(i,j)-mat2%A(j,i)
-              end if
-            end do 
-          end do
+          ! ioffset=0 
+          ! do i=1,orb%nsub
+          !   do k=1,orb%total(i)
+          !     do l=1,orb%total(i)
+          !       if(dabs(mat2%A(k+ioffset,l+ioffset)).lt.1.0e-9)then
+          !          mat2%A(k+ioffset,l+ioffset)=0.0d0
+          !       end if
+          !       mat1(i)%A(k,l)=mat2%A(k+ioffset,l+ioffset)
+          !     end do
+          !   end do
+          !   ioffset=ioffset+orb%total(i)
+          ! end do
 
-          goto 1333 
+          ! do i=1,norb
+          !   do j=1,norb
+          !     if(dabs(mat2%A(i,j)).lt.1.0d-9) mat2%A(i,j)=0.0d0
+          !     if(mat2%A(i,j)-mat2%A(j,i).gt.1.0d-6) then
+          !       write(1,*)i,j,"i,j",mat2%A(i,j)-mat2%A(j,i)
+          !     end if
+          !   end do 
+          ! end do
+
+goto 1333 
 
           T1=0.0d0
           T2=0.0d0
@@ -771,7 +799,8 @@
             ioffset1=ioffset1+orb%occ(i)
           end do
           
-          1333      continue
+1333       continue
+
           if(old_code)then ! === old code ===
           noffset=0
           noffset1=0
@@ -785,22 +814,16 @@
                 koffset=0
                 koffset1=0 
                 do k=1,orb%nsub; do k1=1,orb%total(k)
-                    !      induces for rdm
                   nr=n1+noffset1
                   mr=m1+moffset1
                   jr=j1+joffset1
                   kr=k1+koffset1
-                    !      induce  fro integrals
                   ni=n1+noffset
                   mi=m1+moffset
                   ji=j1+joffset
                   ki=k1+koffset 
-                    !              G   part
                   mat2%G(ni,mi,ji,ki)&
                     =mat2%G(ni,mi,ji,ki)+2.0d0*T(ni,ki)*mat2%D(mr,jr)
-                    !              B   part
-                    !                  mat2%B(ni,mi)=mat2%B(ni,mi)&
-                    !                 +2.0d0*T(ni,ki)*mat2%D(mr,jr)*mat2%T(ki,ji)
                   end do
                 koffset=koffset+orb%total(k)
                 koffset1=koffset1+orb%occ(k) 
@@ -824,35 +847,119 @@
             ! only hD part, i.e. h*D_ij
           else ! === new code ===
 
-            allocate(GM1(norb,norb,norb,norb)) ! the k,ij,l | The i,j can be further reduced
-            GM1=0.0d0
-            ioffset=0
-            ioffset1=0
-            do i=1,orb%nsub; do ii=1,orb%occ(i)
-              i0=ioffset
-              i1=orb%total(i) 
-              i2=orb%occ(i) 
-              ix=ioffset1
+            ! allocate(GM1(norb,norb,norb,norb)) ! the k,ij,l | The i,j can be further reduced
+            ! GM1=0.0d0
+            ! ioffset=0
+            ! ioffset1=0
+            ! do i=1,orb%nsub; do ii=1,orb%occ(i)
+            !   i0=ioffset
+            !   i1=orb%total(i) 
+            !   i2=orb%occ(i) 
+            !   ix=ioffset1
     
-              joffset=0
-              joffset1=0
-              do j=1,orb%nsub; do jj=1,orb%occ(j)             
-                j0=joffset
-                j1=orb%total(j) 
-                j2=orb%occ(j) 
-                jx=joffset1
+            !   joffset=0
+            !   joffset1=0
+            !   do j=1,orb%nsub; do jj=1,orb%occ(j)             
+            !     j0=joffset
+            !     j1=orb%total(j) 
+            !     j2=orb%occ(j) 
+            !     jx=joffset1
               
-                GM1(:,i0+ii,j0+jj,:)=T*mat2%D(ix+ii,jx+jj)*2.0d0
-              end do
-              joffset=joffset+orb%total(j)
-              joffset1=joffset1+orb%occ(j)          
-              end do 
-            end do
-            ioffset=ioffset+orb%total(i)
-            ioffset1=ioffset1+orb%occ(i)          
-            end do
-            mat2%G=GM1
-            deallocate(GM1)
+            !     GM1(:,i0+ii,j0+jj,:)=T*mat2%D(ix+ii,jx+jj)*2.0d0
+            !   end do
+            !   joffset=joffset+orb%total(j)
+            !   joffset1=joffset1+orb%occ(j)          
+            !   end do 
+            ! end do
+            ! ioffset=ioffset+orb%total(i)
+            ! ioffset1=ioffset1+orb%occ(i)          
+            ! end do
+            ! mat2%G=GM1
+            ! deallocate(GM1)
+
+            ! noffset=0
+            ! noffset1=0
+            ! do n=1,orb%nsub
+            !   moffset=0
+            !   moffset1=0 
+            !   do m=1,orb%nsub
+            !     joffset=0
+            !     joffset1=0
+            !     do j=1,orb%nsub
+            !       koffset=0
+            !       koffset1=0
+            !       do k=1,orb%nsub
+            !         do n1=1,orb%total(n)
+            !           do m1=1,orb%occ(m)
+            !             do j1=1,orb%occ(j)
+            !               do k1=1,orb%total(k)
+            !                 nr=n1+noffset1
+            !                 mr=m1+moffset1
+            !                 jr=j1+joffset1
+            !                 kr=k1+koffset1
+            !                 ni=n1+noffset
+            !                 mi=m1+moffset
+            !                 ji=j1+joffset
+            !                 ki=k1+koffset 
+            !                 mat2%G(ni,mi,ji,ki)&
+            !                   =mat2%G(ni,mi,ji,ki)+2.0d0*T(ni,ki)*mat2%D(mr,jr)
+            !               end do
+            !             end do
+            !           end do
+            !         end do
+            !       koffset=koffset+orb%total(k)
+            !       koffset1=koffset1+orb%occ(k)
+            !       end do
+            !       joffset=joffset+orb%total(j)
+            !       joffset1=joffset1+orb%occ(j)
+            !     end do
+            !     moffset=moffset+orb%total(m)
+            !     moffset1=moffset1+orb%occ(m)
+            !   end do
+            !   noffset=noffset+orb%total(n)
+            !   noffset1=noffset1+orb%occ(n) 
+            ! end do
+
+
+            ! noffset=0
+            ! noffset1=0
+            ! do n=1,orb%nsub; do n1=1,orb%total(n)
+            !   moffset=0
+            !   moffset1=0 
+            !   do m=1,orb%nsub; do m1=1,orb%occ(m)
+            !     joffset=0
+            !     joffset1=0
+            !     do j=1,orb%nsub; do j1=1,orb%occ(j)
+            !       koffset=0
+            !       koffset1=0 
+            !       do k=1,orb%nsub; do k1=1,orb%total(k)
+            !         nr=n1+noffset1
+            !         mr=m1+moffset1
+            !         jr=j1+joffset1
+            !         kr=k1+koffset1
+            !         ni=n1+noffset
+            !         mi=m1+moffset
+            !         ji=j1+joffset
+            !         ki=k1+koffset 
+            !         mat2%G(ni,mi,ji,ki)&
+            !           =mat2%G(ni,mi,ji,ki)+2.0d0*T(ni,ki)*mat2%D(mr,jr)
+            !         end do
+            !       koffset=koffset+orb%total(k)
+            !       koffset1=koffset1+orb%occ(k) 
+            !       end do
+            !     end do
+            !     joffset=joffset+orb%total(j)
+            !     joffset1=joffset1+orb%occ(j)
+            !     end do
+            !   end do
+            !   moffset=moffset+orb%total(m)
+            !   moffset1=moffset1+orb%occ(m)
+            !   end do
+            ! end do
+            ! noffset=noffset+orb%total(n)
+            ! noffset1=noffset1+orb%occ(n) 
+            ! end do 
+
           end if ! ===
           if(old_code)then ! === old code ===
           noffset=0
@@ -927,82 +1034,217 @@
                   ! stage-2 :  dgemm and fully point group (later) since it will be too time-consuming
           else ! === new code ===      
   
-          allocate(GM1(norb,norb,norb,norb))
-          GM1=0.0d0
+          ! allocate(GM1(norb,norb,norb,norb))
+          ! GM1=0.0d0
 
-          ioffset=0
-          ioffset1=0
-          do i=1,orb%nsub; do ii=1,orb%occ(i)
-            i0=ioffset
-            i1=orb%total(i)
-            i2=orb%occ(i)
-            ix=ioffset1
+          ! ioffset=0
+          ! ioffset1=0
+          ! do i=1,orb%nsub; do ii=1,orb%occ(i)
+          !   i0=ioffset
+          !   i1=orb%total(i)
+          !   i2=orb%occ(i)
+          !   ix=ioffset1
 
-            joffset=0
-            joffset1=0 
-            do j=1,orb%nsub; do jj=1,orb%occ(j)
-              j0=joffset
-              j1=orb%total(j)
-              j2=orb%occ(j)
-              jx=joffset1
+          !   joffset=0
+          !   joffset1=0 
+          !   do j=1,orb%nsub; do jj=1,orb%occ(j)
+          !     j0=joffset
+          !     j1=orb%total(j)
+          !     j2=orb%occ(j)
+          !     jx=joffset1
       
-              allocate(TM1(norb,norb));TM1=0.0d0
+          !     allocate(TM1(norb,norb));TM1=0.0d0
 
-              koffset=0
-              koffset1=0
-              do k=1,orb%nsub; do kk=1,orb%occ(k)
-                k0=koffset
-                k1=orb%total(k)
-                k2=orb%occ(k)
-                kx=koffset1
+          !     koffset=0
+          !     koffset1=0
+          !     do k=1,orb%nsub; do kk=1,orb%occ(k)
+          !       k0=koffset
+          !       k1=orb%total(k)
+          !       k2=orb%occ(k)
+          !       kx=koffset1
 
-                loffset=0
-                loffset1=0
-                do l=1,orb%nsub
+          !       loffset=0
+          !       loffset1=0
+          !       do l=1,orb%nsub
 
-                  if(orb%grouptable(i,j).eq.orb%grouptable(k,l))then
-                    do ll=1,orb%occ(l)
-                      l0=loffset
-                      l1=orb%total(l)
-                      l2=orb%occ(l)
-                      lx=loffset1
-                      dtmp=mat2%P(ix+ii,kx+kk,lx+ll,jx+jj)
+          !         if(orb%grouptable(i,j).eq.orb%grouptable(k,l))then
+          !           do ll=1,orb%occ(l)
+          !             l0=loffset
+          !             l1=orb%total(l)
+          !             l2=orb%occ(l)
+          !             lx=loffset1
+          !             dtmp=mat2%P(ix+ii,kx+kk,lx+ll,jx+jj)
 
-                      TM1=TM1+U(:,:,k0+kk,l0+ll)*dtmp*2.0d0 
-                    end do
-                  end if
+          !             TM1=TM1+U(:,:,k0+kk,l0+ll)*dtmp*2.0d0 
+          !           end do
+          !         end if
 
-                  if(orb%grouptable(i,k).eq.orb%grouptable(j,l))then
-                    do ll=1,orb%occ(l)
-                      l0=loffset
-                      l1=orb%total(l)
-                      l2=orb%occ(l)
-                      lx=loffset1
-                      dtmp=mat2%P(ix+ii,jx+jj,lx+ll,kx+kk)
-                      TM1=TM1+U(:,k0+kk,l0+ll,:)*dtmp*4.0d0
-                    end do
-                  end if
-                  loffset=loffset+orb%total(l)
-                  loffset1=loffset1+orb%occ(l)
-                end do
-              end do
-              koffset=koffset+orb%total(k)
-              koffset1=koffset1+orb%occ(k)
-              end do
-              GM1(:,i0+ii,j0+jj,:)=TM1 
-              deallocate(TM1) 
+          !         if(orb%grouptable(i,k).eq.orb%grouptable(j,l))then
+          !           do ll=1,orb%occ(l)
+          !             l0=loffset
+          !             l1=orb%total(l)
+          !             l2=orb%occ(l)
+          !             lx=loffset1
+          !             dtmp=mat2%P(ix+ii,jx+jj,lx+ll,kx+kk)
+          !             TM1=TM1+U(:,k0+kk,l0+ll,:)*dtmp*4.0d0
+          !           end do
+          !         end if
+          !         loffset=loffset+orb%total(l)
+          !         loffset1=loffset1+orb%occ(l)
+          !       end do
+          !     end do
+          !     koffset=koffset+orb%total(k)
+          !     koffset1=koffset1+orb%occ(k)
+          !     end do
+          !     GM1(:,i0+ii,j0+jj,:)=TM1 
+          !     deallocate(TM1) 
 
-            end do
-            joffset=joffset+orb%total(j)
-            joffset1=joffset1+orb%occ(j)
-            end do 
-          end do
-          ioffset=ioffset+orb%total(i)
-          ioffset1=ioffset1+orb%occ(i)
-          end do         
+          !   end do
+          !   joffset=joffset+orb%total(j)
+          !   joffset1=joffset1+orb%occ(j)
+          !   end do 
+          ! end do
+          ! ioffset=ioffset+orb%total(i)
+          ! ioffset1=ioffset1+orb%occ(i)
+          ! end do         
 
-          mat2%G=mat2%G+GM1
-          deallocate(GM1)
+          ! mat2%G=mat2%G+GM1
+          ! deallocate(GM1)
+            ! walltime(20) = wtime()
+            
+            ! noffset=0
+            ! noffset1=0
+            ! do n=1,orb%nsub; do n1=1,orb%total(n)
+            !   moffset=0
+            !   moffset1=0 
+            !   do m=1,orb%nsub; do m1=1,orb%occ(m)
+            !     kooffset=0
+            !     kooffset1=0
+            !     do ko=1,orb%nsub; do ko1=1,orb%total(ko)
+            !       joffset=0
+            !       joffset1=0
+            !       do j=1,orb%nsub; do j1=1,orb%occ(j)
+            !         koffset=0
+            !         koffset1=0
+            !         do k=1,orb%nsub; do k1=1,orb%occ(k)
+            !           loffset=0
+            !           loffset1=0
+            !           do l=1,orb%nsub; do l1=1,orb%occ(l)
+
+            !             nr=n1+noffset1
+            !             mr=m1+moffset1
+            !             kor=ko1+kooffset1
+            !             jr=j1+joffset1
+            !             kr=k1+koffset1
+            !             lr=l1+loffset1
+
+            !             ni=n1+noffset
+            !             mi=m1+moffset
+            !             koi=ko1+kooffset
+            !             ji=j1+joffset
+            !             ki=k1+koffset
+            !             li=l1+loffset
+
+            !             mat2%G(ni,mi,ji,koi)=mat2%G(ni,mi,ji,koi)&
+            !             +2.0d0*mat2%P(mr,kr,lr,jr)*U(ni,koi,ki,li)&
+            !       +2.0d0*2.0d0*mat2%P(mr,jr,lr,kr)*U(ni,ki,li,koi)
+            !           ! write(201,*)ni,mi,ji,koi,mat2%G(ni,mi,ji,koi)
+
+
+            !           end do
+            !           loffset=loffset+orb%total(l)
+            !           loffset1=loffset1+orb%occ(l)
+            !           end do
+            !         end do
+            !         koffset=koffset+orb%total(k)
+            !         koffset1=koffset1+orb%occ(k)
+            !         end do
+            !       !write(*,*)ni,mi,ji,koi,mat2%G(ni,mi,ji,koi)
+            !       !stop
+            !       end do
+            !       joffset=joffset+orb%total(j)
+            !       joffset1=joffset1+orb%occ(j)
+            !       end do
+            !     end do
+            !     kooffset=kooffset+orb%total(ko)
+            !     kooffset1=kooffset1+orb%occ(ko)
+            !     end do
+            !   end do
+            !   moffset=moffset+orb%total(m)
+            !   moffset1=moffset1+orb%occ(m)
+            !   end do 
+            ! end do
+            ! noffset=noffset+orb%total(n)
+            ! noffset1=noffset1+orb%occ(n)
+            ! end do
+
+            ! noffset=0
+            ! noffset1=0
+            ! do n=1,orb%nsub
+            !   moffset=0
+            !   moffset1=0 
+            !   do m=1,orb%nsub
+            !     kooffset=0
+            !     kooffset1=0
+            !     do ko=1,orb%nsub
+            !       joffset=0
+            !       joffset1=0
+            !       do j=1,orb%nsub
+            !         koffset=0
+            !         koffset1=0
+            !         do k=1,orb%nsub
+            !           loffset=0
+            !           loffset1=0
+            !           do l=1,orb%nsub
+            !             do n1=1,orb%total(n)
+            !               do m1=1,orb%occ(m)               
+            !                 do ko1=1,orb%total(ko)
+            !                   do j1=1,orb%occ(j)
+            !                     do k1=1,orb%occ(k)
+            !                       do l1=1,orb%occ(l)
+            !                         nr=n1+noffset1
+            !                         mr=m1+moffset1
+            !                         kor=ko1+kooffset1
+            !                         jr=j1+joffset1
+            !                         kr=k1+koffset1
+            !                         lr=l1+loffset1
+
+            !                         ni=n1+noffset
+            !                         mi=m1+moffset
+            !                         koi=ko1+kooffset
+            !                         ji=j1+joffset
+            !                         ki=k1+koffset
+            !                         li=l1+loffset
+
+            !                         mat2%G(ni,mi,ji,koi)=mat2%G(ni,mi,ji,koi)&
+            !                         +2.0d0*mat2%P(mr,kr,lr,jr)*U(ni,koi,ki,li)&
+            !                         +2.0d0*2.0d0*mat2%P(mr,jr,lr,kr)*U(ni,ki,li,koi)
+            !                       end do
+            !                     end do
+            !                   end do
+            !                 end do
+            !               end do
+            !             end do
+            !             loffset=loffset+orb%total(l)
+            !             loffset1=loffset1+orb%occ(l)
+            !           end do
+            !           koffset=koffset+orb%total(k)
+            !           koffset1=koffset1+orb%occ(k)
+            !         end do
+            !         joffset=joffset+orb%total(j)
+            !         joffset1=joffset1+orb%occ(j)
+            !       end do
+            !       kooffset=kooffset+orb%total(ko)
+            !       kooffset1=kooffset1+orb%occ(ko)
+            !     end do
+            !     moffset=moffset+orb%total(m)
+            !     moffset1=moffset1+orb%occ(m)
+            !   end do
+            !   noffset=noffset+orb%total(n)
+            !   noffset1=noffset1+orb%occ(n)
+            ! end do
+            ! walltime(21) = wtime()
+            ! write(*,*)"*******************G_2_time*****",walltime(21)-walltime(20)
           end if ! ===
  
           if(method(icycle).eq."microit")then
@@ -1250,6 +1492,7 @@
             end do
   
           !!--------------A------------------
+
             ioffset=0        
             do i=1,orb%nsub; do i1=1,orb%total(i)
               joffset=0
@@ -1285,8 +1528,6 @@
                     loffset=loffset+orb%total(l)
                     end do
                   end if
- 
-                  
                   loffset=0
                   loffset1=0
                   do l=1,orb%nsub; do l1=1,orb%act(l)
@@ -1321,7 +1562,7 @@
             do i=1,norb
               do j=1,norb
                 mat2%A(i,j)=2*mat2%A(i,j)
-          !!               write(22,*) i,j,mat2%A(i,j)
+          
               end do
             end do
           !!sstop
