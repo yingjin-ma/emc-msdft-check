@@ -317,3 +317,147 @@ extern "C"  void xjf_csr_(int *Anrowsc,
   cudaFree(y);
 }
 
+// TM1=TM1+U(:,:,k0+kk,l0+ll)*dtmp
+__device__ __host__ void f2add(double *TM1,double *U,double dtmp,int norb,int k,int l){
+    int stride2=norb*norb;
+    for(int i=0;i<norb;i++){
+      for(int j=0;j<norb;j++){
+        TM1[i*norb+j]+=U[l*stride2*norb+k*stride2+i*norb+j]*dtmp;
+
+      }
+    }
+    // for(int i=0;i<stride2;i++){
+    //   TM1[i]=TM1[i]+U[i]*dtmp;
+      
+    // }
+}
+//TM2=TM2+U(:,k0+kk,l0+ll,:)*dtmp
+__device__ __host__ void f23add(double *TM2,double *U,double dtmp,int norb,int k,int l){
+    int stride2=norb*norb,strides=l*stride2+k*norb,stride3=stride2*norb;
+    for(int i=0;i<norb;i++){
+      for(int j=0;j<norb;j++){
+        TM2[i*norb+j]=U[strides+i*stride3+j]*dtmp;
+      }
+    }
+}
+// GM1(i0+ii,:,j0+jj,:)=(TM1+TM2)*2.0d0
+__device__ __host__ void f13add(double *TM1,double *TM2,double *GM1,int norb,int i,int j){
+    int stride2=norb*norb,strides=j*stride2+i,stride3=stride2*norb;
+    for(int t=0;t<norb;t++){
+      for(int s=0;s<norb;s++){
+        // GM1[strides+t*stride3+s*norb]=(TM1[t*norb+s]+TM2[t*norb+s])*2.0;
+        GM1[strides+s*stride3+t*norb]=(TM1[s*norb+t]+TM2[s*norb+t])*2.0;
+      }
+    }
+}
+
+extern "C" void matgeny_(int *occ,int *tot,double *GM1,double *T,
+                         double *D,int *NP,int *NP2,int *NP3,
+                         int *group,double *P,double *U){
+    int nsub=*NP;
+    int nact=*NP2;
+    int norb=*NP3;
+    int ioffset=0;
+    int ioffset1=0;
+    int i0,ix,joffset,joffset1,j0,jx,l0,lx,loffset,loffset1,k0,kx;
+    int koffset,koffset1;   
+    int stride3=nact*nact*nact;
+    double dtmp;
+    double *TM1,*TM2,*TM3;
+    // for(int i=0;i<norb;i++){
+    //   for(int j=0;j<norb;j++){
+    //     printf("%lf ",U[i*norb+j]);
+    //   }
+    // }
+    TM1=(double*)malloc(sizeof(double)*norb*norb);
+    TM2=(double*)malloc(sizeof(double)*norb*norb);
+    TM3=(double*)malloc(sizeof(double)*norb*norb);
+    for(int i=0;i<nsub;i++){
+        for(int ii=0;ii<occ[i];ii++){
+            i0=ioffset;
+            ix=ioffset1;
+            joffset=0;
+            joffset1=0;
+            for(int j=0;j<nsub;j++){
+                for(int jj=0;jj<occ[j];jj++){
+                    j0=joffset;
+                    jx=joffset1;
+                    memset(TM1, 0.0, norb*norb * sizeof(double));
+                    memset(TM2, 0.0, norb*norb * sizeof(double));
+                    memset(TM3, 0.0, norb*norb * sizeof(double));
+                    koffset=0;
+                    koffset1=0;
+                    for(int k=0;k<nsub;k++){
+                        for(int kk=0;kk<occ[k];kk++){
+                            k0=koffset;
+                            kx=koffset1;
+                            loffset=0;
+                            loffset1=0;
+                            for(int l=0;l<nsub;l++){
+                                if(group[i+j*8]==group[k+l*8]){
+                                    // int ll;
+                                    for(int ll=0;ll<occ[l];ll++){
+                                        l0=loffset;
+                                        lx=loffset1;
+                                        dtmp=P[(jx+jj)*stride3+(lx+ll)*nact*nact+(kx+kk)*nact+(ix+ii)];
+                                        // if (ii==0&&jj==0&&kk==0&&ll<10)
+                                        // {
+                                        //   printf("dtmp  %lf ",dtmp);
+                                        // }
+                                        // TM1=TM1+U(:,:,k0+kk,l0+ll)*dtmp
+                                        f2add(TM1,U,dtmp,norb,(k0+kk),(l0+ll));
+                                        if (ii==0&&jj==0&&kk==0&&ll==0)
+                                        {
+                                          // for(int u= 0; u < norb; u++)
+                                          // {
+                                          //   printf("TM1  %lf ",TM1[u]);
+                                          // }
+                                          // printf("dtmp  %lf ",dtmp);
+                                        }
+                                    }
+
+                                }
+                                if(group[8*i+k]==group[8*j+l]){
+                                    for(int ll=0;ll<occ[l];ll++){
+                                        l0=loffset;
+                                        lx=loffset1;
+                                        dtmp=P[(kx+kk)*stride3+(lx+ll)*nact+(jx+jj)*nact+(ix+ii)]+
+                                             P[(kx+kk)*stride3+(jx+jj)*nact+(lx+ll)*nact+(ix+ii)];
+                                        f23add(TM2,U,dtmp,norb,(k0+kk),(l0+ll));
+                                        // TM2=TM2+U(:,k0+kk,l0+ll,:)*dtmp
+                                        if (ii==0&&jj==0&&kk==0&&ll==0)
+                                        {
+                                          for(int u= 0; u < norb; u++)
+                                          {
+                                            printf("TM1  %lf ",TM2[u]);
+                                          }
+                                          // printf("dtmp  %lf ",dtmp);
+                                        }
+                                    }
+                                }
+                                loffset=loffset+tot[l];
+                                loffset1=loffset1+occ[l];
+                            }
+                        }
+                        koffset=koffset+tot[k];
+                        koffset1=koffset1+occ[k];
+                    }
+                    // GM1(i0+ii,:,j0+jj,:)=(TM1+TM2)*2.0d0
+                    f13add(TM1,TM2,GM1,norb,(i0+ii),(j0+jj));
+                    if(ii==0&&jj==0){
+                      for(int f=0;f<norb;f++){
+                        printf("GM1  %lf ",GM1[f]);
+                      }
+                    }
+                }
+                joffset=joffset+tot[j];
+                joffset1=joffset1+occ[j];
+            }
+        }
+        ioffset=ioffset+tot[i];
+        ioffset1=ioffset1+occ[i];
+    }
+    free(TM1);
+    free(TM2);
+    free(TM3);
+}
