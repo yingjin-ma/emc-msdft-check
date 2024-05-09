@@ -5,11 +5,15 @@ Subroutine Solver_gmres(icycle)
   
           integer::icycle
           double precision,allocatable::x_estimate(:)
+          double precision,allocatable::xxx(:)
+          double precision,allocatable::xD(:)
+          real(4),allocatable::xxxs(:)
+          
    
           integer,allocatable::porb(:)
           double precision d0,dv,redundant
           double precision,allocatable::D(:),X(:),Y(:),XP(:),YP(:) 
-          double precision,allocatable::H(:,:),HP(:,:),HPA(:,:)
+          double precision,allocatable::H(:,:),HP(:,:),HPA(:,:),HP2(:,:)
   
           double precision,allocatable::T1(:,:),T2(:,:),T3(:,:) 
   
@@ -19,6 +23,11 @@ Subroutine Solver_gmres(icycle)
           integer,allocatable::valid(:,:)
           double precision,allocatable::G(:)
           logical Lvalid
+          real(4) , allocatable :: SHP(:,:)
+          double precision :: sum_h
+          real(4) , allocatable :: xS(:)
+          
+          
   
           ! Parameter initialization
           lamda=1.0d0 ! "1" means the standard AH 
@@ -360,6 +369,9 @@ Subroutine Solver_gmres(icycle)
         allocate(porb(nij));   porb=0
         allocate(YP(nij));     YP=0.0d0
         allocate(HP(nij,nij)); HP=0.0d0
+        allocate(HP2(nij,nij)); HP2=0.0d0
+        allocate(SHP(nij,nij)); SHP=0.0
+        allocate(xS(nij));     xS=1.0
 
         !        ij=0
         !        kl=0
@@ -418,21 +430,95 @@ Subroutine Solver_gmres(icycle)
           YP=-YP
 
           allocate(x_estimate(nij));x_estimate=0.0d0
+          allocate(xxx(nij));xxx=0.0d0
+          allocate(xxxs(nij));xxxs=0.0d0
           allocate(XP(nij));XP=0.0d0
+          allocate(xD(nij));xD=1.0d0
           itr_max=2
           mr=nij
           tol_abs = 1.0D-08
           tol_rel = 1.0D-08
+          write(*,*) nij
+          write(*,*)
+          !$OMP PARALLEL DEFAULT(shared) PRIVATE(i,j)
+          !$OMP DO
+          do i=1,nij
+            !$OMP PARALLEL DO
+            do j=1,nij
+              if(dabs(HP(j,i)).lt.redundant)then
+                HP(j,i)=0.0
+              end if
+            end do
+          end do
+          !$OMP END PARALLEL
+          HP2=HP
+          ! write(*,*) HP
 
-          call matrix_to_csr(HP,nij,nij)
-          call pmgmres_ilu_cr( nij, nonzeros, rowoffset, colindex, values, x_estimate, YP, itr_max, mr, tol_abs, tol_rel )
+          do i=1,nij
+            do j=1,nij
+              sum_h=sum_h+HP(j,i)
+            end do
+          end do
+
+          sum_h=sum_h/(nij*nij)
+          write(*,*) sum_h
+          ! write(*,*)HP(:,1)
+          do i=1,nij
+            do j=1,nij
+              if(dabs(HP(j,i)).lt.dabs(sum_h))then
+                SHP(j,i)=HP(j,i)
+                HP(j,i)=0.0d0
+              else
+           
+              end if
+            end do
+          end do
+          ! ! write(*,*)SHP(:,1)
+          
+          ! write(*,*)"sum_h",sum_h
+
+          ! call Smatrix_to_csr(SHP,nij,nij)
+
+          ! call ax_cr (nij,SHPnonzeros,SHProwoffset,SHPcolindex,SHPvalues, xS,xxxs)
+          ! write(*,*)xxxs(:100)
+
+          ! call matrix_to_csr(HP,nij,nij)
+
+          ! call ax_crDouble(nij,nonzeros,rowoffset,colindex,values,xD,xxx)
+          ! write(*,*)xxx(:100)
+
+          ! deallocate(rowoffset)
+          ! deallocate(colindex)
+          ! deallocate(values)
+
+          ! write(*,*)SHPnonzeros
+          ! write(*,*)SHProwoffset
+          ! write(*,*)SHPcolindex(:170)
+          ! write(*,*)SHPvalues(:170)
+          ! xS=YP
+          
+          ! call entrywise_csr(nij,nonzeros,rowoffset,colindex,values,YP,x_estimate,SHPnonzeros,SHProwoffset,SHPcolindex,SHPvalues,xS)
+          ! write(*,*) x_estimate
+          ! x_estimate=0.0d0
+
+          call matrix_to_csr(HP2,nij,nij)
+
+          ! xxx=1.0d0
+          ! call ax_crDouble(nij,nonzeros,rowoffset,colindex,values,xD,xxx)
+          ! write(*,*)xxx(:100)
+          call pmgmres_crd( nij, nonzeros, rowoffset, colindex, values, x_estimate, YP, itr_max, mr, tol_abs, tol_rel)
 
           ! call matrix_to_coo(HP,nij,nij)
           !call mgmres_st ( nij, nonzeros, coo_rows, coo_cols, coo_values, x_estimate, YP, itr_max, mr, tol_abs, tol_rel )
           nonzeros=0
+          SHPnonzeros=0
           deallocate(rowoffset)
           deallocate(colindex)
           deallocate(values)
+
+          ! deallocate(SHProwoffset)
+          ! deallocate(SHPcolindex)
+          ! deallocate(SHPvalues)
 
           ! deallocate(coo_rows)
           ! deallocate(coo_cols)

@@ -326,8 +326,6 @@
               end do
             end do
 
-            
-
             call eigtql2(idvs,A,eigA)
 
             write(2,*)"eig-A"
@@ -400,9 +398,6 @@
 
             deallocate(eigA)
             deallocate(A)
-
-            
-
           end do
 
         else

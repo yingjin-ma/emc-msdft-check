@@ -3,7 +3,8 @@
       SUBROUTINE transform_subspaces(nsub,act,tot,norb,TRANS,T,U,group)
         ! Yingjin in around 2013
         ! use omp_lib
-        use date_time          
+        use date_time
+        use omp_lib          
 
         INTEGER::norb
         DOUBLE PRECISION::TRANS(norb,norb)
@@ -65,26 +66,28 @@
               l0=0
               DO l=1,nsub
                 if(group(i,group(j,group(k,l))).eq.1)then
-                  ! $OMP PARALLEL
-                  ! $OMP DO
-                  do ii=1,tot(i)
-                    do jj=1,tot(j) 
-                      if(tot(k).ne.0.and.tot(l).ne.0)then
-                        allocate(TM1(tot(k),tot(l)));TM1=0.0d0
-                        allocate(TM2(tot(k),tot(l)));TM2=0.0d0
-                        allocate(TM3(tot(k),tot(l)));TM3=0.0d0
-                        TM1=U(I0+ii,J0+jj,k0+1:k0+tot(k),l0+1:l0+tot(l))
-                        call MXMG(tot(k),tot(l),tot(k),UM(k)%U,TM1,TM2,"TN")
-                        call MXMG(tot(k),tot(l),tot(l),TM2,UM(l)%U,TM3,"NN")
-                        TG1(I0+ii,J0+jj,k0+1:k0+tot(k),l0+1:l0+tot(l))=TM3
-                        deallocate(TM1)
-                        deallocate(TM2)
-                        deallocate(TM3)
-                      end if 
+                  allocate(TM1(tot(k),tot(l)))
+                  allocate(TM2(tot(k),tot(l)))
+                  allocate(TM3(tot(k),tot(l)))
+                  if(tot(k).ne.0.and.tot(l).ne.0)then
+                    !$OMP PARALLEL DEFAULT(shared) PRIVATE(ii, jj, TM1, TM2,TM3,dtmp)
+                    !$OMP DO
+                    do ii=1,tot(i)
+                      do jj=1,tot(j) 
+                          TM1=0.0d0
+                          TM2=0.0d0
+                          TM3=0.0d0
+                          TM1=U(I0+ii,J0+jj,k0+1:k0+tot(k),l0+1:l0+tot(l))
+                          call MXMG(tot(k),tot(l),tot(k),UM(k)%U,TM1,TM2,"TN")
+                          call MXMG(tot(k),tot(l),tot(l),TM2,UM(l)%U,TM3,"NN")
+                          TG1(I0+ii,J0+jj,k0+1:k0+tot(k),l0+1:l0+tot(l))=TM3
+                      end do
                     end do
-                  end do
-                  ! $OMP END DO
-                  ! $OMP END PARALLEL
+                    !$OMP END PARALLEL
+                  end if
+                  deallocate(TM1)
+                  deallocate(TM2)
+                  deallocate(TM3)
                 end if
                 l0=l0+tot(l)
               END DO
@@ -103,40 +106,38 @@
         DO i=1,nsub
           j0=0
           DO j=1,nsub
-            k0=0   
-            DO k=1,nsub
-              l0=0
-              DO l=1,nsub
-                if(group(i,group(j,group(k,l))).eq.1)then
-                  do kk=1,tot(k)
-                    do ll=1,tot(l) 
-
-                      if(tot(i).ne.0.and.tot(j).ne.0)then
-                    
-                        allocate(TM1(tot(i),tot(j)));TM1=0.0d0
-                        allocate(TM2(tot(i),tot(j)));TM2=0.0d0
-                        allocate(TM3(tot(i),tot(j)));TM3=0.0d0
-
-                        TM1=TG1(i0+1:i0+tot(i),j0+1:j0+tot(j),k0+kk,l0+ll)
-
-                        call MXMG(tot(i),tot(j),tot(i),UM(i)%U,TM1,TM2,"TN")
-                        call MXMG(tot(i),tot(j),tot(j),TM2,UM(j)%U,TM3,"NN")
-
-                        TG2(i0+1:i0+tot(i),j0+1:j0+tot(j),k0+kk,l0+ll)=TM3
-
-                        deallocate(TM1)
-                        deallocate(TM2)
-                        deallocate(TM3)
-                   
-                      end if
- 
+            k0=0
+            if(tot(i).ne.0.and.tot(j).ne.0)then
+              allocate(TM1(tot(i),tot(j)))
+              allocate(TM2(tot(i),tot(j)))
+              allocate(TM3(tot(i),tot(j)))
+              DO k=1,nsub
+                l0=0
+                DO l=1,nsub
+                  if(group(i,group(j,group(k,l))).eq.1)then
+                    !$OMP PARALLEL DEFAULT(shared) PRIVATE(ii, jj, TM1, TM2,TM3,dtmp)
+                    !$OMP DO
+                    do kk=1,tot(k)
+                      do ll=1,tot(l) 
+                          TM1=0.0d0
+                          TM2=0.0d0
+                          TM3=0.0d0
+                          TM1=TG1(i0+1:i0+tot(i),j0+1:j0+tot(j),k0+kk,l0+ll)
+                          call MXMG(tot(i),tot(j),tot(i),UM(i)%U,TM1,TM2,"TN")
+                          call MXMG(tot(i),tot(j),tot(j),TM2,UM(j)%U,TM3,"NN")
+                          TG2(i0+1:i0+tot(i),j0+1:j0+tot(j),k0+kk,l0+ll)=TM3
+                      end do
                     end do
-                  end do
-                end if
-                l0=l0+tot(l)
+                    !$OMP END PARALLEL
+                  end if
+                  l0=l0+tot(l)
+                END DO
+                k0=k0+tot(k)
               END DO
-              k0=k0+tot(k)
-            END DO
+              deallocate(TM1)
+              deallocate(TM2)
+              deallocate(TM3)
+            end if
             j0=j0+tot(j)
           END DO
           i0=i0+tot(i)

@@ -273,6 +273,188 @@ __global__ void spmv_cusp(const unsigned int M,
   }
 }
 
+__global__ void kernel_spmv_CSR_vector_Mixed_Entrywise_Split(
+    const unsigned int M,      // number of rows
+    const float *AxS,          // float value iterator 1, matrix values
+    float *xS,                 // float value iterator 2, dense vector
+    const int *AjS,            // floats column iterator
+    const int *ApS,            // floats row iterator
+    const double *AxD,         // double value iterator 1, matrix values
+    const double *xD,          // double value iterator 2, dense vector
+    const int *AjD,            // doubles column iterator
+    const int *ApD,            // doubles row iterator
+    double *y,                 // value iterator 3, result vector
+    const bool isAccumulative  // (T): y+=Ax, (F): y=Ax
+) {
+  const size_t VECTORS_PER_BLOCK = THREADS_PER_BLOCK / THREADS_PER_VECTOR;
+  __shared__ volatile double
+      sdata[VECTORS_PER_BLOCK * THREADS_PER_VECTOR + THREADS_PER_VECTOR / 2];  // padded to avoid reduction conditionals
+  __shared__ volatile int ptrsS[VECTORS_PER_BLOCK][2];
+  __shared__ volatile int ptrsD[VECTORS_PER_BLOCK][2];
+
+  const int thread_id = THREADS_PER_BLOCK * blockIdx.x + threadIdx.x;  // global thread index
+  const int thread_lane = threadIdx.x & (THREADS_PER_VECTOR - 1);      // thread index within the vector
+  const int vector_id = thread_id / THREADS_PER_VECTOR;                // global vector index
+  const int vector_lane = threadIdx.x / THREADS_PER_VECTOR;            // vector index within the block
+  const int num_vectors = VECTORS_PER_BLOCK * gridDim.x;               // total number of active vectors
+
+  for (int row = vector_id; row < M; row += num_vectors) {
+    // use two threads to fetch Ap[row] and Ap[row+1]
+    // this is considerably faster than the straightforward version
+    if (thread_lane < 2) {
+      ptrsS[vector_lane][thread_lane] = ApS[row + thread_lane];
+      ptrsD[vector_lane][thread_lane] = ApD[row + thread_lane];
+    }
+    const int row_startS = ptrsS[vector_lane][0];  // same as: row_start = Ap[row];
+    const int row_endS = ptrsS[vector_lane][1];    // same as: row_end   = Ap[row+1];
+    const int row_startD = ptrsD[vector_lane][0];  // same as: row_start = Ap[row];
+    const int row_endD = ptrsD[vector_lane][1];    // same as: row_end   = Ap[row+1];
+
+    // initialize local sum
+    double sum = 0.0;
+    if (isAccumulative && (thread_lane == 0)) {
+      sum = y[row];
+    }
+
+    // accumulate local sums
+    // single precision
+    if (THREADS_PER_VECTOR == 32 && row_endS - row_startS > 32) {
+      // ensure aligned memory access to Aj and Ax
+      int jj = row_startS - (row_startS & (THREADS_PER_VECTOR - 1)) + thread_lane;
+      // accumulate local sums
+      if (jj >= row_startS && jj < row_endS) sum += AxS[jj] * xS[AjS[jj]-1];
+      // accumulate local sums
+      for (jj += THREADS_PER_VECTOR; jj < row_endS; jj += THREADS_PER_VECTOR) sum += AxS[jj] * xS[AjS[jj]-1];
+    } else {
+      // accumulate local sums
+      for (int jj = row_startS + thread_lane; jj < row_endS; jj += THREADS_PER_VECTOR) sum += AxS[jj] * xS[AjS[jj]-1];
+    }
+
+    // double precision
+    if (THREADS_PER_VECTOR == 32 && row_endD - row_startD > 32) {
+      // ensure aligned memory access to Aj and Ax
+      int jj = row_startD - (row_startD & (THREADS_PER_VECTOR - 1)) + thread_lane;
+      // accumulate local sums
+      if (jj >= row_startD && jj < row_endD) sum += AxD[jj] * xD[AjD[jj]-1];
+      // accumulate local sums
+      for (jj += THREADS_PER_VECTOR; jj < row_endD; jj += THREADS_PER_VECTOR) sum += AxD[jj] * xD[AjD[jj]-1];
+    } else {
+      // accumulate local sums
+      for (int jj = row_startD + thread_lane; jj < row_endD; jj += THREADS_PER_VECTOR) sum += AxD[jj] * xD[AjD[jj]-1];
+    }
+
+    // Store local sum in shared memory
+    sdata[threadIdx.x] = sum;
+
+    // Reduce local sums to row sum
+    double tmp;
+    if (THREADS_PER_VECTOR > 16) {
+      tmp = sdata[threadIdx.x + 16];
+      sum += tmp;
+      sdata[threadIdx.x] = sum;
+    }
+    if (THREADS_PER_VECTOR > 8) {
+      tmp = sdata[threadIdx.x + 8];
+      sum += tmp;
+      sdata[threadIdx.x] = sum;
+    }
+    if (THREADS_PER_VECTOR > 4) {
+      tmp = sdata[threadIdx.x + 4];
+      sum += tmp;
+      sdata[threadIdx.x] = sum;
+    }
+    if (THREADS_PER_VECTOR > 2) {
+      tmp = sdata[threadIdx.x + 2];
+      sum += tmp;
+      sdata[threadIdx.x] = sum;
+    }
+    if (THREADS_PER_VECTOR > 1) {
+      tmp = sdata[threadIdx.x + 1];
+      sum += tmp;
+      sdata[threadIdx.x] = sum;
+    }
+
+    // First thread writes the result
+    if (thread_lane == 0) {
+      y[row] = sdata[threadIdx.x];
+    }
+  }
+}
+
+extern "C"  void entrywise_csr_(int *Anrowsc,
+                                int *Annzc,
+                                const int *Arows,
+                                const int *Acols,
+                                const double *Avals,
+                                const double *xd,
+                                double *b2,
+                                int *Annzcs,
+                                const int *ApS,
+                                const int *AjS,
+                                float *AxS,
+                                float *xS)
+{
+  //定义A device
+  int Anrows=*Anrowsc;
+  int Annz=*Annzc;
+  int AnnzS=*Annzcs;
+  // double
+  int *Arow_offset,*Aclo;
+  double *Avalue,*xD,*y;
+  // float
+  int *Arow_offsetS,*AcloS;
+  float *AvalueS,*xDS;
+
+  //float
+  cudaMalloc(((void **)(&xDS)),Anrows* sizeof(float ));//
+  cudaMemcpy(xDS,xS,Anrows* sizeof(float ),cudaMemcpyHostToDevice);
+
+  cudaMalloc(((void **)(&AvalueS)),AnnzS* sizeof(float ));//
+  cudaMemcpy(AvalueS,AxS,AnnzS* sizeof(float ),cudaMemcpyHostToDevice);
+
+  cudaMalloc(((void **)(&Arow_offsetS)),(Anrows+1)* sizeof(int ));//
+  cudaMemcpy(Arow_offsetS,ApS,(Anrows+1)* sizeof(int ),cudaMemcpyHostToDevice);
+
+  cudaMalloc(((void **)(&AcloS)),AnnzS* sizeof(int ));
+  cudaMemcpy(AcloS,AjS,AnnzS* sizeof(int ),cudaMemcpyHostToDevice);//A.cols
+
+  //double
+  cudaMalloc(((void **)(&xD)),Anrows* sizeof(double ));//
+  cudaMemcpy(xD,xd,Anrows* sizeof(double ),cudaMemcpyHostToDevice);
+
+  cudaMalloc(((void **)(&Avalue)),Annz* sizeof(double ));//
+  cudaMemcpy(Avalue,Avals,Annz* sizeof(double ),cudaMemcpyHostToDevice);
+
+  cudaMalloc(((void **)(&Arow_offset)),(Anrows+1)* sizeof(int ));//
+  cudaMemcpy(Arow_offset,Arows,(Anrows+1)* sizeof(int ),cudaMemcpyHostToDevice);
+
+  cudaMalloc(((void **)(&Aclo)),Annz* sizeof(int ));
+  cudaMemcpy(Aclo,Acols,Annz* sizeof(int ),cudaMemcpyHostToDevice);//A.cols
+
+  cudaMalloc(((void **)(&y)),Anrows* sizeof(double ));
+  cudaMemcpy(y,b2,Anrows* sizeof(double),cudaMemcpyHostToDevice);//y
+
+  const size_t VECTORS_PER_BLOCK  = THREADS_PER_BLOCK / THREADS_PER_VECTOR;//一个块中计算了多少行
+  const size_t MAX_BLOCKS  = 2048;//cusp::system::cuda::detail::max_active_blocks
+  const size_t NUM_BLOCKS = min(MAX_BLOCKS, (Anrows + (VECTORS_PER_BLOCK - 1)) / VECTORS_PER_BLOCK);
+  
+  // spmv_cusp<<< NUM_BLOCKS,THREADS_PER_BLOCK,0 >>>(Anrows,Avalue,Arow_offset,Aclo,xD,y);
+  kernel_spmv_CSR_vector_Mixed_Entrywise_Split<<< NUM_BLOCKS,THREADS_PER_BLOCK,0 >>>(Anrows,AxS,xDS,AjS,ApS,Avalue,xD,Aclo,Arow_offset,y,false);
+  cudaDeviceSynchronize();
+  cudaMemcpy(b2,y,Anrows* sizeof(double ),cudaMemcpyDeviceToHost);
+  
+  cudaFree(Arow_offset);
+  cudaFree(Aclo);
+  cudaFree(Avalue);
+  cudaFree(xD);
+  cudaFree(y);
+
+  cudaFree(Arow_offsetS);
+  cudaFree(AcloS);
+  cudaFree(AvalueS);
+  cudaFree(xDS);
+}
+
 extern "C"  void xjf_csr_(int *Anrowsc,
                                 int *Annzc,
                                 const int *Arows,
@@ -316,6 +498,8 @@ extern "C"  void xjf_csr_(int *Anrowsc,
   cudaFree(xD);
   cudaFree(y);
 }
+
+
 
 // TM1=TM1+U(:,:,k0+kk,l0+ll)*dtmp
 __device__ __host__ void f2add(double *TM1,double *U,double dtmp,int norb,int k,int l){

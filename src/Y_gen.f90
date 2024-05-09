@@ -134,34 +134,6 @@
         ! ioffset1=ioffset1+occ(i)
         ! end do
 
-        ! !$OMP PARALLEL DEFAULT(shared) PRIVATE(ii,jj, kk,ll,TM1, TM2)
-        ! !$OMP DO
-        ! do ii=1,occ(1)
-        !   do jj=1,occ(1)
-        !     TM1=0.0d0
-        !     TM2=0.0d0
-        !     do kk=1,occ(1)
-        !         if(group(1,1).eq.group(1,1))then
-        !           do ll=1,occ(1)
-        !             dtmp=P(ii,kk,ll,jj) ! ij,kl
-        !             TM1=TM1+U(:,:,kk,ll)*dtmp
-        !           end do
-        !         end if
-        !         if(group(1,1).eq.group(1,1))then
-        !           do ll=1,occ(1)
-        !             dtmp=P(ii,jj,ll,kk)& ! ik,jl
-        !                 +P(ii,ll,jj,kk)  ! ik,lj
-        !             TM2=TM2+U(:,kk,ll,:)*dtmp
-        !           end do
-        !         end if
-        !     end do
-        !     GM1(ii,:,jj,:)=(TM1+TM2)*2.0d0
-        !   end do
-        ! end do
-        ! !$OMP END DO
-        ! !$OMP END PARALLEL
-
-        
         walltime(50) = wtime()
         ioffset=0
         ioffset1=0

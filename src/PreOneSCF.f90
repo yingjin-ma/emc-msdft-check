@@ -495,28 +495,30 @@ goto 2222
           end if ! === 
           2211      format(A7,I3,I3,I3,I3,G21.12)          
 
-          ! The hD part
+          ! The hD part   mat2%A:norb  T:norb  mat2%D:nocc    114 24 24
             if(old_code)then ! === old code ===
               noffset=0
               noffset1=0
-              do n=1,orb%nsub; do n1=1,orb%total(n)
+              do n=1,orb%nsub; do n1=1,orb%total(n)  !r
                 moffset=0
                 moffset1=0
-                do m=1,orb%nsub; do m1=1,orb%occ(m)
+                do m=1,orb%nsub; do m1=1,orb%occ(m)  !i
+
                   joffset=0
-                  joffset1=0   
+                  joffset1=0
                   do j=1,orb%nsub; do j1=1,orb%occ(j)
                     mat2%A(n1+noffset,m1+moffset)=mat2%A(n1+noffset,m1+moffset)&
-                  +2.0d0*T(n1+noffset,j1+joffset)*mat2%D(m1+moffset1,j1+joffset1)
+                    +2.0d0*T(n1+noffset,j1+joffset)*mat2%D(m1+moffset1,j1+joffset1)
                   end do
                   joffset=joffset+orb%total(j)
                   joffset1=joffset1+orb%occ(j)
+                  
                   end do 
                 end do  
                 moffset=moffset+orb%total(m)
-                moffset1=moffset1+orb%occ(m) 
-                end do            
-              end do 
+                moffset1=moffset1+orb%occ(m)
+                end do
+              end do
               noffset=noffset+orb%total(n)
               noffset1=noffset1+orb%occ(n) 
               end do
@@ -582,7 +584,7 @@ goto 2222
               ! end do
 
               call operator(orb%nsub,mat2%A,T,mat2%D,norb,nocc,orb%total,orb%occ,mat2%p,U,mat2%G)
-              
+              ! call qaz(orb%nsub,mat2%A,T,mat2%D,norb,nocc,orb%total,orb%occ,mat2%p,U,mat2%G)
             end if ! ===
 
 

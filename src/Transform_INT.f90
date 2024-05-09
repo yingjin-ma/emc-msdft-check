@@ -2,6 +2,7 @@
 
         use global_control 
         use matrix
+        use date_time
 
         logical::if_trans
         
@@ -31,6 +32,8 @@
         !        call print_mat(norb,norb,MAT2%U)    
         !        stop 
                 !write(*,*)T
+
+
         open(unit=111,file="FCIDUMP_NEW")
         open(unit=121,file=FCIDUMP)
           read(121,*)A2,A3,A4
@@ -55,6 +58,8 @@
           write(111,"(A10)")A3
           write(111,*)"&END"
         close(121)
+
+        
  
         if(orb%sym.eq."d2h")then
           open(unit=113,file="INTEGRAL_ORDER_8_IRREPS.grp") 
@@ -64,52 +69,29 @@
           open(unit=113,file="INTEGRAL_ORDER_2_IRREPS.grp")
         else if(orb%sym.eq."c1")then
           open(unit=113,file="INTEGRAL_ORDER_1_IRREPS.grp")
-        end if   
-          do 
-            read(113,*,iostat=ierr)i0,j0,k0,l0
-            if(ierr.ne.0)exit
+        end if 
 
-            if(i0.eq.j0.and.k0.eq.l0)then
-              ij=0
-              do i=1,orb%total(i0)
-                do j=1,i
-                  ij=ij+1
-                  kl=0
-                  do k=1,orb%total(k0)
-                    do l=1,k
-                      kl=kl+1
-                      i2=i+base(i0)
-                      j2=j+base(j0)
-                      k2=k+base(k0)
-                      l2=l+base(l0)
-                      d2=U(i2,j2,k2,l2)
-                      if(dabs(d2)>thrs%eri)then
-                        if(i0.eq.k0)then
-                          if(ij.ge.kl)then
-                            write(111,112)d2,i2,j2,k2,l2
-                          end if
-                        else
-                          write(111,112)d2,i2,j2,k2,l2
-                        end if
-                      end if
-                    end do
-                  end do
-                end do
-              end do
-            else 
-              ij=0
-              do i=1,orb%total(i0)
-                do j=1,orb%total(j0)
-                  ij=ij+1
-                  kl=0
-                  do k=1,orb%total(k0)
-                    do l=1,orb%total(l0)
-                      kl=kl+1
-                      i2=i+base(i0)
-                      j2=j+base(j0)
-                      k2=k+base(k0)
-                      l2=l+base(l0)
-                      d2=U(i2,j2,k2,l2)
+        walltime(60) = wtime()
+
+        do 
+          read(113,*,iostat=ierr)i0,j0,k0,l0
+          if(ierr.ne.0)exit
+
+          if(i0.eq.j0.and.k0.eq.l0)then
+            ij=0
+            do i=1,orb%total(i0)
+              do j=1,i
+                ij=ij+1
+                kl=0
+                do k=1,orb%total(k0)
+                  do l=1,k
+                    kl=kl+1
+                    i2=i+base(i0)
+                    j2=j+base(j0)
+                    k2=k+base(k0)
+                    l2=l+base(l0)
+                    d2=U(i2,j2,k2,l2)
+                    if(dabs(d2)>thrs%eri)then
                       if(i0.eq.k0)then
                         if(ij.ge.kl)then
                           write(111,112)d2,i2,j2,k2,l2
@@ -117,12 +99,38 @@
                       else
                         write(111,112)d2,i2,j2,k2,l2
                       end if
-                    end do
+                    end if
                   end do
                 end do
               end do
-            end if
-          end do 
+            end do
+          else 
+            ij=0
+            do i=1,orb%total(i0)
+              do j=1,orb%total(j0)
+                ij=ij+1
+                kl=0
+                do k=1,orb%total(k0)
+                  do l=1,orb%total(l0)
+                    kl=kl+1
+                    i2=i+base(i0)
+                    j2=j+base(j0)
+                    k2=k+base(k0)
+                    l2=l+base(l0)
+                    d2=U(i2,j2,k2,l2)
+                    if(i0.eq.k0)then
+                      if(ij.ge.kl)then
+                        write(111,112)d2,i2,j2,k2,l2
+                      end if
+                    else
+                      write(111,112)d2,i2,j2,k2,l2
+                    end if
+                  end do
+                end do
+              end do
+            end do
+          end if
+        end do 
         close(113)
 
         ioffset=0
@@ -134,6 +142,9 @@
           end do
           ioffset=ioffset+orb%total(i)
         end do
+
+        walltime(61) = wtime()
+        write(*,*)"*******************After_Tran_time*****",walltime(61)-walltime(60)
 
         write(111,112)FRONRE0,0,0,0,0
 

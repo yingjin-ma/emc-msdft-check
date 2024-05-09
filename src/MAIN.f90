@@ -228,8 +228,9 @@
             deallocate(Umat_FINAL)
             deallocate(mat2%A0)
             deallocate(mat2%B0)
+            walltime(13) = wtime()
 
-            walltime(14) = wtime()
+            
             ! call timing_reporter(3,"macro-iteration loop",walltime(14)-walltime(10))
             ! call timing_reporter(30,"macro-iteration loop",walltime(14)-walltime(10))
             write(*,*)"*******************MPS optimization",walltime(5)-walltime(10)

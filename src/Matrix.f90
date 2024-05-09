@@ -102,7 +102,7 @@ module matrix
       end type MPSlist
       ! type in matrix
       type (MPSlist), pointer :: mps_head
-      type (MPSlist), pointer :: mps_ptr 
+      type (MPSlist), pointer :: mps_ptr
       type (MPSlist), pointer :: mps_tail
 
       type::LRlist
@@ -157,11 +157,16 @@ module matrix
       double precision,allocatable::HLR(:,:)
       double precision,allocatable::MhD(:,:)
       integer,allocatable::iorder(:)
-      !spmat_CSR
+      !Dspmat_CSR
       integer,allocatable::rowoffset(:) 
       integer,allocatable::colindex(:) 
       double precision,allocatable::values(:)
       integer::nonzeros
+      !Sspmat_CSR
+      integer,allocatable::SHProwoffset(:) 
+      integer,allocatable::SHPcolindex(:) 
+      real(4),allocatable::SHPvalues(:)
+      integer::SHPnonzeros
       !spmat_COO
       integer,allocatable::coo_rows(:)
       integer,allocatable::coo_cols(:)
