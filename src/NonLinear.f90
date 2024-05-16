@@ -59,7 +59,8 @@
           !          write(6,*)"This is a simple/debugging AH, no redundant limit"
           call Solver_Augmented_Hessian(icycle) 
           !          write(6,*)" After Solver AH "; call flush(6)
-          ! call Solver_gmres(icycle)
+        else if(trim(method(icycle)).eq."gmres")then
+          call Solver_gmres(icycle)
         else
           call derivaties4(0,0)
           call iteration(icycle)  
